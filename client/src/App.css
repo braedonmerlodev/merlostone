@@ -8,6 +8,7 @@ body {
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
   min-height: 100vh;
+  overflow-x: hidden;
 }
 
 .App {
@@ -15,6 +16,7 @@ body {
   min-height: 100vh;
   display: flex;
   flex-direction: column;
+  overflow-x: hidden;
 }
 
 /* Form styles */
@@ -26,7 +28,111 @@ body {
   box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
 }
 
-/* Footer styles (if you add one) */
+/* Hero section styles */
+.hero-section {
+  position: relative;
+  height: 100vh;
+  width: 100%;
+  overflow: hidden;
+}
+
+/* Smooth scroll behavior */
+html {
+  scroll-behavior: smooth;
+}
+
+/* Adjust navbar height */
+.MuiToolbar-root {
+  min-height: 64px;
+}
+
+/* Improve Carousel indicators */
+.MuiBox-root .Carousel-indicators {
+  z-index: 5;
+  margin-bottom: 20px;
+}
+
+.MuiBox-root .Carousel-indicator {
+  background-color: rgba(255, 255, 255, 0.5);
+  width: 12px;
+  height: 12px;
+  margin: 0 6px;
+  border-radius: 50%;
+  transition: all 0.3s ease;
+}
+
+.MuiBox-root .Carousel-indicator.active {
+  background-color: white;
+  transform: scale(1.2);
+}
+
+/* Page container styles for all pages */
+.page-container {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding-top: 100px; /* Space for fixed navbar */
+  padding-bottom: 2rem;
+  min-height: calc(100vh - 164px); /* Viewport height minus navbar and some padding */
+}
+
+/* About page styles */
+.about-page-container {
+  line-height: 1.8;
+}
+
+.about-page-container p {
+  font-size: 1.1rem;
+}
+
+.about-image {
+  max-width: 100%;
+  height: auto;
+  border-radius: 8px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+}
+
+.about-quote {
+  font-style: italic;
+  color: #555;
+  border-left: 4px solid #1976d2;
+  padding-left: 1rem;
+  margin: 2rem 0;
+}
+
+.about-highlight {
+  background-color: #f5f5f5;
+  border-radius: 8px;
+  padding: 1.5rem;
+  margin: 2rem 0;
+}
+
+/* Stone Care page styles */
+.stone-care-container {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding-top: 100px; /* Space for fixed navbar */
+  padding-bottom: 2rem;
+}
+
+.stone-care-section {
+  margin-bottom: 2rem;
+}
+
+.stone-care-warning {
+  background-color: #fff3cd;
+  border-left: 4px solid #ffc107;
+  padding: 0.75rem 1.25rem;
+  margin-bottom: 1rem;
+}
+
+.stone-care-danger {
+  background-color: #f8d7da;
+  border-left: 4px solid #dc3545;
+  padding: 0.75rem 1.25rem;
+  margin-bottom: 1rem;
+}
+
+/* Footer styles */
 .footer {
   margin-top: auto;
   padding: 1rem;

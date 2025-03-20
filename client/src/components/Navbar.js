@@ -1,4 +1,5 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
+import { Link as RouterLink } from 'react-router-dom';
 import { 
   AppBar, 
   Box, 
@@ -14,12 +15,40 @@ import {
 } from '@mui/material';
 import MenuIcon from '@mui/icons-material/Menu';
 
-const pages = ['Home', 'Products', 'Services', 'About', 'Contact'];
+// Update the pages array to include Stone Care
+const pages = ['Home', 'Products', 'Services', 'Stone Care', 'About', 'Contact'];
+// Map pages to their routes
+const pageRoutes = {
+  'Home': '/',
+  'Products': '/products',
+  'Services': '/services',
+  'Stone Care': '/stone-care',
+  'About': '/about',
+  'Contact': '/contact'
+};
 
 function Navbar() {
   const [anchorElNav, setAnchorElNav] = useState(null);
+  const [scrolled, setScrolled] = useState(false);
   const theme = useTheme();
   const isMobile = useMediaQuery(theme.breakpoints.down('md'));
+
+  // Add scroll event listener to change navbar appearance on scroll
+  useEffect(() => {
+    const handleScroll = () => {
+      const offset = window.scrollY;
+      if (offset > 50) {
+        setScrolled(true);
+      } else {
+        setScrolled(false);
+      }
+    };
+
+    window.addEventListener('scroll', handleScroll);
+    return () => {
+      window.removeEventListener('scroll', handleScroll);
+    };
+  }, []);
 
   const handleOpenNavMenu = (event) => {
     setAnchorElNav(event.currentTarget);
@@ -30,15 +59,22 @@ function Navbar() {
   };
 
   return (
-    <AppBar position="static" color="primary">
+    <AppBar 
+      position="fixed" 
+      sx={{
+        backgroundColor: scrolled ? 'rgba(25, 118, 210, 0.95)' : 'transparent',
+        boxShadow: scrolled ? 1 : 'none',
+        transition: 'background-color 0.3s ease, box-shadow 0.3s ease'
+      }}
+    >
       <Container maxWidth="xl">
         <Toolbar disableGutters>
           {/* Logo/Brand - large screens */}
           <Typography
             variant="h6"
             noWrap
-            component="a"
-            href="/"
+            component={RouterLink}
+            to="/"
             sx={{
               mr: 2,
               display: { xs: 'none', md: 'flex' },
@@ -83,7 +119,12 @@ function Navbar() {
               }}
             >
               {pages.map((page) => (
-                <MenuItem key={page} onClick={handleCloseNavMenu}>
+                <MenuItem 
+                  key={page} 
+                  onClick={handleCloseNavMenu}
+                  component={RouterLink}
+                  to={pageRoutes[page]}
+                >
                   <Typography textAlign="center">{page}</Typography>
                 </MenuItem>
               ))}
@@ -94,8 +135,8 @@ function Navbar() {
           <Typography
             variant="h5"
             noWrap
-            component="a"
-            href="/"
+            component={RouterLink}
+            to="/"
             sx={{
               mr: 2,
               display: { xs: 'flex', md: 'none' },
@@ -115,8 +156,18 @@ function Navbar() {
             {pages.map((page) => (
               <Button
                 key={page}
+                component={RouterLink}
+                to={pageRoutes[page]}
                 onClick={handleCloseNavMenu}
-                sx={{ my: 2, color: 'white', display: 'block', mx: 1 }}
+                sx={{ 
+                  my: 2, 
+                  color: 'white', 
+                  display: 'block', 
+                  mx: 1,
+                  '&:hover': {
+                    backgroundColor: 'rgba(255, 255, 255, 0.1)',
+                  } 
+                }}
               >
                 {page}
               </Button>
@@ -147,4 +198,4 @@ function Navbar() {
   );
 }
 
-export default Navbar; 
+export default Navbar;
