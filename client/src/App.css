@@ -66,6 +66,105 @@ html {
   transform: scale(1.2);
 }
 
+/* Audio player styles */
+.audio-player-container {
+  position: fixed;
+  bottom: 20px;
+  right: 20px;
+  z-index: 1000;
+  transition: opacity 0.3s ease;
+}
+
+.audio-player-container:hover {
+  opacity: 1;
+}
+
+.audio-player-button {
+  border-radius: 50%;
+  background-color: rgba(0, 0, 0, 0.5);
+  color: white;
+  width: 40px;
+  height: 40px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+
+.audio-player-button:hover {
+  background-color: rgba(0, 0, 0, 0.7);
+  transform: scale(1.1);
+}
+
+/* Edges page styles */
+.edge-profile-card {
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+  height: 100%;
+}
+
+.edge-profile-card:hover {
+  transform: translateY(-8px);
+  box-shadow: 0 10px 20px rgba(0, 0, 0, 0.1);
+}
+
+.edge-profile-image {
+  height: 180px;
+  object-fit: contain;
+  padding: 16px;
+  background-color: #f5f5f5;
+}
+
+.edge-profile-name {
+  text-align: center;
+  padding: 16px;
+  font-weight: 500;
+}
+
+.edge-category-heading {
+  margin-top: 40px;
+  margin-bottom: 24px;
+  font-weight: bold;
+  color: #333;
+  border-bottom: 2px solid #1976d2;
+  padding-bottom: 8px;
+  display: inline-block;
+}
+
+/* Gallery page styles */
+.gallery-tabs .MuiTab-root {
+  text-transform: none;
+  font-size: 1rem;
+  min-width: 120px;
+}
+
+.gallery-image-card {
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+  height: 100%;
+  cursor: pointer;
+}
+
+.gallery-image-card:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 10px 20px rgba(0, 0, 0, 0.15);
+}
+
+.gallery-category-title {
+  position: relative;
+  padding-bottom: 12px;
+  margin-bottom: 24px;
+}
+
+.gallery-category-title::after {
+  content: '';
+  position: absolute;
+  left: 0;
+  bottom: 0;
+  width: 60px;
+  height: 3px;
+  background-color: #1976d2;
+}
+
 /* Page container styles for all pages */
 .page-container {
   max-width: 1200px;

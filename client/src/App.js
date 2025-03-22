@@ -5,6 +5,9 @@ import Navbar from './components/Navbar';
 import ContactForm from './components/ContactForm';
 import ImageSlider from './components/ImageSlider';
 import StoneCarePage from './components/StoneCarePage';
+import AudioPlayer from './components/AudioPlayer';
+import EdgesPage from './components/EdgesPage';
+import GalleryPage from './components/GalleryPage';
 import { createTheme, ThemeProvider, CssBaseline, Container, Box, Typography, Paper } from '@mui/material';
 
 // Create a theme instance
@@ -224,9 +227,14 @@ function App() {
             <Route path="/products" element={<ProductsPage />} />
             <Route path="/services" element={<ServicesPage />} />
             <Route path="/stone-care" element={<StoneCarePage />} />
+            <Route path="/edges" element={<EdgesPage />} />
+            <Route path="/gallery" element={<GalleryPage />} />
             <Route path="/about" element={<AboutPage />} />
             <Route path="/contact" element={<ContactPage />} />
           </Routes>
+          
+          {/* Audio Player is visible on all pages */}
+          <AudioPlayer />
         </div>
       </Router>
     </ThemeProvider>

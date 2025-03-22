@@ -15,14 +15,16 @@ import {
 } from '@mui/material';
 import MenuIcon from '@mui/icons-material/Menu';
 
-// Update the pages array to include Stone Care
-const pages = ['Home', 'Products', 'Services', 'Stone Care', 'About', 'Contact'];
+// Update the pages array to include Gallery
+const pages = ['Home', 'Products', 'Services', 'Stone Care', 'Edges', 'Gallery', 'About', 'Contact'];
 // Map pages to their routes
 const pageRoutes = {
   'Home': '/',
   'Products': '/products',
   'Services': '/services',
   'Stone Care': '/stone-care',
+  'Edges': '/edges',
+  'Gallery': '/gallery',
   'About': '/about',
   'Contact': '/contact'
 };
