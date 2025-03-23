@@ -10,17 +10,17 @@ import {
   Container, 
   Button, 
   MenuItem,
-  useMediaQuery,
-  useTheme
+  useTheme,
+  Link as MuiLink
 } from '@mui/material';
 import MenuIcon from '@mui/icons-material/Menu';
+import PhoneIcon from '@mui/icons-material/Phone';
 
-// Update the pages array to include Gallery
-const pages = ['Home', 'Products', 'Services', 'Stone Care', 'Edges', 'Gallery', 'About', 'Contact'];
+// Update the pages array to remove Products
+const pages = ['Home', 'Services', 'Stone Care', 'Edges', 'Gallery', 'About', 'Contact'];
 // Map pages to their routes
 const pageRoutes = {
   'Home': '/',
-  'Products': '/products',
   'Services': '/services',
   'Stone Care': '/stone-care',
   'Edges': '/edges',
@@ -32,9 +32,9 @@ const pageRoutes = {
 function Navbar() {
   const [anchorElNav, setAnchorElNav] = useState(null);
   const [scrolled, setScrolled] = useState(false);
+  // eslint-disable-next-line no-unused-vars
   const theme = useTheme();
-  const isMobile = useMediaQuery(theme.breakpoints.down('md'));
-
+  
   // Add scroll event listener to change navbar appearance on scroll
   useEffect(() => {
     const handleScroll = () => {
@@ -70,91 +70,92 @@ function Navbar() {
       }}
     >
       <Container maxWidth="xl">
-        <Toolbar disableGutters>
-          {/* Logo/Brand - large screens */}
-          <Typography
-            variant="h6"
-            noWrap
-            component={Link}
-            to="/"
-            sx={{
-              mr: 2,
-              display: { xs: 'none', md: 'flex' },
-              fontFamily: 'monospace',
-              fontWeight: 700,
-              letterSpacing: '.3rem',
-              color: 'inherit',
-              textDecoration: 'none',
-            }}
-          >
-            MERLO STONE
-          </Typography>
-
-          {/* Mobile menu */}
-          <Box sx={{ flexGrow: 1, display: { xs: 'flex', md: 'none' } }}>
-            <IconButton
-              size="large"
-              aria-label="navigation menu"
-              aria-controls="menu-appbar"
-              aria-haspopup="true"
-              onClick={handleOpenNavMenu}
-              color="inherit"
-            >
-              <MenuIcon />
-            </IconButton>
-            <Menu
-              id="menu-appbar"
-              anchorEl={anchorElNav}
-              anchorOrigin={{
-                vertical: 'bottom',
-                horizontal: 'left',
-              }}
-              keepMounted
-              transformOrigin={{
-                vertical: 'top',
-                horizontal: 'left',
-              }}
-              open={Boolean(anchorElNav)}
-              onClose={handleCloseNavMenu}
+        <Toolbar disableGutters sx={{ justifyContent: 'space-between' }}>
+          <Box sx={{ display: 'flex', alignItems: 'center' }}>
+            {/* Logo/Brand - large screens */}
+            <Typography
+              variant="h6"
+              noWrap
+              component={Link}
+              to="/"
               sx={{
-                display: { xs: 'block', md: 'none' },
+                mr: 2,
+                display: { xs: 'none', md: 'flex' },
+                fontFamily: 'monospace',
+                fontWeight: 700,
+                letterSpacing: '.3rem',
+                color: 'inherit',
+                textDecoration: 'none',
               }}
             >
-              {pages.map((page) => (
-                <MenuItem 
-                  key={page} 
-                  component={Link}
-                  to={pageRoutes[page]}
-                  onClick={handleCloseNavMenu}
-                >
-                  <Typography textAlign="center">{page}</Typography>
-                </MenuItem>
-              ))}
-            </Menu>
+              MERLO STONE
+            </Typography>
+
+            {/* Mobile menu */}
+            <Box sx={{ display: { xs: 'flex', md: 'none' } }}>
+              <IconButton
+                size="large"
+                aria-label="navigation menu"
+                aria-controls="menu-appbar"
+                aria-haspopup="true"
+                onClick={handleOpenNavMenu}
+                color="inherit"
+              >
+                <MenuIcon />
+              </IconButton>
+              <Menu
+                id="menu-appbar"
+                anchorEl={anchorElNav}
+                anchorOrigin={{
+                  vertical: 'bottom',
+                  horizontal: 'left',
+                }}
+                keepMounted
+                transformOrigin={{
+                  vertical: 'top',
+                  horizontal: 'left',
+                }}
+                open={Boolean(anchorElNav)}
+                onClose={handleCloseNavMenu}
+                sx={{
+                  display: { xs: 'block', md: 'none' },
+                }}
+              >
+                {pages.map((page) => (
+                  <MenuItem 
+                    key={page} 
+                    component={Link}
+                    to={pageRoutes[page]}
+                    onClick={handleCloseNavMenu}
+                  >
+                    <Typography textAlign="center">{page}</Typography>
+                  </MenuItem>
+                ))}
+              </Menu>
+            </Box>
+
+            {/* Logo/Brand - small screens */}
+            <Typography
+              variant="h5"
+              noWrap
+              component={Link}
+              to="/"
+              sx={{
+                mr: 2,
+                display: { xs: 'flex', md: 'none' },
+                fontFamily: 'monospace',
+                fontWeight: 700,
+                letterSpacing: '.3rem',
+                color: 'inherit',
+                textDecoration: 'none',
+              }}
+            >
+              MERLO STONE
+            </Typography>
           </Box>
 
-          {/* Logo/Brand - small screens */}
-          <Typography
-            variant="h5"
-            noWrap
-            component={Link}
-            to="/"
-            sx={{
-              mr: 2,
-              display: { xs: 'flex', md: 'none' },
-              flexGrow: 1,
-              fontFamily: 'monospace',
-              fontWeight: 700,
-              letterSpacing: '.3rem',
-              color: 'inherit',
-              textDecoration: 'none',
-            }}
-          >
-            MERLO STONE
-          </Typography>
-
           {/* Desktop menu */}
-          <Box sx={{ flexGrow: 1, display: { xs: 'none', md: 'flex' }, justifyContent: 'center' }}>
+          <Box sx={{ display: { xs: 'none', md: 'flex' }, justifyContent: 'center' }}>
             {pages.map((page) => (
               <Button
                 key={page}
@@ -176,23 +177,25 @@ function Navbar() {
             ))}
           </Box>
 
-          {/* Right side section - could be used for login/signup buttons */}
-          <Box sx={{ flexGrow: 0 }}>
-            {!isMobile && (
-              <Button 
-                variant="outlined" 
-                color="inherit"
-                sx={{ 
-                  borderColor: 'white',
-                  '&:hover': {
-                    borderColor: 'white',
-                    backgroundColor: 'rgba(255, 255, 255, 0.1)',
-                  }
-                }}
-              >
-                Login
-              </Button>
-            )}
+          {/* Right side section - phone number */}
+          <Box sx={{ display: 'flex', alignItems: 'center' }}>
+            <PhoneIcon sx={{ mr: 1, fontSize: { xs: '1.5rem', sm: '2rem' }, color: 'white' }} />
+            <MuiLink 
+              href="tel:+19255255802"
+              underline="none"
+              sx={{ 
+                fontWeight: 'bold',
+                fontSize: { xs: '1.2rem', sm: '1.5rem' },
+                letterSpacing: '0.5px',
+                color: 'white',
+                textDecoration: 'none',
+                '&:hover': {
+                  color: 'rgba(255, 255, 255, 0.9)',
+                }
+              }}
+            >
+              Office: 925-525-5802
+            </MuiLink>
           </Box>
         </Toolbar>
       </Container>

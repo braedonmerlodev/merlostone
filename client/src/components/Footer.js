@@ -32,19 +32,19 @@ function Footer() {
               MERLO STONE
             </Typography>
             <Typography variant="body2" sx={{ mb: 2 }}>
-              The Bay Area's premier fabricator and installer of natural stone. Quality service for contractors, designers, architects, and homeowners.
+              The Bay Area's premier fabricator and installer of natural stone. Our fabrication shop is based in Tracy, CA, providing quality service for contractors, designers, architects, and homeowners throughout the Bay Area.
             </Typography>
             <Box sx={{ display: 'flex', alignItems: 'center', mb: 1 }}>
               <LocationOnIcon sx={{ mr: 1, fontSize: '1.2rem' }} />
               <Typography variant="body2">
-                1234 Stone Way, San Francisco, CA 94110
+                4220 Commercial Drive, Unit 1A, Tracy, CA 95304
               </Typography>
             </Box>
             <Box sx={{ display: 'flex', alignItems: 'center', mb: 1 }}>
               <PhoneIcon sx={{ mr: 1, fontSize: '1.2rem' }} />
               <Typography variant="body2">
-                <Link href="tel:+14155551234" color="inherit" underline="hover">
-                  (415) 555-1234
+                <Link href="tel:+19255255802" color="inherit" underline="hover">
+                  (925) 525-5802
                 </Link>
               </Typography>
             </Box>

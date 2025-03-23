@@ -3,7 +3,7 @@ import './App.css';
 import { createBrowserRouter, RouterProvider, Outlet } from 'react-router-dom';
 import Navbar from './components/Navbar';
 import ContactForm from './components/ContactForm';
-import ImageSlider from './components/ImageSlider';
+import CustomImageSlider from './components/CustomImageSlider';
 import StoneCarePage from './components/StoneCarePage';
 import AudioPlayer from './components/AudioPlayer';
 import EdgesPage from './components/EdgesPage';
@@ -35,11 +35,11 @@ export const AudioContext = createContext();
 function HomePage() {
   return (
     <>
-      {/* Hero section with ImageSlider */}
+      {/* Hero section with CustomImageSlider */}
       <Box sx={{ position: 'relative', height: '100vh', width: '100%', overflow: 'hidden' }}>
-        {/* Image Slider sits behind */}
+        {/* CustomImageSlider sits behind */}
         <Box sx={{ position: 'absolute', top: 0, left: 0, right: 0, zIndex: 0 }}>
-          <ImageSlider />
+          <CustomImageSlider />
         </Box>
       </Box>
       
@@ -67,7 +67,7 @@ function HomePage() {
               </Typography>
               <Typography variant="body1" paragraph sx={{ fontSize: '1.1rem', mb: 3 }}>
                 As the Bay Area's premier fabricator and installer of natural stone, we provide quality service to all our customers. 
-                General contractors, designers, architects and homeowners alike, receive the same superior service.
+                Our fabrication shop is based in Tracy, CA, serving general contractors, designers, architects and homeowners throughout the entire Bay Area.
               </Typography>
               <Typography variant="body1" paragraph sx={{ fontSize: '1.1rem', mb: 3 }}>
                 We can design and install quality countertops, with intricate borders and backsplashes. Solid surface countertops 
@@ -136,36 +136,17 @@ function AboutPage() {
         <Box sx={{ maxWidth: '800px', mx: 'auto' }}>
           <Typography variant="body1" paragraph>
             Merlo Stone is the Bay Area's premier fabricator and installer of natural stone. We provide quality service to all our customers, 
-            from general contractors and designers to architects and homeowners.
+            from general contractors and designers to architects and homeowners throughout the Bay Area.
           </Typography>
           <Typography variant="body1" paragraph>
             With years of experience in the industry, we have established ourselves as a trusted name in stone fabrication and installation. 
             Our team of skilled craftsmen takes pride in delivering exceptional quality and service on every project.
           </Typography>
           <Typography variant="body1" paragraph>
-            We specialize in all types of natural and engineered stone, including granite, marble, quartz, and more. 
-            Our state-of-the-art facility and tools allow us to create precise, beautiful stonework for any application.
+            Our fabrication shop is located at 4220 Commercial Drive, Unit 1A, Tracy, CA 95304, where we specialize in all types of natural and engineered stone, including granite, marble, quartz, and more. 
+            While our workshop is in Tracy, we proudly serve the entire Bay Area with our superior craftsmanship and installation services.
           </Typography>
         </Box>
-      </Container>
-    </Box>
-  );
-}
-
-// Products Page placeholder - can be moved to a separate file later
-function ProductsPage() {
-  return (
-    <Box sx={{ pt: 12, pb: 8 }}>
-      <Container maxWidth="lg">
-        <Typography variant="h3" component="h1" gutterBottom sx={{ textAlign: 'center', fontWeight: 'bold' }}>
-          Our Products
-        </Typography>
-        <Typography variant="body1" paragraph align="center" sx={{ maxWidth: '800px', mx: 'auto', mb: 6 }}>
-          We offer a wide range of high-quality stone products for residential and commercial applications.
-        </Typography>
-        <Grid container spacing={4}>
-          {/* Product categories can be added here */}
-        </Grid>
       </Container>
     </Box>
   );
@@ -212,10 +193,6 @@ function App() {
         {
           path: "/about",
           element: <AboutPage />
-        },
-        {
-          path: "/products",
-          element: <ProductsPage />
         },
         {
           path: "/privacy-policy",

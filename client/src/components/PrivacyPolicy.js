@@ -63,9 +63,9 @@ function PrivacyPolicy() {
           
           <Typography variant="body1" sx={{ ml: 4 }}>
             Merlo Stone<br />
-            1234 Stone Way<br />
-            San Francisco, CA 94110<br />
-            Phone: (415) 555-1234<br />
+            4220 Commercial Drive, Unit 1A<br />
+            Tracy, CA 95304<br />
+            Phone: (925) 525-5802<br />
             Email: info@merlostone.com
           </Typography>
         </Paper>

@@ -18,10 +18,48 @@ import LocationOnIcon from '@mui/icons-material/LocationOn';
 import PhoneIcon from '@mui/icons-material/Phone';
 import EmailIcon from '@mui/icons-material/Email';
 import AccessTimeIcon from '@mui/icons-material/AccessTime';
+import DirectionsIcon from '@mui/icons-material/Directions';
 import { Link as RouterLink } from 'react-router-dom';
 
-// Don't import reCAPTCHA by default to prevent initial loading
-// import { GoogleReCaptchaProvider, useGoogleReCaptcha } from 'react-google-recaptcha-v3';
+// Google Maps Component
+const GoogleMap = () => {
+  return (
+    <Box sx={{ width: '100%', height: '400px', mt: 6, borderRadius: 2, overflow: 'hidden' }}>
+      <Typography variant="h4" component="h2" gutterBottom align="center" sx={{ mb: 3 }}>
+        Visit Our Fabrication Shop
+      </Typography>
+      <Box
+        component="iframe"
+        src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3168.646673008206!2d-121.4453221!3d37.4305889!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x80904546d9efc0e3%3A0xaa5dcfb89977f929!2s4220%20Commercial%20Dr%20unit%201a%2C%20Tracy%2C%20CA%2095304!5e0!3m2!1sen!2sus!4v1653957438463!5m2!1sen!2sus"
+        sx={{
+          border: 0,
+          width: '100%',
+          height: '350px',
+          borderRadius: '4px',
+          boxShadow: 3
+        }}
+        allowFullScreen=""
+        loading="lazy"
+        referrerPolicy="no-referrer-when-downgrade"
+        title="Merlo Stone Location"
+        aria-label="Google Maps showing Merlo Stone's location"
+      />
+      <Box sx={{ display: 'flex', justifyContent: 'center', mt: 2 }}>
+        <Button 
+          variant="contained" 
+          color="primary" 
+          startIcon={<DirectionsIcon />}
+          href="https://www.google.com/maps/dir//4220+Commercial+Dr+unit+1a,+Tracy,+CA+95304" 
+          target="_blank"
+          rel="noopener noreferrer"
+          sx={{ mt: 2 }}
+        >
+          Get Directions
+        </Button>
+      </Box>
+    </Box>
+  );
+};
 
 const FormContent = () => {
   const theme = useTheme();
@@ -41,9 +79,6 @@ const FormContent = () => {
   });
   const [isSubmitting, setIsSubmitting] = useState(false);
   
-  // Get the reCAPTCHA execution function if available
-  // const { executeRecaptcha } = useGoogleReCaptcha();
-
   const handleInputChange = (e) => {
     const { name, value } = e.target;
     setFormData({
@@ -97,7 +132,6 @@ const FormContent = () => {
     
     try {
       // In a real application, you would send this to your backend
-      // Since we're not making a DB call, we'll simulate a successful submission.
       console.log('Form data:', formData);
       
       // Simulate API call delay
@@ -170,9 +204,20 @@ const FormContent = () => {
                       Our Location
                     </Typography>
                     <Typography variant="body2">
-                      1234 Stone Way<br />
-                      San Francisco, CA 94110
+                      4220 Commercial Drive, Unit 1A<br />
+                      Tracy, CA 95304
                     </Typography>
+                    <Button
+                      variant="text"
+                      size="small"
+                      startIcon={<DirectionsIcon />}
+                      href="https://www.google.com/maps/dir//4220+Commercial+Dr+unit+1a,+Tracy,+CA+95304" 
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      sx={{ mt: 1, pl: 0, textTransform: 'none' }}
+                    >
+                      Get Directions
+                    </Button>
                   </Box>
                 </Box>
                 
@@ -183,7 +228,9 @@ const FormContent = () => {
                       Phone
                     </Typography>
                     <Typography variant="body2">
-                      (415) 555-1234
+                      <Link href="tel:+19255255802" color="inherit" underline="hover">
+                        (925) 525-5802
+                      </Link>
                     </Typography>
                   </Box>
                 </Box>
@@ -195,7 +242,9 @@ const FormContent = () => {
                       Email
                     </Typography>
                     <Typography variant="body2">
-                      info@merlostone.com
+                      <Link href="mailto:davemerlo@comcast.net" color="inherit" underline="hover">
+                        davemerlo@comcast.net
+                      </Link>
                     </Typography>
                   </Box>
                 </Box>
@@ -319,11 +368,11 @@ const FormContent = () => {
                 <Divider sx={{ mb: 3 }} />
                 
                 <Grid container spacing={2}>
-                  <Grid item xs={12} sm={6}>
+                  <Grid item xs={12}>
                     <Box sx={{ display: 'flex', alignItems: 'center', mb: 2 }}>
                       <LocationOnIcon sx={{ mr: 1, color: theme.palette.primary.main }} />
                       <Typography variant="body2">
-                        1234 Stone Way, San Francisco, CA 94110
+                        4220 Commercial Drive, Unit 1A, Tracy, CA 95304
                       </Typography>
                     </Box>
                   </Grid>
@@ -331,23 +380,43 @@ const FormContent = () => {
                     <Box sx={{ display: 'flex', alignItems: 'center', mb: 2 }}>
                       <PhoneIcon sx={{ mr: 1, color: theme.palette.primary.main }} />
                       <Typography variant="body2">
-                        (415) 555-1234
+                        <Link href="tel:+19255255802" color="inherit" underline="hover">
+                          (925) 525-5802
+                        </Link>
+                      </Typography>
+                    </Box>
+                  </Grid>
+                  <Grid item xs={12} sm={6}>
+                    <Box sx={{ display: 'flex', alignItems: 'center' }}>
+                      <EmailIcon sx={{ mr: 1, color: theme.palette.primary.main }} />
+                      <Typography variant="body2">
+                        <Link href="mailto:davemerlo@comcast.net" color="inherit" underline="hover">
+                          davemerlo@comcast.net
+                        </Link>
                       </Typography>
                     </Box>
                   </Grid>
                   <Grid item xs={12}>
-                    <Box sx={{ display: 'flex', alignItems: 'center' }}>
-                      <EmailIcon sx={{ mr: 1, color: theme.palette.primary.main }} />
-                      <Typography variant="body2">
-                        info@merlostone.com
-                      </Typography>
-                    </Box>
+                    <Button
+                      variant="text"
+                      size="small"
+                      startIcon={<DirectionsIcon />}
+                      href="https://www.google.com/maps/dir//4220+Commercial+Dr+unit+1a,+Tracy,+CA+95304" 
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      sx={{ mt: 1, textTransform: 'none' }}
+                    >
+                      Get Directions
+                    </Button>
                   </Grid>
                 </Grid>
               </Paper>
             )}
           </Grid>
         </Grid>
+        
+        {/* Google Map */}
+        <GoogleMap />
       </Container>
       
       <Snackbar 
