@@ -2,31 +2,31 @@ import React from 'react';
 import Carousel from 'react-material-ui-carousel';
 import { Paper, Box, Typography } from '@mui/material';
 
-// Sample images - replace these with your actual work images
+// Use actual images from the images folder in specified order
 const items = [
     {
         id: 1,
-        image: "linear-gradient(to right, #434343 0%, black 100%)",
-        title: "Project One",
-        description: "Modern architectural design"
+        image: "/images/4.jpg",
+        title: "Merlo Stone Welcomes You!",
+        description: ""
     },
     {
         id: 2,
-        image: "linear-gradient(to top, #09203f 0%, #537895 100%)",
-        title: "Project Two",
-        description: "Interior design concept"
+        image: "/images/1.jpg",
+        title: "Merlo Stone Welcomes You!",
+        description: ""
     },
     {
         id: 3,
-        image: "linear-gradient(120deg, #f6d365 0%, #fda085 100%)",
-        title: "Project Three",
-        description: "Landscape design"
+        image: "/images/2.jpg",
+        title: "Merlo Stone Welcomes You!",
+        description: ""
     },
     {
         id: 4,
-        image: "linear-gradient(to right, #868f96 0%, #596164 100%)",
-        title: "Project Four",
-        description: "Commercial construction"
+        image: "/images/3.jpg",
+        title: "Merlo Stone Welcomes You!",
+        description: ""
     }
 ];
 
@@ -65,9 +65,7 @@ const Item = ({ item }) => {
                 height: '100vh',
                 width: '100%',
                 position: 'relative',
-                backgroundImage: item.image.includes('gradient') 
-                    ? item.image 
-                    : `linear-gradient(rgba(0, 0, 0, 0.5), rgba(0, 0, 0, 0.5)), url(${item.image})`,
+                backgroundImage: `linear-gradient(rgba(0, 0, 0, 0.5), rgba(0, 0, 0, 0.5)), url(${item.image})`,
                 backgroundSize: 'cover',
                 backgroundPosition: 'center',
                 display: 'flex',
@@ -82,9 +80,11 @@ const Item = ({ item }) => {
             <Typography variant="h3" component="h2" sx={{ fontWeight: 'bold', mb: 2 }}>
                 {item.title}
             </Typography>
-            <Typography variant="h5" sx={{ maxWidth: '70%', textAlign: 'center' }}>
-                {item.description}
-            </Typography>
+            {item.description && (
+                <Typography variant="h5" sx={{ maxWidth: '70%', textAlign: 'center' }}>
+                    {item.description}
+                </Typography>
+            )}
         </Paper>
     );
 };

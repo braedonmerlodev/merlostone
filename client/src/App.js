@@ -8,7 +8,13 @@ import StoneCarePage from './components/StoneCarePage';
 import AudioPlayer from './components/AudioPlayer';
 import EdgesPage from './components/EdgesPage';
 import GalleryPage from './components/GalleryPage';
-import { createTheme, ThemeProvider, CssBaseline, Container, Box, Typography, Paper } from '@mui/material';
+import ServicesPage from './components/ServicesPage';
+import Testimonials from './components/Testimonials';
+import LogoSlider from './components/LogoSlider';
+import Footer from './components/Footer';
+import PrivacyPolicy from './components/PrivacyPolicy';
+import { createTheme, ThemeProvider, CssBaseline, Container, Box, Typography, Grid, Button } from '@mui/material';
+import { Link } from 'react-router-dom';
 
 // Create a theme instance
 const theme = createTheme({
@@ -35,51 +41,83 @@ function HomePage() {
         <Box sx={{ position: 'absolute', top: 0, left: 0, right: 0, zIndex: 0 }}>
           <ImageSlider />
         </Box>
-        
-        {/* Hero content */}
-        <Box 
-          sx={{ 
-            position: 'relative', 
-            zIndex: 5, 
-            height: 'calc(100vh - 64px)', 
-            display: 'flex',
-            flexDirection: 'column',
-            justifyContent: 'center',
-            alignItems: 'center',
-            color: 'white',
-            textShadow: '2px 2px 4px rgba(0,0,0,0.5)',
-            pt: 8
-          }}
-        >
-          <Typography 
-            variant="h2" 
-            component="h1" 
-            gutterBottom 
-            align="center" 
-            sx={{ fontWeight: 'bold', mb: 2 }}
-          >
-            Welcome to Merlostone
-          </Typography>
-          <Typography 
-            variant="h5" 
-            paragraph 
-            align="center"
-            sx={{ maxWidth: '800px', mx: 'auto', px: 3 }}
-          >
-            Showcasing our finest works through an elegant and modern design
-          </Typography>
-        </Box>
       </Box>
       
-      {/* Main content starts here */}
-      <Container sx={{ py: 8 }}>
-        <Typography variant="h4" component="h2" gutterBottom align="center">
-          Our Services
-        </Typography>
-        <Typography variant="body1" paragraph align="center">
-          This is a demo application with a responsive navbar, a background image slider, and a contact form with reCAPTCHA v3 integration.
-        </Typography>
-      </Container>
+      {/* About Me section */}
+      <Box sx={{ py: 10, backgroundColor: '#f8f8f8' }}>
+        <Container maxWidth="lg">
+          <Grid container spacing={4} alignItems="center">
+            <Grid item xs={12} md={6}>
+              <Box
+                component="img"
+                src="/images/me.jpg"
+                alt="Dave Merlo"
+                sx={{
+                  width: '100%',
+                  maxHeight: 500,
+                  objectFit: 'cover',
+                  borderRadius: 2,
+                  boxShadow: 3
+                }}
+              />
+            </Grid>
+            <Grid item xs={12} md={6}>
+              <Typography variant="h3" component="h2" gutterBottom sx={{ fontWeight: 'bold', color: '#333' }}>
+                About Us
+              </Typography>
+              <Typography variant="body1" paragraph sx={{ fontSize: '1.1rem', mb: 3 }}>
+                As the Bay Area's premier fabricator and installer of natural stone, we provide quality service to all our customers. 
+                General contractors, designers, architects and homeowners alike, receive the same superior service.
+              </Typography>
+              <Typography variant="body1" paragraph sx={{ fontSize: '1.1rem', mb: 3 }}>
+                We can design and install quality countertops, with intricate borders and backsplashes. Solid surface countertops 
+                manufactured from ZodiaqStone, CaesarStone, SileStone as well as other engineered stones.
+              </Typography>
+              <Typography variant="body1" paragraph sx={{ fontSize: '1.1rem' }}>
+                Our designers will work with you step by step to create the project of your dreams and imagination at affordable prices.
+              </Typography>
+              <Button 
+                variant="contained" 
+                color="primary" 
+                size="large" 
+                component={Link} 
+                to="/about"
+                sx={{ mt: 3, px: 4, py: 1 }}
+              >
+                Learn More
+              </Button>
+            </Grid>
+          </Grid>
+        </Container>
+      </Box>
+      
+      {/* Testimonials section (replacing Services section) */}
+      <Testimonials />
+      
+      {/* Logo Slider section */}
+      <LogoSlider />
+      
+      {/* Call to action for Services */}
+      <Box sx={{ py: 6, textAlign: 'center' }}>
+        <Container maxWidth="md">
+          <Typography variant="h4" component="h2" gutterBottom>
+            Explore Our Services
+          </Typography>
+          <Typography variant="body1" paragraph sx={{ mb: 4 }}>
+            Discover our full range of stone fabrication and installation services for kitchens, bathrooms, commercial spaces, and more.
+          </Typography>
+          <Button 
+            variant="contained" 
+            color="primary" 
+            size="large" 
+            component={Link} 
+            to="/services"
+            sx={{ px: 4, py: 1.5 }}
+          >
+            View All Services
+          </Button>
+        </Container>
+      </Box>
       
       {/* Contact form */}
       <ContactForm />
@@ -87,217 +125,133 @@ function HomePage() {
   );
 }
 
-// Products Page Component
-function ProductsPage() {
-  return (
-    <Container className="page-container">
-      <Typography variant="h3" component="h1" gutterBottom align="center">
-        Our Products
-      </Typography>
-      <Typography variant="body1" paragraph>
-        Discover our range of high-quality stone products for your home and business.
-      </Typography>
-      {/* Add your products content here */}
-    </Container>
-  );
-}
-
-// Services Page Component
-function ServicesPage() {
-  return (
-    <Container className="page-container">
-      <Typography variant="h3" component="h1" gutterBottom align="center">
-        Our Services
-      </Typography>
-      <Typography variant="body1" paragraph>
-        We offer a wide range of stone installation and maintenance services.
-      </Typography>
-      {/* Add your services content here */}
-    </Container>
-  );
-}
-
-// About Page Component
+// About Page placeholder - can be moved to a separate file later
 function AboutPage() {
   return (
-    <Container className="page-container">
-      <Paper elevation={3} sx={{ p: { xs: 3, md: 5 }, mb: 4 }}>
-        <Typography variant="h3" component="h1" gutterBottom align="center" sx={{ mb: 4 }}>
-          About Us
+    <Box sx={{ pt: 12, pb: 8 }}>
+      <Container maxWidth="lg">
+        <Typography variant="h3" component="h1" gutterBottom sx={{ textAlign: 'center', fontWeight: 'bold' }}>
+          About Merlo Stone
         </Typography>
-        
-        <Box className="about-page-container" sx={{ maxWidth: 900, mx: 'auto', textAlign: 'left', mb: 4 }}>
+        <Box sx={{ maxWidth: '800px', mx: 'auto' }}>
           <Typography variant="body1" paragraph>
-            Thank you for considering M&S Marble as your fabricator/installer for your natural stone project. We specialize in quality custom fabrication from Kitchen Counter Tops, Bathroom Vanities, Showers, Tub Surrounds, Table Tops and more.
+            Merlo Stone is the Bay Area's premier fabricator and installer of natural stone. We provide quality service to all our customers, 
+            from general contractors and designers to architects and homeowners.
           </Typography>
-          
           <Typography variant="body1" paragraph>
-            We recognize that remodeling projects can sometimes be overwhelming. Don't worry, our knowledgeable staff makes every effort to make sure the process is straight forward and easy at all times. We are committed to excellence in every way!
+            With years of experience in the industry, we have established ourselves as a trusted name in stone fabrication and installation. 
+            Our team of skilled craftsmen takes pride in delivering exceptional quality and service on every project.
           </Typography>
-          
-          <Box sx={{ mb: 4, maxWidth: '100%', overflow: 'hidden', borderRadius: 2 }}>
-            <Box
-              component="img"
-              sx={{
-                width: '100%',
-                maxHeight: '400px',
-                objectFit: 'cover'
-              }}
-              alt="Marble workshop"
-              src="/images/about/workshop.jpg" 
-              onError={(e) => {
-                e.target.onerror = null;
-                e.target.style.height = '300px';
-                e.target.style.background = 'linear-gradient(135deg, #667eea 0%, #764ba2 100%)';
-                e.target.style.display = 'flex';
-                e.target.style.alignItems = 'center';
-                e.target.style.justifyContent = 'center';
-                e.target.alt = 'M&S Marble Workshop';
-              }}
-            />
-          </Box>
-          
-          <Box className="about-quote" sx={{ pl: 3, my: 4, borderLeft: '4px solid #1976d2' }}>
-            <Typography variant="body1" paragraph sx={{ fontStyle: 'italic' }}>
-              "Dave Merlo has owned and operated M&S Marble-Tile since 1986. Dave takes pride in his craftsmanship. From the beginning this company has built it's reputation from word to mouth. A happy customer is the only way it's been and the only way we want it!"
-            </Typography>
-          </Box>
-        </Box>
-        
-        <Box className="about-highlight" sx={{ my: 4, p: 4, bgcolor: '#f5f5f5', borderRadius: 2 }}>
-          <Typography variant="h5" gutterBottom align="center" sx={{ mb: 2 }}>
-            Our Commitment To You
-          </Typography>
-          <Typography variant="body1" align="center">
-            At M&S Marble, we are dedicated to providing exceptional craftsmanship, personalized service, and stunning results that exceed your expectations. 
-            With over 35 years of experience in the industry, we have the expertise to bring your vision to life.
+          <Typography variant="body1" paragraph>
+            We specialize in all types of natural and engineered stone, including granite, marble, quartz, and more. 
+            Our state-of-the-art facility and tools allow us to create precise, beautiful stonework for any application.
           </Typography>
         </Box>
-        
-        <Box sx={{ mt: 6, display: 'flex', flexDirection: { xs: 'column', md: 'row' }, justifyContent: 'space-around' }}>
-          <Box sx={{ mb: { xs: 4, md: 0 }, maxWidth: '280px' }}>
-            <Typography variant="h6" gutterBottom align="center">
-              Quality Materials
-            </Typography>
-            <Typography variant="body2" align="center">
-              We source only the finest natural stone materials for our projects, ensuring beauty and durability.
-            </Typography>
-          </Box>
-          
-          <Box sx={{ mb: { xs: 4, md: 0 }, maxWidth: '280px' }}>
-            <Typography variant="h6" gutterBottom align="center">
-              Expert Craftmanship
-            </Typography>
-            <Typography variant="body2" align="center">
-              Our skilled artisans bring decades of experience to every project, large or small.
-            </Typography>
-          </Box>
-          
-          <Box sx={{ maxWidth: '280px' }}>
-            <Typography variant="h6" gutterBottom align="center">
-              Customer Satisfaction
-            </Typography>
-            <Typography variant="body2" align="center">
-              Your complete satisfaction is our primary goal, from initial consultation to final installation.
-            </Typography>
-          </Box>
-        </Box>
-      </Paper>
-    </Container>
+      </Container>
+    </Box>
   );
 }
 
-// Contact Page Component that uses the ContactForm component
-function ContactPage() {
+// Products Page placeholder - can be moved to a separate file later
+function ProductsPage() {
   return (
-    <Container className="page-container">
-      <Typography variant="h3" component="h1" gutterBottom align="center">
-        Contact Us
-      </Typography>
-      <Typography variant="body1" paragraph align="center">
-        Get in touch with us using the form below.
-      </Typography>
-      <ContactForm />
-    </Container>
-  );
-}
-
-// Root Layout component for all pages
-function RootLayout() {
-  return (
-    <div className="App">
-      {/* Navbar is always visible */}
-      <Box sx={{ position: 'relative', zIndex: 10 }}>
-        <Navbar />
-      </Box>
-      
-      {/* This is where the route components will be rendered */}
-      <Outlet />
-      
-      {/* Audio Player is visible on all pages */}
-      <AudioPlayer />
-    </div>
+    <Box sx={{ pt: 12, pb: 8 }}>
+      <Container maxWidth="lg">
+        <Typography variant="h3" component="h1" gutterBottom sx={{ textAlign: 'center', fontWeight: 'bold' }}>
+          Our Products
+        </Typography>
+        <Typography variant="body1" paragraph align="center" sx={{ maxWidth: '800px', mx: 'auto', mb: 6 }}>
+          We offer a wide range of high-quality stone products for residential and commercial applications.
+        </Typography>
+        <Grid container spacing={4}>
+          {/* Product categories can be added here */}
+        </Grid>
+      </Container>
+    </Box>
   );
 }
 
 function App() {
-  // Initialize audio state from localStorage if available
+  // Audio state
   const [audioState, setAudioState] = useState({
     isPlaying: true, // Start with audio on to enable autoplay
     volume: localStorage.getItem('audioVolume') !== null 
-      ? JSON.parse(localStorage.getItem('audioVolume')) 
+      ? parseInt(localStorage.getItem('audioVolume')) 
       : 30
   });
 
-  // Create router with the routes configuration
   const router = createBrowserRouter([
     {
       path: "/",
-      element: <RootLayout />,
+      element: <Root />,
       children: [
-        { 
-          index: true, 
-          element: <HomePage /> 
+        {
+          path: "/",
+          element: <HomePage />
         },
-        { 
-          path: "products", 
-          element: <ProductsPage /> 
+        {
+          path: "/gallery",
+          element: <GalleryPage />
         },
-        { 
-          path: "services", 
-          element: <ServicesPage /> 
+        {
+          path: "/services",
+          element: <ServicesPage />
         },
-        { 
-          path: "stone-care", 
-          element: <StoneCarePage /> 
+        {
+          path: "/edges",
+          element: <EdgesPage />
         },
-        { 
-          path: "edges", 
-          element: <EdgesPage /> 
+        {
+          path: "/contact",
+          element: <ContactForm />
         },
-        { 
-          path: "gallery", 
-          element: <GalleryPage /> 
+        {
+          path: "/stone-care",
+          element: <StoneCarePage />
         },
-        { 
-          path: "about", 
-          element: <AboutPage /> 
+        {
+          path: "/about",
+          element: <AboutPage />
         },
-        { 
-          path: "contact", 
-          element: <ContactPage /> 
+        {
+          path: "/products",
+          element: <ProductsPage />
+        },
+        {
+          path: "/privacy-policy",
+          element: <PrivacyPolicy />
         }
       ]
     }
   ]);
 
   return (
-    <ThemeProvider theme={theme}>
-      <CssBaseline />
-      <AudioContext.Provider value={{ audioState, setAudioState }}>
+    <AudioContext.Provider value={{ audioState, setAudioState }}>
+      <ThemeProvider theme={theme}>
+        <CssBaseline />
         <RouterProvider router={router} />
-      </AudioContext.Provider>
-    </ThemeProvider>
+      </ThemeProvider>
+    </AudioContext.Provider>
+  );
+}
+
+function Root() {
+  // eslint-disable-next-line no-unused-vars
+  const { audioState, setAudioState } = React.useContext(AudioContext);
+  
+  return (
+    <>
+      <Navbar />
+      <Box sx={{ minHeight: '100vh', display: 'flex', flexDirection: 'column' }}>
+        <Box component="main" sx={{ flexGrow: 1 }}>
+          <Outlet />
+        </Box>
+        <Footer />
+      </Box>
+      <div className="audio-player-container">
+        <AudioPlayer />
+      </div>
+    </>
   );
 }
 

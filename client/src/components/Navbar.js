@@ -87,7 +87,7 @@ function Navbar() {
               textDecoration: 'none',
             }}
           >
-            MERLOSTONE
+            MERLO STONE
           </Typography>
 
           {/* Mobile menu */}
@@ -150,7 +150,7 @@ function Navbar() {
               textDecoration: 'none',
             }}
           >
-            MERLOSTONE
+            MERLO STONE
           </Typography>
 
           {/* Desktop menu */}

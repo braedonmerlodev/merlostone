@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { 
   Container, 
   Typography, 
@@ -16,6 +16,7 @@ import {
   IconButton
 } from '@mui/material';
 import CloseIcon from '@mui/icons-material/Close';
+import { useLocation } from 'react-router-dom';
 
 // Gallery data mapped to actual images in the images folder
 const galleryData = {
@@ -175,14 +176,37 @@ const galleryData = {
 // Categories for the tabs
 const categories = Object.keys(galleryData);
 
-// Placeholder image if the actual image is not available
-const placeholderImage = null; // Using CSS fallbacks instead of external URLs
-
 const GalleryPage = () => {
-  const [selectedCategory, setSelectedCategory] = useState(categories[0]);
+  const location = useLocation();
+  
+  // Check if we have a selected category from navigation
+  const initialCategory = location.state?.selectedCategory && 
+    categories.includes(location.state.selectedCategory) ? 
+    location.state.selectedCategory : categories[0];
+  
+  const [selectedCategory, setSelectedCategory] = useState(initialCategory);
   const [showAll, setShowAll] = useState(false);
   const [modalOpen, setModalOpen] = useState(false);
   const [selectedImage, setSelectedImage] = useState(null);
+
+  // Effect to scroll to the content when navigating from services
+  useEffect(() => {
+    if (location.state?.selectedCategory) {
+      // Small delay to ensure DOM is ready
+      setTimeout(() => {
+        const categoriesSection = document.getElementById('gallery-categories');
+        if (categoriesSection) {
+          categoriesSection.scrollIntoView({ behavior: 'smooth', block: 'start' });
+        } else {
+          // Fallback to scroll to top
+          window.scrollTo({
+            top: 0,
+            behavior: 'smooth'
+          });
+        }
+      }, 100);
+    }
+  }, [location.state]);
 
   const handleCategoryChange = (event, newValue) => {
     setSelectedCategory(newValue);
@@ -215,7 +239,7 @@ const GalleryPage = () => {
         </Typography>
         
         {/* Category tabs */}
-        <Box sx={{ borderBottom: 1, borderColor: 'divider', mb: 4 }} className="gallery-tabs">
+        <Box id="gallery-categories" sx={{ borderBottom: 1, borderColor: 'divider', mb: 4 }} className="gallery-tabs">
           <Tabs 
             value={selectedCategory} 
             onChange={handleCategoryChange}
