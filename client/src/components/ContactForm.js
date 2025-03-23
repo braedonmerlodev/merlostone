@@ -10,10 +10,13 @@ import {
   Snackbar,
   Alert
 } from '@mui/material';
-import { GoogleReCaptchaProvider, useGoogleReCaptcha } from 'react-google-recaptcha-v3';
+
+// Don't import reCAPTCHA by default to prevent initial loading
+// import { GoogleReCaptchaProvider, useGoogleReCaptcha } from 'react-google-recaptcha-v3';
 
 // Replace with your actual reCAPTCHA v3 site key
 const RECAPTCHA_SITE_KEY = "YOUR_RECAPTCHA_SITE_KEY";
+const USE_RECAPTCHA = false; // Set to false to disable reCAPTCHA completely
 
 const FormContent = () => {
   const [formData, setFormData] = useState({
@@ -31,8 +34,8 @@ const FormContent = () => {
   });
   const [isSubmitting, setIsSubmitting] = useState(false);
   
-  // Get the reCAPTCHA execution function
-  const { executeRecaptcha } = useGoogleReCaptcha();
+  // Get the reCAPTCHA execution function if available
+  // const { executeRecaptcha } = useGoogleReCaptcha();
 
   const handleInputChange = (e) => {
     const { name, value } = e.target;
@@ -83,26 +86,14 @@ const FormContent = () => {
       return;
     }
     
-    if (!executeRecaptcha) {
-      setSnackbar({
-        open: true,
-        message: 'reCAPTCHA not available',
-        severity: 'error'
-      });
-      return;
-    }
-    
     setIsSubmitting(true);
     
     try {
-      // Execute reCAPTCHA and get token
-      const token = await executeRecaptcha('contact_form');
-      
+      // Skip reCAPTCHA verification if disabled
       // In a real application, you would send this token to your backend
       // for verification with Google's reCAPTCHA API.
       // Since we're not making a DB call, we'll simulate a successful submission.
       
-      console.log('reCAPTCHA token:', token);
       console.log('Form data:', formData);
       
       // Simulate API call delay
@@ -216,9 +207,7 @@ const FormContent = () => {
             </Grid>
             <Grid item xs={12}>
               <Typography variant="caption" color="textSecondary">
-                This site is protected by reCAPTCHA v3 and the Google
-                <a href="https://policies.google.com/privacy" target="_blank" rel="noopener noreferrer"> Privacy Policy</a> and
-                <a href="https://policies.google.com/terms" target="_blank" rel="noopener noreferrer"> Terms of Service</a> apply.
+                Your data will be handled according to our privacy policy.
               </Typography>
             </Grid>
             <Grid item xs={12} sx={{ display: 'flex', justifyContent: 'center' }}>
@@ -253,11 +242,8 @@ const FormContent = () => {
 
 // Wrapper component that provides the reCAPTCHA provider
 const ContactForm = () => {
-  return (
-    <GoogleReCaptchaProvider reCaptchaKey={RECAPTCHA_SITE_KEY}>
-      <FormContent />
-    </GoogleReCaptchaProvider>
-  );
+  // Use FormContent directly without reCAPTCHA provider to prevent loading issues
+  return <FormContent />;
 };
 
 export default ContactForm; 

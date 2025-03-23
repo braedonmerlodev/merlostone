@@ -157,7 +157,7 @@ const edgeProfiles = [
 ];
 
 // Placeholder image if the actual image is not available
-const placeholderImage = 'https://via.placeholder.com/300x150?text=Edge+Profile';
+const placeholderImage = null; // No external placeholder - using CSS fallbacks instead
 
 // Group edge profiles by category
 const groupedProfiles = edgeProfiles.reduce((groups, profile) => {
@@ -210,7 +210,13 @@ const EdgesPage = () => {
                       image={profile.image}
                       alt={profile.name}
                       onError={(e) => {
-                        e.target.src = placeholderImage;
+                        e.target.onerror = null;
+                        e.target.style.height = '180px';
+                        e.target.style.background = 'linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%)';
+                        e.target.style.display = 'flex';
+                        e.target.style.alignItems = 'center';
+                        e.target.style.justifyContent = 'center';
+                        e.target.alt = profile.name;
                       }}
                       sx={{ objectFit: 'contain', p: 2, backgroundColor: '#f5f5f5' }}
                     />

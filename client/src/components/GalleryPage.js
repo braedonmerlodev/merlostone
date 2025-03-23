@@ -176,7 +176,7 @@ const galleryData = {
 const categories = Object.keys(galleryData);
 
 // Placeholder image if the actual image is not available
-const placeholderImage = 'https://via.placeholder.com/400x300?text=Gallery+Image';
+const placeholderImage = null; // Using CSS fallbacks instead of external URLs
 
 const GalleryPage = () => {
   const [selectedCategory, setSelectedCategory] = useState(categories[0]);
@@ -250,7 +250,7 @@ const GalleryPage = () => {
                     display: 'flex',
                     justifyContent: 'center',
                     alignItems: 'center',
-                    backgroundImage: 'linear-gradient(rgba(255, 255, 255, 0.8), rgba(255, 255, 255, 0.8)), url(https://source.unsplash.com/random/1200x600/?park)',
+                    backgroundImage: 'linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%)',
                     backgroundSize: 'cover',
                     backgroundPosition: 'center'
                   }}
@@ -301,7 +301,13 @@ const GalleryPage = () => {
                           image={item.image}
                           alt={item.title}
                           onError={(e) => {
-                            e.target.src = placeholderImage;
+                            e.target.onerror = null;
+                            e.target.style.height = '250px';
+                            e.target.style.background = 'linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%)';
+                            e.target.style.display = 'flex';
+                            e.target.style.alignItems = 'center';
+                            e.target.style.justifyContent = 'center';
+                            e.target.alt = item.title;
                           }}
                           sx={{ objectFit: 'cover' }}
                         />
@@ -344,7 +350,13 @@ const GalleryPage = () => {
                       image={item.image}
                       alt={item.title}
                       onError={(e) => {
-                        e.target.src = placeholderImage;
+                        e.target.onerror = null;
+                        e.target.style.height = '250px';
+                        e.target.style.background = 'linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%)';
+                        e.target.style.display = 'flex';
+                        e.target.style.alignItems = 'center';
+                        e.target.style.justifyContent = 'center';
+                        e.target.alt = item.title;
                       }}
                       sx={{ objectFit: 'cover' }}
                     />
@@ -435,7 +447,13 @@ const GalleryPage = () => {
                   objectFit: 'contain'
                 }}
                 onError={(e) => {
-                  e.target.src = placeholderImage;
+                  e.target.onerror = null;
+                  e.target.style.height = '250px';
+                  e.target.style.background = 'linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%)';
+                  e.target.style.display = 'flex';
+                  e.target.style.alignItems = 'center';
+                  e.target.style.justifyContent = 'center';
+                  e.target.alt = selectedImage.title;
                 }}
               />
               <Box sx={{ p: 2, textAlign: 'center' }}>

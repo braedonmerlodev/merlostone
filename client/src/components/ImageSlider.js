@@ -6,25 +6,25 @@ import { Paper, Box, Typography } from '@mui/material';
 const items = [
     {
         id: 1,
-        image: "https://source.unsplash.com/random/1600x900/?architecture",
+        image: "linear-gradient(to right, #434343 0%, black 100%)",
         title: "Project One",
         description: "Modern architectural design"
     },
     {
         id: 2,
-        image: "https://source.unsplash.com/random/1600x900/?interior",
+        image: "linear-gradient(to top, #09203f 0%, #537895 100%)",
         title: "Project Two",
         description: "Interior design concept"
     },
     {
         id: 3,
-        image: "https://source.unsplash.com/random/1600x900/?landscape",
+        image: "linear-gradient(120deg, #f6d365 0%, #fda085 100%)",
         title: "Project Three",
         description: "Landscape design"
     },
     {
         id: 4,
-        image: "https://source.unsplash.com/random/1600x900/?construction",
+        image: "linear-gradient(to right, #868f96 0%, #596164 100%)",
         title: "Project Four",
         description: "Commercial construction"
     }
@@ -65,7 +65,9 @@ const Item = ({ item }) => {
                 height: '100vh',
                 width: '100%',
                 position: 'relative',
-                backgroundImage: `linear-gradient(rgba(0, 0, 0, 0.5), rgba(0, 0, 0, 0.5)), url(${item.image})`,
+                backgroundImage: item.image.includes('gradient') 
+                    ? item.image 
+                    : `linear-gradient(rgba(0, 0, 0, 0.5), rgba(0, 0, 0, 0.5)), url(${item.image})`,
                 backgroundSize: 'cover',
                 backgroundPosition: 'center',
                 display: 'flex',

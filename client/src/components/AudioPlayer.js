@@ -1,19 +1,74 @@
-import React, { useState, useEffect, useRef } from 'react';
+import React, { useState, useEffect, useRef, useContext } from 'react';
 import { Box, IconButton, Tooltip, Fade, Slider, Popover, Typography } from '@mui/material';
 import VolumeUpIcon from '@mui/icons-material/VolumeUp';
 import VolumeOffIcon from '@mui/icons-material/VolumeOff';
 import VolumeDownIcon from '@mui/icons-material/VolumeDown';
 import SettingsIcon from '@mui/icons-material/Settings';
+import { AudioContext } from '../App';
 
-// You should replace this with your actual audio file path
-const AUDIO_FILE = '/audio/background-music.mp3';
+// Path to the audio file
+const AUDIO_FILE = '/images/audio/ms-track.mp3';
 
 const AudioPlayer = () => {
-  const [isPlaying, setIsPlaying] = useState(true);
-  const [audioLoaded, setAudioLoaded] = useState(false);
-  const [volume, setVolume] = useState(30);
+  const { audioState, setAudioState } = useContext(AudioContext);
+  const [isPlaying, setIsPlaying] = useState(audioState.isPlaying);
+  const [volume, setVolume] = useState(audioState.volume);
   const [anchorEl, setAnchorEl] = useState(null);
   const audioRef = useRef(null);
+  
+  // Initialize audio element once on mount
+  useEffect(() => {
+    // Create audio element
+    const audio = new Audio(AUDIO_FILE);
+    audio.loop = true;
+    audio.volume = volume / 100; // Convert percentage to decimal
+    audioRef.current = audio;
+    
+    // Clean up on unmount
+    return () => {
+      if (audio) {
+        audio.pause();
+        audio.src = '';
+      }
+    };
+  }, [volume]); // Include volume as dependency since we use it
+  
+  // Sync local state with context
+  useEffect(() => {
+    setIsPlaying(audioState.isPlaying);
+    setVolume(audioState.volume);
+  }, [audioState]);
+  
+  // Update volume when it changes
+  useEffect(() => {
+    if (audioRef.current) {
+      audioRef.current.volume = volume / 100;
+    }
+  }, [volume]);
+  
+  // Handle play/pause state changes separately
+  useEffect(() => {
+    if (!audioRef.current) return;
+    
+    if (isPlaying) {
+      const playPromise = audioRef.current.play();
+      if (playPromise !== undefined) {
+        playPromise.catch(e => {
+          console.warn('Audio playback was prevented:', e);
+        });
+      }
+    } else {
+      audioRef.current.pause();
+    }
+  }, [isPlaying]);
+  
+  // Update global context when local state changes
+  useEffect(() => {
+    setAudioState({
+      isPlaying,
+      volume
+    });
+  }, [isPlaying, volume, setAudioState]);
 
   const handleSettingsClick = (event) => {
     setAnchorEl(event.currentTarget);
@@ -28,74 +83,8 @@ const AudioPlayer = () => {
 
   const handleVolumeChange = (event, newValue) => {
     setVolume(newValue);
-    if (audioRef.current) {
-      audioRef.current.volume = newValue / 100;
-    }
+    localStorage.setItem('audioVolume', JSON.stringify(newValue));
   };
-
-  useEffect(() => {
-    // Create audio element
-    const audio = new Audio(AUDIO_FILE);
-    audio.loop = true;
-    audio.volume = volume / 100; // Convert percentage to decimal
-    audioRef.current = audio;
-
-    // Add event listeners
-    audio.addEventListener('canplaythrough', () => {
-      setAudioLoaded(true);
-    });
-
-    audio.addEventListener('error', (e) => {
-      console.error('Error loading audio file:', e);
-      setAudioLoaded(false);
-      setIsPlaying(false);
-    });
-
-    // Try to automatically play audio when the component mounts
-    if (isPlaying) {
-      const playPromise = audio.play();
-      
-      if (playPromise !== undefined) {
-        playPromise.catch(error => {
-          console.warn('Autoplay was prevented by browser policy:', error);
-          setIsPlaying(false);
-        });
-      }
-    }
-
-    // Cleanup function
-    return () => {
-      audio.pause();
-      audio.src = '';
-      audio.removeEventListener('canplaythrough', () => {});
-      audio.removeEventListener('error', () => {});
-    };
-  }, [isPlaying, volume]);
-
-  // Handle play/pause
-  useEffect(() => {
-    if (!audioRef.current) return;
-    
-    if (isPlaying) {
-      // Using a promise to handle autoplay policy
-      const playPromise = audioRef.current.play();
-      
-      // Modern browsers return a promise
-      if (playPromise !== undefined) {
-        playPromise
-          .then(() => {
-            // Autoplay started successfully
-          })
-          .catch(error => {
-            // Autoplay was prevented
-            console.warn('Autoplay was prevented by browser policy:', error);
-            setIsPlaying(false);
-          });
-      }
-    } else {
-      audioRef.current.pause();
-    }
-  }, [isPlaying, audioLoaded]);
 
   const toggleAudio = () => {
     setIsPlaying(!isPlaying);
@@ -119,7 +108,8 @@ const AudioPlayer = () => {
         sx={{
           display: 'flex',
           alignItems: 'center',
-          gap: 1
+          gap: 1,
+          animation: 'none' // Remove animation to improve performance
         }}
       >
         <Tooltip 
@@ -137,7 +127,8 @@ const AudioPlayer = () => {
               color: 'white',
               '&:hover': {
                 color: '#fff',
-              }
+              },
+              position: 'relative'
             }}
           >
             {getVolumeIcon()}

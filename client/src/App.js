@@ -1,6 +1,6 @@
-import React from 'react';
+import React, { createContext, useState } from 'react';
 import './App.css';
-import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
+import { createBrowserRouter, RouterProvider, Outlet } from 'react-router-dom';
 import Navbar from './components/Navbar';
 import ContactForm from './components/ContactForm';
 import ImageSlider from './components/ImageSlider';
@@ -21,6 +21,9 @@ const theme = createTheme({
     },
   },
 });
+
+// Create audio context for sharing audio state across components
+export const AudioContext = createContext();
 
 // Home Page Component
 function HomePage() {
@@ -132,17 +135,25 @@ function AboutPage() {
             We recognize that remodeling projects can sometimes be overwhelming. Don't worry, our knowledgeable staff makes every effort to make sure the process is straight forward and easy at all times. We are committed to excellence in every way!
           </Typography>
           
-          <Box sx={{ display: 'flex', justifyContent: 'center', my: 5 }}>
+          <Box sx={{ mb: 4, maxWidth: '100%', overflow: 'hidden', borderRadius: 2 }}>
             <Box
               component="img"
-              className="about-image"
               sx={{
-                maxWidth: '100%',
-                borderRadius: 2,
-                boxShadow: 3,
+                width: '100%',
+                maxHeight: '400px',
+                objectFit: 'cover'
               }}
               alt="Marble workshop"
-              src="https://source.unsplash.com/random/800x500/?marble-fabrication"
+              src="/images/about/workshop.jpg" 
+              onError={(e) => {
+                e.target.onerror = null;
+                e.target.style.height = '300px';
+                e.target.style.background = 'linear-gradient(135deg, #667eea 0%, #764ba2 100%)';
+                e.target.style.display = 'flex';
+                e.target.style.alignItems = 'center';
+                e.target.style.justifyContent = 'center';
+                e.target.alt = 'M&S Marble Workshop';
+              }}
             />
           </Box>
           
@@ -211,32 +222,81 @@ function ContactPage() {
   );
 }
 
+// Root Layout component for all pages
+function RootLayout() {
+  return (
+    <div className="App">
+      {/* Navbar is always visible */}
+      <Box sx={{ position: 'relative', zIndex: 10 }}>
+        <Navbar />
+      </Box>
+      
+      {/* This is where the route components will be rendered */}
+      <Outlet />
+      
+      {/* Audio Player is visible on all pages */}
+      <AudioPlayer />
+    </div>
+  );
+}
+
 function App() {
+  // Initialize audio state from localStorage if available
+  const [audioState, setAudioState] = useState({
+    isPlaying: true, // Start with audio on to enable autoplay
+    volume: localStorage.getItem('audioVolume') !== null 
+      ? JSON.parse(localStorage.getItem('audioVolume')) 
+      : 30
+  });
+
+  // Create router with the routes configuration
+  const router = createBrowserRouter([
+    {
+      path: "/",
+      element: <RootLayout />,
+      children: [
+        { 
+          index: true, 
+          element: <HomePage /> 
+        },
+        { 
+          path: "products", 
+          element: <ProductsPage /> 
+        },
+        { 
+          path: "services", 
+          element: <ServicesPage /> 
+        },
+        { 
+          path: "stone-care", 
+          element: <StoneCarePage /> 
+        },
+        { 
+          path: "edges", 
+          element: <EdgesPage /> 
+        },
+        { 
+          path: "gallery", 
+          element: <GalleryPage /> 
+        },
+        { 
+          path: "about", 
+          element: <AboutPage /> 
+        },
+        { 
+          path: "contact", 
+          element: <ContactPage /> 
+        }
+      ]
+    }
+  ]);
+
   return (
     <ThemeProvider theme={theme}>
       <CssBaseline />
-      <Router>
-        <div className="App">
-          {/* Navbar is always visible */}
-          <Box sx={{ position: 'relative', zIndex: 10 }}>
-            <Navbar />
-          </Box>
-          
-          <Routes>
-            <Route path="/" element={<HomePage />} />
-            <Route path="/products" element={<ProductsPage />} />
-            <Route path="/services" element={<ServicesPage />} />
-            <Route path="/stone-care" element={<StoneCarePage />} />
-            <Route path="/edges" element={<EdgesPage />} />
-            <Route path="/gallery" element={<GalleryPage />} />
-            <Route path="/about" element={<AboutPage />} />
-            <Route path="/contact" element={<ContactPage />} />
-          </Routes>
-          
-          {/* Audio Player is visible on all pages */}
-          <AudioPlayer />
-        </div>
-      </Router>
+      <AudioContext.Provider value={{ audioState, setAudioState }}>
+        <RouterProvider router={router} />
+      </AudioContext.Provider>
     </ThemeProvider>
   );
 }

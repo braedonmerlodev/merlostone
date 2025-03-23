@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { Link as RouterLink } from 'react-router-dom';
+import { Link } from 'react-router-dom';
 import { 
   AppBar, 
   Box, 
@@ -75,7 +75,7 @@ function Navbar() {
           <Typography
             variant="h6"
             noWrap
-            component={RouterLink}
+            component={Link}
             to="/"
             sx={{
               mr: 2,
@@ -123,9 +123,9 @@ function Navbar() {
               {pages.map((page) => (
                 <MenuItem 
                   key={page} 
-                  onClick={handleCloseNavMenu}
-                  component={RouterLink}
+                  component={Link}
                   to={pageRoutes[page]}
+                  onClick={handleCloseNavMenu}
                 >
                   <Typography textAlign="center">{page}</Typography>
                 </MenuItem>
@@ -137,7 +137,7 @@ function Navbar() {
           <Typography
             variant="h5"
             noWrap
-            component={RouterLink}
+            component={Link}
             to="/"
             sx={{
               mr: 2,
@@ -158,7 +158,7 @@ function Navbar() {
             {pages.map((page) => (
               <Button
                 key={page}
-                component={RouterLink}
+                component={Link}
                 to={pageRoutes[page]}
                 onClick={handleCloseNavMenu}
                 sx={{ 
