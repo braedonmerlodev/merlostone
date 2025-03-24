@@ -165,7 +165,7 @@ const FormContent = () => {
       // Success message
       setSnackbar({
         open: true,
-        message: result.message || 'Thank you! Your message has been sent successfully. We\'ll get back to you shortly.',
+        message: 'Thank you! Your message has been sent successfully. We\'ll get back to you shortly.',
         severity: 'success'
       });
       
@@ -182,7 +182,7 @@ const FormContent = () => {
       console.error('Error submitting form:', error);
       setSnackbar({
         open: true,
-        message: error.message || 'Error submitting form. Please try again or contact us directly by phone.',
+        message: 'There was an error submitting your form. Please try again or contact us directly at (925) 525-5802 or davemerlo@comcast.net.',
         severity: 'error'
       });
     } finally {
@@ -206,6 +206,42 @@ const FormContent = () => {
         <Typography variant="body1" paragraph align="center" sx={{ mb: 6, maxWidth: '800px', mx: 'auto', fontSize: '1.3rem', lineHeight: 1.7 }}>
           Have questions or ready to start your project? Reach out to us for a free consultation and estimate.
         </Typography>
+        
+        {/* Feedback Alerts - Display at the top of the form when status changes */}
+        {snackbar.open && (
+          <Box sx={{ mb: 4, maxWidth: '800px', mx: 'auto' }}>
+            <Alert 
+              severity={snackbar.severity} 
+              onClose={handleCloseSnackbar}
+              variant="filled"
+              sx={{ 
+                fontSize: '1.1rem', 
+                alignItems: 'center',
+                '& .MuiAlert-message': { 
+                  flex: 1 
+                },
+                boxShadow: 3
+              }}
+            >
+              <Box sx={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', width: '100%' }}>
+                <Typography variant="body1" sx={{ fontWeight: 'medium' }}>
+                  {snackbar.message}
+                </Typography>
+                {snackbar.severity === 'error' && (
+                  <Button 
+                    variant="outlined" 
+                    color="inherit" 
+                    size="small" 
+                    sx={{ ml: 2, whiteSpace: 'nowrap' }}
+                    href="tel:+19255255802"
+                  >
+                    Call Us
+                  </Button>
+                )}
+              </Box>
+            </Alert>
+          </Box>
+        )}
         
         <Grid container spacing={4}>
           {/* Form section */}
@@ -452,13 +488,19 @@ const FormContent = () => {
         <GoogleMap />
       </Container>
       
+      {/* Floating notification that appears at the bottom */}
       <Snackbar 
         open={snackbar.open} 
-        autoHideDuration={6000} 
+        autoHideDuration={10000} 
         onClose={handleCloseSnackbar}
         anchorOrigin={{ vertical: 'bottom', horizontal: 'center' }}
       >
-        <Alert onClose={handleCloseSnackbar} severity={snackbar.severity} sx={{ width: '100%' }}>
+        <Alert 
+          onClose={handleCloseSnackbar} 
+          severity={snackbar.severity} 
+          variant="filled"
+          sx={{ width: '100%', fontSize: '1.05rem' }}
+        >
           {snackbar.message}
         </Alert>
       </Snackbar>
