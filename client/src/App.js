@@ -1,4 +1,4 @@
-import React, { createContext, useState, useContext } from 'react';
+import React, { createContext, useState } from 'react';
 import './App.css';
 import { createBrowserRouter, RouterProvider, Outlet } from 'react-router-dom';
 import Navbar from './components/Navbar';
@@ -22,10 +22,10 @@ import { ImageProvider, useImages } from './contexts/ImageContext';
 const theme = createTheme({
   palette: {
     primary: {
-      main: '#1976d2',
+      main: '#212121',
     },
     secondary: {
-      main: '#dc004e',
+      main: '#FFC107',
     },
   },
 });
