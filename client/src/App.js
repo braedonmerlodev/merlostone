@@ -1,9 +1,9 @@
-import React, { createContext, useState } from 'react';
+import React, { createContext, useState, useContext } from 'react';
 import './App.css';
 import { createBrowserRouter, RouterProvider, Outlet } from 'react-router-dom';
 import Navbar from './components/Navbar';
 import ContactForm from './components/ContactForm';
-import CustomImageSlider from './components/CustomImageSlider';
+import AliceCarouselSlider from './components/AliceCarouselSlider';
 import StoneCarePage from './components/StoneCarePage';
 import AudioPlayer from './components/AudioPlayer';
 import EdgesPage from './components/EdgesPage';
@@ -13,8 +13,10 @@ import Testimonials from './components/Testimonials';
 import LogoSlider from './components/LogoSlider';
 import Footer from './components/Footer';
 import PrivacyPolicy from './components/PrivacyPolicy';
+import ImageDebugger from './components/ImageDebugger';
 import { createTheme, ThemeProvider, CssBaseline, Container, Box, Typography, Grid, Button } from '@mui/material';
 import { Link } from 'react-router-dom';
+import { ImageProvider, useImages } from './contexts/ImageContext';
 
 // Create a theme instance
 const theme = createTheme({
@@ -33,13 +35,15 @@ export const AudioContext = createContext();
 
 // Home Page Component
 function HomePage() {
+  const { resolveImagePath } = useImages();
+
   return (
     <>
-      {/* Hero section with CustomImageSlider */}
+      {/* Hero section with AliceCarouselSlider */}
       <Box sx={{ position: 'relative', height: '100vh', width: '100%', overflow: 'hidden' }}>
-        {/* CustomImageSlider sits behind */}
+        {/* AliceCarouselSlider sits behind */}
         <Box sx={{ position: 'absolute', top: 0, left: 0, right: 0, zIndex: 0 }}>
-          <CustomImageSlider />
+          <AliceCarouselSlider />
         </Box>
       </Box>
       
@@ -50,7 +54,7 @@ function HomePage() {
             <Grid item xs={12} md={6}>
               <Box
                 component="img"
-                src="/images/me.jpg"
+                src={resolveImagePath('me.jpg')}
                 alt="Dave Merlo"
                 sx={{
                   width: '100%',
@@ -58,6 +62,10 @@ function HomePage() {
                   objectFit: 'cover',
                   borderRadius: 2,
                   boxShadow: 3
+                }}
+                onError={(e) => {
+                  console.error('Failed to load Dave Merlo image');
+                  e.target.style.display = 'none';
                 }}
               />
             </Grid>
@@ -152,66 +160,6 @@ function AboutPage() {
   );
 }
 
-function App() {
-  // Audio state
-  const [audioState, setAudioState] = useState({
-    isPlaying: true, // Start with audio on to enable autoplay
-    volume: localStorage.getItem('audioVolume') !== null 
-      ? parseInt(localStorage.getItem('audioVolume')) 
-      : 30
-  });
-
-  const router = createBrowserRouter([
-    {
-      path: "/",
-      element: <Root />,
-      children: [
-        {
-          path: "/",
-          element: <HomePage />
-        },
-        {
-          path: "/gallery",
-          element: <GalleryPage />
-        },
-        {
-          path: "/services",
-          element: <ServicesPage />
-        },
-        {
-          path: "/edges",
-          element: <EdgesPage />
-        },
-        {
-          path: "/contact",
-          element: <ContactForm />
-        },
-        {
-          path: "/stone-care",
-          element: <StoneCarePage />
-        },
-        {
-          path: "/about",
-          element: <AboutPage />
-        },
-        {
-          path: "/privacy-policy",
-          element: <PrivacyPolicy />
-        }
-      ]
-    }
-  ]);
-
-  return (
-    <AudioContext.Provider value={{ audioState, setAudioState }}>
-      <ThemeProvider theme={theme}>
-        <CssBaseline />
-        <RouterProvider router={router} />
-      </ThemeProvider>
-    </AudioContext.Provider>
-  );
-}
-
 function Root() {
   // eslint-disable-next-line no-unused-vars
   const { audioState, setAudioState } = React.useContext(AudioContext);
@@ -232,4 +180,83 @@ function Root() {
   );
 }
 
-export default App;
+// Create the router with all our routes
+const router = createBrowserRouter([
+  {
+    path: "/",
+    element: <Root />,
+    children: [
+      {
+        path: "/",
+        element: <HomePage />
+      },
+      {
+        path: "/gallery",
+        element: <GalleryPage />
+      },
+      {
+        path: "/services",
+        element: <ServicesPage />
+      },
+      {
+        path: "/edges",
+        element: <EdgesPage />
+      },
+      {
+        path: "/contact",
+        element: <ContactForm />
+      },
+      {
+        path: "/stone-care",
+        element: <StoneCarePage />
+      },
+      {
+        path: "/about",
+        element: <AboutPage />
+      },
+      {
+        path: "/privacy-policy",
+        element: <PrivacyPolicy />
+      },
+      {
+        path: "/testimonials",
+        element: <Testimonials />
+      },
+      {
+        path: "/debug-images",
+        element: <ImageDebugger />
+      }
+    ]
+  }
+]);
+
+function App() {
+  // Audio state
+  const [audioState, setAudioState] = useState({
+    isPlaying: true, // Start with audio on to enable autoplay
+    volume: localStorage.getItem('audioVolume') !== null 
+      ? parseInt(localStorage.getItem('audioVolume')) 
+      : 30
+  });
+
+  return (
+    <AudioContext.Provider value={{ audioState, setAudioState }}>
+      <ThemeProvider theme={theme}>
+        <CssBaseline />
+        <RouterProvider router={router} />
+      </ThemeProvider>
+    </AudioContext.Provider>
+  );
+}
+
+// Wrap the App component with our ImageProvider
+const AppWithImageProvider = () => {
+  return (
+    <ImageProvider>
+      <App />
+    </ImageProvider>
+  );
+};
+
+// Export the wrapped version of App instead
+export default AppWithImageProvider;

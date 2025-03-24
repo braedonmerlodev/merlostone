@@ -13,10 +13,27 @@ import {
   Divider,
   Button,
   Modal,
-  IconButton
+  IconButton,
+  Alert
 } from '@mui/material';
 import CloseIcon from '@mui/icons-material/Close';
+import InfoIcon from '@mui/icons-material/Info';
 import { useLocation } from 'react-router-dom';
+import { useImages } from '../contexts/ImageContext';
+
+// Helper function to map service categories to gallery tabs
+const mapServiceCategoryToGalleryTab = (serviceCategory) => {
+  const mappings = {
+    'kitchens': 'Kitchens',
+    'bathrooms': 'Bathrooms | Vanities',
+    'fireplaces': 'Fireplaces',
+    'outdoor': 'BBQ\'s', // Fallback mapping
+    'commercial': 'Industrial', // Fallback mapping
+    'custom': 'Bathrooms | Vanities' // Fallback mapping
+  };
+  
+  return mappings[serviceCategory] || categories[0];
+};
 
 // Gallery data mapped to actual images in the images folder
 const galleryData = {
@@ -33,6 +50,10 @@ const galleryData = {
     { id: 'k10', image: '/images/kitchens/10.jpeg', title: 'Kitchen Design 10' },
     { id: 'k11', image: '/images/kitchens/11.jpeg', title: 'Kitchen Design 11' },
     { id: 'k12', image: '/images/kitchens/12.jpeg', title: 'Kitchen Design 12' },
+    { id: 'k13', image: '/images/kitchens/13.jpeg', title: 'Kitchen Design 13' },
+    { id: 'k14', image: '/images/kitchens/14.jpeg', title: 'Kitchen Design 14' },
+    { id: 'k15', image: '/images/kitchens/15.jpeg', title: 'Kitchen Design 15' },
+    { id: 'k16', image: '/images/kitchens/16.jpeg', title: 'Kitchen Design 16' },
   ],
   Bars: [
     { id: 'b1', image: '/images/bars/1.jpg', title: 'Bar Design 1' },
@@ -61,6 +82,12 @@ const galleryData = {
     { id: 'bv10', image: '/images/bathrooms/10.jpg', title: 'Bathroom Design 10' },
     { id: 'bv11', image: '/images/bathrooms/11.jpg', title: 'Bathroom Design 11' },
     { id: 'bv12', image: '/images/bathrooms/12.jpg', title: 'Bathroom Design 12' },
+    { id: 'bv13', image: '/images/bathrooms/13.jpg', title: 'Bathroom Design 13' },
+    { id: 'bv14', image: '/images/bathrooms/14.jpg', title: 'Bathroom Design 14' },
+    { id: 'bv15', image: '/images/bathrooms/15.jpg', title: 'Bathroom Design 15' },
+    { id: 'bv16', image: '/images/bathrooms/16.jpg', title: 'Bathroom Design 16' },
+    { id: 'bv17', image: '/images/bathrooms/17.jpg', title: 'Bathroom Design 17' },
+    { id: 'bv18', image: '/images/bathrooms/18.jpg', title: 'Bathroom Design 18' },
   ],
   'BBQ\'s': [
     { id: 'bbq1', image: '/images/bbq/1.jpg', title: 'BBQ Design 1' },
@@ -178,16 +205,21 @@ const categories = Object.keys(galleryData);
 
 const GalleryPage = () => {
   const location = useLocation();
+  const { resolveImagePath, pathMode } = useImages();
   
   // Check if we have a selected category from navigation
-  const initialCategory = location.state?.selectedCategory && 
-    categories.includes(location.state.selectedCategory) ? 
-    location.state.selectedCategory : categories[0];
+  const serviceCategory = location.state?.selectedCategory;
+  const customTitle = location.state?.customTitle;
+  
+  // Map service category to gallery tab if available
+  const initialCategory = serviceCategory ? 
+    mapServiceCategoryToGalleryTab(serviceCategory) : categories[0];
   
   const [selectedCategory, setSelectedCategory] = useState(initialCategory);
   const [showAll, setShowAll] = useState(false);
   const [modalOpen, setModalOpen] = useState(false);
   const [selectedImage, setSelectedImage] = useState(null);
+  const [showCustomTitleAlert, setShowCustomTitleAlert] = useState(Boolean(customTitle));
 
   // Effect to scroll to the content when navigating from services
   useEffect(() => {
@@ -211,10 +243,14 @@ const GalleryPage = () => {
   const handleCategoryChange = (event, newValue) => {
     setSelectedCategory(newValue);
     setShowAll(false);
+    // Hide the custom title alert when user changes categories
+    setShowCustomTitleAlert(false);
   };
 
   const handleShowAll = () => {
     setShowAll(true);
+    // Hide the custom title alert when showing all
+    setShowCustomTitleAlert(false);
   };
 
   const handleImageClick = (image) => {
@@ -225,13 +261,29 @@ const GalleryPage = () => {
   const handleCloseModal = () => {
     setModalOpen(false);
   };
+  
+  const handleCloseAlert = () => {
+    setShowCustomTitleAlert(false);
+  };
 
   return (
     <Container className="page-container">
       <Paper elevation={3} sx={{ p: { xs: 2, md: 4 }, mb: 4 }}>
         <Typography variant="h3" component="h1" gutterBottom align="center" sx={{ mb: 4 }}>
-          Gallery
+          {customTitle && showCustomTitleAlert ? customTitle : 'Gallery'}
         </Typography>
+        
+        {customTitle && showCustomTitleAlert && (
+          <Alert 
+            severity="info" 
+            icon={<InfoIcon />}
+            onClose={handleCloseAlert}
+            sx={{ mb: 3 }}
+          >
+            You're currently viewing our {selectedCategory} gallery as an alternative for {customTitle}. 
+            We're continuously updating our collections - please check back soon for more specific examples.
+          </Alert>
+        )}
         
         <Typography variant="body1" paragraph align="center" sx={{ mb: 4 }}>
           Browse through our project gallery to see examples of our craftsmanship. 
@@ -322,9 +374,10 @@ const GalleryPage = () => {
                         <CardMedia
                           component="img"
                           height="250"
-                          image={item.image}
+                          image={resolveImagePath(item.image.replace(/^\/images\//, ''))}
                           alt={item.title}
                           onError={(e) => {
+                            console.error(`Failed to load gallery image: ${item.image} (using ${pathMode} strategy)`);
                             e.target.onerror = null;
                             e.target.style.height = '250px';
                             e.target.style.background = 'linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%)';
@@ -371,9 +424,10 @@ const GalleryPage = () => {
                     <CardMedia
                       component="img"
                       height="250"
-                      image={item.image}
+                      image={resolveImagePath(item.image.replace(/^\/images\//, ''))}
                       alt={item.title}
                       onError={(e) => {
+                        console.error(`Failed to load gallery image: ${item.image} (using ${pathMode} strategy)`);
                         e.target.onerror = null;
                         e.target.style.height = '250px';
                         e.target.style.background = 'linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%)';
@@ -461,7 +515,7 @@ const GalleryPage = () => {
           {selectedImage && (
             <>
               <img
-                src={selectedImage.image}
+                src={resolveImagePath(selectedImage.image.replace(/^\/images\//, ''))}
                 alt={selectedImage.title}
                 style={{ 
                   maxWidth: '100%', 
@@ -471,6 +525,7 @@ const GalleryPage = () => {
                   objectFit: 'contain'
                 }}
                 onError={(e) => {
+                  console.error(`Failed to load modal image: ${selectedImage.image} (using ${pathMode} strategy)`);
                   e.target.onerror = null;
                   e.target.style.height = '250px';
                   e.target.style.background = 'linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%)';

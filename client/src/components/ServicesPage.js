@@ -1,81 +1,69 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useMemo } from 'react';
 import { Container, Typography, Grid, Paper, Box, CircularProgress, Button, Chip } from '@mui/material';
 import { useTheme } from '@mui/material/styles';
 import { useNavigate } from 'react-router-dom';
 import ArrowForwardIcon from '@mui/icons-material/ArrowForward';
 import CollectionsIcon from '@mui/icons-material/Collections';
+import { useImages } from '../contexts/ImageContext';
+import ConstructionIcon from '@mui/icons-material/Construction';
 
 function ServicesPage() {
   const theme = useTheme();
   const [imagesLoaded, setImagesLoaded] = useState(false);
   const navigate = useNavigate();
+  const { resolveImagePath, pathMode, loading: imageContextLoading } = useImages();
 
-  // Services data based on image directories with mapping to gallery categories
-  const services = [
+  // Use useMemo to prevent the services array from changing on every render
+  const services = useMemo(() => [
     {
+      id: 1,
       title: "Kitchen Countertops",
-      description: "Custom granite, marble, and engineered stone countertops designed to transform your kitchen with elegance and durability.",
-      image: "/images/kitchens/1.jpg",
-      folder: "kitchens",
-      galleryCategory: "Kitchens"
+      image: "kitchens/1.jpeg", // Fixed extension to .jpeg
+      description: "Transform your kitchen with our premium selection of granite, marble, and quartz countertops. Every piece is expertly cut and installed to bring beauty and durability to your home.",
+      galleryCategory: "kitchens"
     },
     {
+      id: 2,
       title: "Bathroom Vanities",
-      description: "Beautiful stone vanity tops, shower surrounds, and tub decks that combine luxury with practical functionality.",
-      image: "/images/bathrooms/1.jpg",
-      folder: "bathrooms",
-      galleryCategory: "Bathrooms | Vanities"
+      image: "bathrooms/1.jpg", // Correct extension as .jpg
+      description: "Elevate your bathroom with elegant stone vanities. Our craftsmen create stunning countertops that add luxury and value to your bathroom spaces.",
+      galleryCategory: "bathrooms"
     },
     {
+      id: 3,
+      title: "Fireplaces",
+      image: "fireplaces/1.jpg", // Correct extension as .jpg
+      description: "Our custom fireplace surrounds provide the perfect focal point for any room. Choose from a variety of stones to complement your home's aesthetic.",
+      galleryCategory: "fireplaces"
+    },
+    {
+      id: 4,
+      title: "Outdoor Kitchens",
+      // Using fireplaces as a fallback since outdoor folder doesn't exist
+      image: "fireplaces/15.jpg",
+      description: "Bring the luxury of stone to your outdoor living spaces. Our weather-resistant stone installations are perfect for BBQ areas, patios, and pool surrounds.",
+      galleryCategory: "fireplaces", // Using fireplaces as fallback
+      customTitle: "Outdoor Kitchens" // Will show this title in the gallery
+    },
+    {
+      id: 5,
       title: "Commercial Projects",
-      description: "Professional stone installations for offices, restaurants, hotels and retail spaces with superior craftsmanship.",
-      image: "/images/industrial/1.jpg",
-      folder: "industrial",
-      galleryCategory: "Industrial"
+      // Using kitchens as a fallback since commercial folder doesn't exist
+      image: "kitchens/m1.jpg",
+      description: "We provide premium stone solutions for restaurants, hotels, office buildings, and other commercial spaces. Our team delivers exceptional results on schedule and within budget.",
+      galleryCategory: "kitchens", // Using kitchens as fallback
+      customTitle: "Commercial Projects" // Will show this title in the gallery
     },
     {
-      title: "Fireplace Surrounds",
-      description: "Elegant stone fireplace surrounds that create a stunning focal point for any room in your home.",
-      image: "/images/fireplaces/1.jpg",
-      folder: "fireplaces",
-      galleryCategory: "Fireplaces"
-    },
-    {
-      title: "Outdoor BBQ Areas",
-      description: "Durable and stylish stone countertops and surrounds for your outdoor kitchen and BBQ area.",
-      image: "/images/bbq/1.jpg",
-      folder: "bbq",
-      galleryCategory: "BBQ's"
-    },
-    {
-      title: "Bar Tops",
-      description: "Sophisticated stone bar tops that add elegance and durability to entertainment spaces.",
-      image: "/images/bars/1.jpg",
-      folder: "bars",
-      galleryCategory: "Bars"
-    },
-    {
-      title: "Custom Edges",
-      description: "Specialized edge profiles that add a distinctive finishing touch to your stone installations.",
-      image: "/images/edges/1.jpg",
-      folder: "edges",
-      galleryCategory: null // No direct gallery category for edges
-    },
-    {
-      title: "Shower Enclosures",
-      description: "Luxurious stone shower walls and enclosures that create a spa-like experience in your bathroom.",
-      image: "/images/showers/1.jpg",
-      folder: "showers",
-      galleryCategory: "Showers"
-    },
-    {
-      title: "Entry Features",
-      description: "Impressive stone entryways that make a statement and welcome visitors to your space.",
-      image: "/images/entrys/1.jpg",
-      folder: "entrys",
-      galleryCategory: "Entrys"
+      id: 6,
+      title: "Custom Fabrication",
+      // Using bathrooms as a fallback since custom folder doesn't exist
+      image: "bathrooms/30.jpg",
+      description: "From unique countertop designs to specialty stone pieces, our custom fabrication services bring your vision to life with precision and expert craftsmanship.",
+      galleryCategory: "bathrooms", // Using bathrooms as fallback
+      customTitle: "Custom Fabrication" // Will show this title in the gallery
     }
-  ];
+  ], []);
 
   // Function to navigate to the gallery with selected category
   const navigateToGallery = (category, event) => {
@@ -85,7 +73,11 @@ function ServicesPage() {
     
     if (category) {
       navigate('/gallery', { 
-        state: { selectedCategory: category } 
+        state: { 
+          selectedCategory: category,
+          // Pass custom title if available
+          customTitle: services.find(s => s.galleryCategory === category)?.customTitle 
+        } 
       });
     } else {
       navigate('/gallery');
@@ -94,11 +86,40 @@ function ServicesPage() {
 
   // Set images as loaded after a delay to show loading state
   useEffect(() => {
+    console.log('ServicesPage mounted, loading images with ImageContext path resolution');
+    console.log(`Current image path strategy: ${pathMode}`);
+    
+    // Simple preload check for first service image
+    const preloadFirstImage = async () => {
+      const img = new Image();
+      const imagePath = resolveImagePath(services[0].image);
+      img.src = imagePath;
+      
+      // Log environment info
+      console.log("Current origin:", window.location.origin);
+      console.log("PUBLIC_URL:", process.env.PUBLIC_URL || 'not set');
+      console.log(`First service image path: ${imagePath}`);
+      
+      try {
+        await new Promise((resolve, reject) => {
+          img.onload = resolve;
+          img.onerror = reject;
+        });
+        console.log('First service image loaded successfully');
+      } catch (err) {
+        console.error('Error preloading first service image:', err);
+      }
+    };
+    
+    if (!imageContextLoading) {
+      preloadFirstImage();
+    }
+    
     const timer = setTimeout(() => {
       setImagesLoaded(true);
     }, 1000);
     return () => clearTimeout(timer);
-  }, []);
+  }, [services, resolveImagePath, pathMode, imageContextLoading]);
 
   return (
     <Box sx={{ pt: 12, pb: 8 }}>
@@ -122,7 +143,7 @@ function ServicesPage() {
           Our skilled craftsmen work with a wide variety of natural and engineered stone to create beautiful, durable surfaces.
         </Typography>
         
-        {!imagesLoaded ? (
+        {!imagesLoaded || imageContextLoading ? (
           <Box sx={{ display: 'flex', justifyContent: 'center', my: 10 }}>
             <CircularProgress />
           </Box>
@@ -155,7 +176,7 @@ function ServicesPage() {
                   >
                     <Box
                       component="img"
-                      src={service.image}
+                      src={resolveImagePath(service.image)}
                       alt={service.title}
                       sx={{
                         width: '100%',
@@ -167,6 +188,7 @@ function ServicesPage() {
                         }
                       }}
                       onError={(e) => {
+                        console.error(`Failed to load service image: ${service.image} (using ${pathMode} strategy)`);
                         e.target.onerror = null;
                         e.target.style.display = 'none';
                         const parent = e.target.parentElement;
@@ -191,17 +213,18 @@ function ServicesPage() {
                     />
                     {service.galleryCategory && (
                       <Chip
-                        icon={<CollectionsIcon />}
-                        label="Gallery"
+                        icon={service.customTitle ? <ConstructionIcon /> : <CollectionsIcon />}
+                        label={service.customTitle ? "Coming Soon" : "Gallery"}
                         size="small"
                         sx={{
                           position: 'absolute',
                           top: 10,
                           right: 10,
                           zIndex: 2,
-                          bgcolor: 'rgba(255, 255, 255, 0.8)',
+                          bgcolor: service.customTitle ? 'rgba(255, 193, 7, 0.8)' : 'rgba(255, 255, 255, 0.8)',
+                          color: service.customTitle ? theme.palette.grey[800] : undefined,
                           '& .MuiChip-icon': {
-                            color: theme.palette.primary.main
+                            color: service.customTitle ? theme.palette.grey[800] : theme.palette.primary.main
                           }
                         }}
                       />
@@ -245,7 +268,7 @@ function ServicesPage() {
                           }
                         }}
                       >
-                        View Gallery
+                        {service.customTitle ? "View Alternative Gallery" : "View Gallery"}
                       </Button>
                     )}
                   </Box>

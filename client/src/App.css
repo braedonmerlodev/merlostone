@@ -296,3 +296,40 @@ html {
     transform: rotate(360deg);
   }
 }
+
+/* Alice Carousel Overrides */
+.alice-carousel {
+  height: 100%;
+}
+
+.alice-carousel__wrapper {
+  height: 100%;
+}
+
+.alice-carousel img {
+  position: relative;
+}
+
+/* Ensure carousel item text is responsive */
+@media (max-width: 768px) {
+  .carousel-item h2 {
+    font-size: 1.75rem !important;
+  }
+  
+  .carousel-item h5 {
+    font-size: 1rem !important;
+    max-width: 90% !important;
+  }
+}
+
+/* Improve carousel button visibility */
+.custom-prev-btn,
+.custom-next-btn {
+  opacity: 0.8;
+  transition: opacity 0.3s ease !important;
+}
+
+.custom-prev-btn:hover,
+.custom-next-btn:hover {
+  opacity: 1;
+}
