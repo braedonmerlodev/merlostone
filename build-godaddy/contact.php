@@ -1,4 +1,7 @@
 <?php
+// Load environment configuration
+require_once '.env.php';
+
 header('Content-Type: application/json');
 header('Access-Control-Allow-Origin: *');
 header('Access-Control-Allow-Methods: POST');
@@ -34,7 +37,7 @@ if (empty($name) || empty($email) || empty($message)) {
 }
 
 // Verify reCAPTCHA
-$recaptchaSecret = '6Le62v4qAAAAAAvJOTQjJsi3cOCwxpZZAz3rUTom'; // Your reCAPTCHA secret key
+$recaptchaSecret = RECAPTCHA_SECRET_KEY; // Your reCAPTCHA secret key
 $recaptchaVerify = file_get_contents("https://www.google.com/recaptcha/api/siteverify?secret={$recaptchaSecret}&response={$recaptchaToken}");
 $recaptchaResponse = json_decode($recaptchaVerify);
 

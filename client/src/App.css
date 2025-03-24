@@ -48,22 +48,34 @@ html {
 
 /* Navbar text specific sizes for consistent display */
 .MuiAppBar-root .MuiButton-root {
-  font-size: 0.95rem !important; 
+  font-size: 0.85rem !important; 
   font-weight: bold !important;
 }
 
 .MuiAppBar-root .MuiTypography-root {
-  font-size: 0.95rem !important;
+  font-size: 0.85rem !important;
 }
 
 .MuiAppBar-root .MuiMenuItem-root .MuiTypography-root {
-  font-size: 0.95rem !important;
+  font-size: 0.85rem !important;
   font-weight: bold !important;
 }
 
 /* Phone number in navbar */
 .MuiAppBar-root a[href^="tel:"] {
-  font-size: 1.1rem !important;
+  font-size: 1rem !important;
+}
+
+/* Additional selector to ensure navbar links are properly sized */
+.MuiAppBar-root nav a,
+.MuiAppBar-root button,
+.MuiAppBar-root li {
+  font-size: 0.85rem !important;
+}
+
+/* Additional rule that specifically targets the production build (applied by className) */
+.MuiAppBar-root .MuiButtonBase-root {
+  font-size: 0.85rem !important;
 }
 
 /* Improve Carousel indicators */
