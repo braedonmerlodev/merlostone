@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { Link, useLocation } from 'react-router-dom';
+import { Link, useLocation, useNavigate } from 'react-router-dom';
 import { 
   AppBar, 
   Box, 
@@ -35,6 +35,7 @@ function Navbar() {
   // eslint-disable-next-line no-unused-vars
   const theme = useTheme();
   const location = useLocation();
+  const navigate = useNavigate();
   
   // Check if we're on the About page
   const isAboutPage = location.pathname === '/about';
@@ -75,8 +76,8 @@ function Navbar() {
     // Close the menu first
     handleCloseNavMenu();
     
-    // Navigate to the link
-    window.history.pushState({}, '', targetPath);
+    // Navigate to the link using React Router
+    navigate(targetPath);
     
     // Scroll to top
     window.scrollTo({

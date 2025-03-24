@@ -15,7 +15,6 @@ import Footer from './components/Footer';
 import PrivacyPolicy from './components/PrivacyPolicy';
 import ImageDebugger from './components/ImageDebugger';
 import { createTheme, ThemeProvider, CssBaseline, Container, Box, Typography, Grid, Button } from '@mui/material';
-import { Link } from 'react-router-dom';
 import { ImageProvider, useImages } from './contexts/ImageContext';
 import { ReCaptchaProvider } from './contexts/ReCaptchaContext';
 
