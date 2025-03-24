@@ -149,8 +149,13 @@ const FormContent = () => {
         recaptchaToken
       };
       
-      // Send to backend API
-      const response = await fetch('/api/contact', {
+      // Get the base URL to handle both local development and production
+      const apiUrl = process.env.NODE_ENV === 'production'
+        ? '/contact.php'  // Production endpoint
+        : '/api/contact'; // Development endpoint (Node.js)
+      
+      // Send to API endpoint
+      const response = await fetch(apiUrl, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify(dataToSubmit)
@@ -165,7 +170,7 @@ const FormContent = () => {
       // Success message
       setSnackbar({
         open: true,
-        message: 'Thank you! Your message has been sent successfully. We\'ll get back to you shortly.',
+        message: result.message || 'Thank you! Your message has been sent successfully. We\'ll get back to you shortly.',
         severity: 'success'
       });
       
