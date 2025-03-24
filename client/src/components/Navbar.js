@@ -60,8 +60,29 @@ function Navbar() {
     setAnchorElNav(event.currentTarget);
   };
 
-  const handleCloseNavMenu = () => {
+  const handleCloseNavMenu = (event) => {
+    // Prevent default scrolling behavior
+    if (event) {
+      event.preventDefault();
+    }
     setAnchorElNav(null);
+  };
+
+  const handleNavLinkClick = (event, targetPath) => {
+    // Prevent default behavior
+    event.preventDefault();
+    
+    // Close the menu first
+    handleCloseNavMenu();
+    
+    // Navigate to the link
+    window.history.pushState({}, '', targetPath);
+    
+    // Scroll to top
+    window.scrollTo({
+      top: 0,
+      behavior: 'smooth'
+    });
   };
   
   return (
@@ -128,9 +149,7 @@ function Navbar() {
                 {pages.map((page) => (
                   <MenuItem 
                     key={page} 
-                    component={Link}
-                    to={pageRoutes[page]}
-                    onClick={handleCloseNavMenu}
+                    onClick={(event) => handleNavLinkClick(event, pageRoutes[page])}
                   >
                     <Typography textAlign="center" sx={{ fontWeight: 'bold', fontSize: '0.85rem' }}>{page}</Typography>
                   </MenuItem>
@@ -165,7 +184,7 @@ function Navbar() {
                 key={page}
                 component={Link}
                 to={pageRoutes[page]}
-                onClick={handleCloseNavMenu}
+                onClick={(event) => handleNavLinkClick(event, pageRoutes[page])}
                 sx={{ 
                   my: 2, 
                   color: 'white', 

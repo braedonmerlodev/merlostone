@@ -1,6 +1,6 @@
-import React, { createContext, useState } from 'react';
+import React, { createContext, useState, useEffect } from 'react';
 import './App.css';
-import { createBrowserRouter, RouterProvider, Outlet } from 'react-router-dom';
+import { createBrowserRouter, RouterProvider, Outlet, Link as RouterLink, useLocation } from 'react-router-dom';
 import Navbar from './components/Navbar';
 import ContactForm from './components/ContactForm';
 import AliceCarouselSlider from './components/AliceCarouselSlider';
@@ -30,6 +30,23 @@ const theme = createTheme({
     },
   },
 });
+
+// Create a custom Link component that scrolls to top
+const ScrollToTopLink = ({ to, children, ...props }) => {
+  const handleClick = () => {
+    // Scroll to top when link is clicked
+    window.scrollTo({
+      top: 0,
+      behavior: 'smooth'
+    });
+  };
+
+  return (
+    <RouterLink to={to} onClick={handleClick} {...props}>
+      {children}
+    </RouterLink>
+  );
+};
 
 // Create audio context for sharing audio state across components
 export const AudioContext = createContext();
@@ -93,7 +110,7 @@ function HomePage() {
                 variant="contained" 
                 color="primary" 
                 size="large" 
-                component={Link} 
+                component={ScrollToTopLink} 
                 to="/about"
                 sx={{ mt: 3, px: 4, py: 1.5, fontSize: '1.1rem', fontWeight: 'medium' }}
               >
@@ -123,7 +140,7 @@ function HomePage() {
             variant="contained" 
             color="primary" 
             size="large" 
-            component={Link} 
+            component={ScrollToTopLink} 
             to="/services"
             sx={{ px: 5, py: 1.5, fontSize: '1.1rem', fontWeight: 'medium' }}
           >
@@ -172,6 +189,17 @@ function AboutPage() {
   );
 }
 
+// ScrollToTop component to handle scroll on route changes
+function ScrollToTop() {
+  const { pathname } = useLocation();
+  
+  useEffect(() => {
+    window.scrollTo(0, 0);
+  }, [pathname]);
+  
+  return null;
+}
+
 function Root() {
   // eslint-disable-next-line no-unused-vars
   const { audioState, setAudioState } = React.useContext(AudioContext);
@@ -179,6 +207,7 @@ function Root() {
   return (
     <>
       <Navbar />
+      <ScrollToTop />
       <Box sx={{ minHeight: '100vh', display: 'flex', flexDirection: 'column' }}>
         <Box component="main" sx={{ flexGrow: 1 }}>
           <Outlet />

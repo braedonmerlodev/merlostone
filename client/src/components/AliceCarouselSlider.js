@@ -258,7 +258,11 @@ const AliceCarouselSlider = () => {
                                     fontWeight: 'bold', 
                                     mb: 2, 
                                     color: 'white',
-                                    textShadow: '1px 1px 3px rgba(0,0,0,0.7)'
+                                    textShadow: '1px 1px 3px rgba(0,0,0,0.7)',
+                                    textAlign: 'center',
+                                    width: '100%',
+                                    px: { xs: 2, sm: 3 },
+                                    fontSize: { xs: '2rem', sm: '2.5rem', md: '3rem' }
                                 }}
                             >
                                 {item.title}
@@ -267,10 +271,11 @@ const AliceCarouselSlider = () => {
                                 <Typography 
                                     variant="h5" 
                                     sx={{ 
-                                        maxWidth: '70%', 
+                                        maxWidth: { xs: '90%', md: '70%' }, 
                                         textAlign: 'center', 
                                         color: 'white',
-                                        textShadow: '1px 1px 3px rgba(0,0,0,0.7)'
+                                        textShadow: '1px 1px 3px rgba(0,0,0,0.7)',
+                                        fontSize: { xs: '1rem', sm: '1.2rem', md: '1.5rem' }
                                     }}
                                 >
                                     {item.description}
