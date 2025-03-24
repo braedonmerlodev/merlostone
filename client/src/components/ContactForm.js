@@ -12,14 +12,15 @@ import {
   Divider,
   useTheme,
   useMediaQuery,
-  Link
+  Link,
+  CircularProgress
 } from '@mui/material';
 import LocationOnIcon from '@mui/icons-material/LocationOn';
 import PhoneIcon from '@mui/icons-material/Phone';
 import EmailIcon from '@mui/icons-material/Email';
 import AccessTimeIcon from '@mui/icons-material/AccessTime';
 import DirectionsIcon from '@mui/icons-material/Directions';
-import { Link as RouterLink } from 'react-router-dom';
+import { useReCaptcha } from '../contexts/ReCaptchaContext';
 
 // Google Maps Component
 const GoogleMap = () => {
@@ -64,6 +65,7 @@ const GoogleMap = () => {
 const FormContent = () => {
   const theme = useTheme();
   const isMobile = useMediaQuery(theme.breakpoints.down('md'));
+  const { executeReCaptcha, reCaptchaLoaded } = useReCaptcha();
   const [formData, setFormData] = useState({
     name: '',
     email: '',
@@ -131,16 +133,39 @@ const FormContent = () => {
     setIsSubmitting(true);
     
     try {
-      // In a real application, you would send this to your backend
-      console.log('Form data:', formData);
+      // Get reCAPTCHA token
+      let recaptchaToken = null;
       
-      // Simulate API call delay
-      await new Promise(resolve => setTimeout(resolve, 1000));
+      if (reCaptchaLoaded) {
+        recaptchaToken = await executeReCaptcha('contact_form_submit');
+        console.log('reCAPTCHA token:', recaptchaToken);
+      } else {
+        console.warn('reCAPTCHA not loaded, proceeding without verification');
+      }
+      
+      // Prepare data for submission
+      const dataToSubmit = {
+        ...formData,
+        recaptchaToken
+      };
+      
+      // Send to backend API
+      const response = await fetch('/api/contact', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(dataToSubmit)
+      });
+      
+      const result = await response.json();
+      
+      if (!response.ok) {
+        throw new Error(result.message || 'Error submitting form');
+      }
       
       // Success message
       setSnackbar({
         open: true,
-        message: 'Thank you! Your message has been sent successfully. We\'ll get back to you shortly.',
+        message: result.message || 'Thank you! Your message has been sent successfully. We\'ll get back to you shortly.',
         severity: 'success'
       });
       
@@ -157,7 +182,7 @@ const FormContent = () => {
       console.error('Error submitting form:', error);
       setSnackbar({
         open: true,
-        message: 'Error submitting form. Please try again or contact us directly by phone.',
+        message: error.message || 'Error submitting form. Please try again or contact us directly by phone.',
         severity: 'error'
       });
     } finally {
@@ -255,8 +280,11 @@ const FormContent = () => {
                     />
                   </Grid>
                   <Grid item xs={12}>
-                    <Typography variant="caption" color="textSecondary">
-                      Your information will be handled securely in accordance with our <Link component={RouterLink} to="/privacy-policy" color="primary">privacy policy</Link>.
+                    <Typography variant="caption" color="textSecondary" sx={{ display: 'block', mb: 2 }}>
+                      This site is protected by reCAPTCHA v3. By submitting this form, you agree to the 
+                      <Link href="https://policies.google.com/privacy" target="_blank" rel="noopener" sx={{ mx: 0.5 }}>Privacy Policy</Link>
+                      and
+                      <Link href="https://policies.google.com/terms" target="_blank" rel="noopener" sx={{ mx: 0.5 }}>Terms of Service</Link>.
                     </Typography>
                   </Grid>
                   <Grid item xs={12} sx={{ display: 'flex', justifyContent: 'flex-end' }}>
@@ -265,8 +293,13 @@ const FormContent = () => {
                       variant="contained"
                       color="primary"
                       size="large"
-                      disabled={isSubmitting}
-                      sx={{ minWidth: '200px', py: 1.5 }}
+                      disabled={isSubmitting || !reCaptchaLoaded}
+                      sx={{ 
+                        minWidth: '200px', 
+                        py: 1.5,
+                        fontSize: '1.1rem'
+                      }}
+                      endIcon={isSubmitting ? <CircularProgress size={20} color="inherit" /> : null}
                     >
                       {isSubmitting ? 'Sending...' : 'Send Message'}
                     </Button>
@@ -435,7 +468,46 @@ const FormContent = () => {
 
 // Wrapper component that provides the reCAPTCHA provider
 const ContactForm = () => {
-  // Use FormContent directly without reCAPTCHA provider to prevent loading issues
+  const { reCaptchaLoaded, error } = useReCaptcha();
+  const isDevEnvironment = window.location.hostname === 'localhost' || 
+                           window.location.hostname === '127.0.0.1' || 
+                           window.location.hostname.endsWith('.github.dev');
+  
+  // If running in a dev environment and there's an error, show warning but allow form to work
+  if (error && isDevEnvironment) {
+    console.warn('reCAPTCHA warning (development environment):', error.message);
+    // In dev environment, we still render the form since we have fallback mock tokens
+  }
+  // In production, if there's a fatal reCAPTCHA error, show user-friendly error
+  else if (error && !isDevEnvironment) {
+    return (
+      <Box sx={{ py: 8 }}>
+        <Container maxWidth="lg">
+          <Typography variant="h3" component="h1" gutterBottom align="center" sx={{ mb: 4, fontWeight: 'bold', fontSize: '2.5rem' }}>
+            Contact Us
+          </Typography>
+          <Paper elevation={3} sx={{ p: 4, maxWidth: '800px', mx: 'auto', textAlign: 'center' }}>
+            <Alert severity="error" sx={{ mb: 3 }}>
+              There was a problem loading the contact form security features. Please try again later.
+            </Alert>
+            <Typography variant="body1" paragraph>
+              Alternatively, you can contact us directly:
+            </Typography>
+            <Typography variant="body1" paragraph>
+              Phone: <Link href="tel:+19255255802">(925) 525-5802</Link><br />
+              Email: <Link href="mailto:davemerlo@comcast.net">davemerlo@comcast.net</Link>
+            </Typography>
+          </Paper>
+        </Container>
+      </Box>
+    );
+  }
+
+  // Show a simple loading message if reCAPTCHA is still loading and no error
+  if (!reCaptchaLoaded && !error && !isDevEnvironment) {
+    console.log('reCAPTCHA is still loading...');
+  }
+  
   return <FormContent />;
 };
 

@@ -156,9 +156,6 @@ const edgeProfiles = [
   }
 ];
 
-// Placeholder image if the actual image is not available
-const placeholderImage = null; // No external placeholder - using CSS fallbacks instead
-
 // Group edge profiles by category
 const groupedProfiles = edgeProfiles.reduce((groups, profile) => {
   const { category } = profile;

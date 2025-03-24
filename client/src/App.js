@@ -17,6 +17,7 @@ import ImageDebugger from './components/ImageDebugger';
 import { createTheme, ThemeProvider, CssBaseline, Container, Box, Typography, Grid, Button } from '@mui/material';
 import { Link } from 'react-router-dom';
 import { ImageProvider, useImages } from './contexts/ImageContext';
+import { ReCaptchaProvider } from './contexts/ReCaptchaContext';
 
 // Create a theme instance
 const theme = createTheme({
@@ -32,6 +33,10 @@ const theme = createTheme({
 
 // Create audio context for sharing audio state across components
 export const AudioContext = createContext();
+
+// Add RECAPTCHA_SITE_KEY constant at the top of the file, near other constants or imports
+// This will be replaced with your actual key once you register
+const RECAPTCHA_SITE_KEY = '6Le62v4qAAAAACYwVpkzHHPCfhA4ECZC4NLIGNIg'; // Replace this with your actual key
 
 // Home Page Component
 function HomePage() {
@@ -245,14 +250,16 @@ function App() {
       ? parseInt(localStorage.getItem('audioVolume')) 
       : 30
   });
-
+  
   return (
-    <AudioContext.Provider value={{ audioState, setAudioState }}>
-      <ThemeProvider theme={theme}>
-        <CssBaseline />
-        <RouterProvider router={router} />
-      </ThemeProvider>
-    </AudioContext.Provider>
+    <ReCaptchaProvider siteKey={RECAPTCHA_SITE_KEY}>
+      <AudioContext.Provider value={{ audioState, setAudioState }}>
+        <ThemeProvider theme={theme}>
+          <CssBaseline />
+          <RouterProvider router={router} />
+        </ThemeProvider>
+      </AudioContext.Provider>
+    </ReCaptchaProvider>
   );
 }
 
