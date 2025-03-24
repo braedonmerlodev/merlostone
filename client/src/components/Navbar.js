@@ -185,22 +185,30 @@ function Navbar() {
 
           {/* Right side section - phone number */}
           <Box sx={{ display: 'flex', alignItems: 'center' }}>
-            <PhoneIcon sx={{ mr: 1, fontSize: { xs: '1.2rem', sm: '1.4rem' }, color: 'white' }} />
+            <PhoneIcon sx={{ mr: 0.5, fontSize: { xs: '1rem', sm: '1.4rem' }, color: 'white' }} />
             <MuiLink 
               href="tel:+19255255802"
               underline="none"
               sx={{ 
                 fontWeight: 'bold',
-                fontSize: { xs: '1rem', sm: '1.1rem' },
-                letterSpacing: '0.5px',
+                fontSize: { xs: '0.8rem', sm: '1.1rem' },
+                letterSpacing: { xs: 0, sm: '0.5px' },
                 color: 'white',
                 textDecoration: 'none',
+                whiteSpace: { xs: 'nowrap', sm: 'normal' },
                 '&:hover': {
                   color: 'rgba(255, 255, 255, 0.9)',
                 }
               }}
             >
-              Office: 925-525-5802
+              {/* Show shorter version on mobile */}
+              <Box component="span" sx={{ display: { xs: 'inline', sm: 'none' } }}>
+                925-525-5802
+              </Box>
+              {/* Show full version on larger screens */}
+              <Box component="span" sx={{ display: { xs: 'none', sm: 'inline' } }}>
+                Office: 925-525-5802
+              </Box>
             </MuiLink>
           </Box>
         </Toolbar>

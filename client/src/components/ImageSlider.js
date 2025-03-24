@@ -119,11 +119,29 @@ const Item = ({ item, index }) => {
             }}
             elevation={0}
         >
-            <Typography variant="h3" component="h2" sx={{ fontWeight: 'bold', mb: 2 }}>
+            <Typography 
+                variant="h3" 
+                component="h2" 
+                sx={{ 
+                    fontWeight: 'bold', 
+                    mb: 2,
+                    textAlign: 'center',
+                    width: '100%',
+                    px: { xs: 2, sm: 0 }, // Add padding on small screens
+                    fontSize: { xs: '2rem', sm: '2.5rem', md: '3rem' } // Responsive font sizing
+                }}
+            >
                 {item.title}
             </Typography>
             {item.description && (
-                <Typography variant="h5" sx={{ maxWidth: '70%', textAlign: 'center' }}>
+                <Typography 
+                    variant="h5" 
+                    sx={{ 
+                        maxWidth: { xs: '90%', md: '70%' }, 
+                        textAlign: 'center',
+                        fontSize: { xs: '1rem', sm: '1.2rem', md: '1.5rem' }
+                    }}
+                >
                     {item.description}
                 </Typography>
             )}

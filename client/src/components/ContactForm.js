@@ -80,6 +80,7 @@ const FormContent = () => {
     severity: 'success'
   });
   const [isSubmitting, setIsSubmitting] = useState(false);
+  const [submitted, setSubmitted] = useState(false);
   
   const handleInputChange = (e) => {
     const { name, value } = e.target;
@@ -133,68 +134,53 @@ const FormContent = () => {
     setIsSubmitting(true);
     
     try {
-      // Get reCAPTCHA token
+      // Get reCAPTCHA token if available
       let recaptchaToken = null;
-      
       if (reCaptchaLoaded) {
         recaptchaToken = await executeReCaptcha('contact_form_submit');
-        console.log('reCAPTCHA token:', recaptchaToken);
-      } else {
-        console.warn('reCAPTCHA not loaded, proceeding without verification');
       }
       
-      // Prepare data for submission
-      const dataToSubmit = {
-        ...formData,
-        recaptchaToken
-      };
-      
-      // Always use contact.php (both in development and production)
-      const apiUrl = '/contact.php';
-      
-      console.log('Submitting form to:', apiUrl);
-      
-      // Send to API endpoint
-      const response = await fetch(apiUrl, {
+      // Direct Formspree submission using fetch
+      const formResponse = await fetch('https://formspree.io/f/mvgkrngl', {
         method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify(dataToSubmit)
+        headers: {
+          'Accept': 'application/json',
+          'Content-Type': 'application/json'
+        },
+        body: JSON.stringify({
+          name: formData.name,
+          email: formData.email,
+          phone: formData.phone,
+          subject: formData.subject,
+          message: formData.message,
+          'g-recaptcha-response': recaptchaToken
+        })
       });
       
-      console.log('Response status:', response.status);
+      const result = await formResponse.json();
       
-      // Try to parse the response as JSON
-      let result;
-      try {
-        result = await response.json();
-        console.log('Response data:', result);
-      } catch (parseError) {
-        console.error('Error parsing response:', parseError);
-        const text = await response.text();
-        console.log('Response text:', text);
-        throw new Error('Could not parse server response');
+      if (formResponse.ok) {
+        // Form submitted successfully
+        setSubmitted(true);
+        setSnackbar({
+          open: true,
+          message: 'Thank you! Your message has been sent successfully. We\'ll get back to you shortly.',
+          severity: 'success'
+        });
+        
+        // Reset form
+        setFormData({
+          name: '',
+          email: '',
+          phone: '',
+          subject: '',
+          message: ''
+        });
+      } else {
+        // Handle errors
+        console.error('Formspree submission error:', result);
+        throw new Error(result.error || 'Error submitting form');
       }
-      
-      if (!response.ok) {
-        throw new Error(result.message || 'Error submitting form');
-      }
-      
-      // Success message
-      setSnackbar({
-        open: true,
-        message: result.message || 'Thank you! Your message has been sent successfully. We\'ll get back to you shortly.',
-        severity: 'success'
-      });
-      
-      // Reset form
-      setFormData({
-        name: '',
-        email: '',
-        phone: '',
-        subject: '',
-        message: ''
-      });
-      
     } catch (error) {
       console.error('Error submitting form:', error);
       setSnackbar({
@@ -269,95 +255,114 @@ const FormContent = () => {
               </Typography>
               
               <Box component="form" onSubmit={handleSubmit} noValidate>
-                <Grid container spacing={3}>
-                  <Grid item xs={12} sm={6}>
-                    <TextField
-                      required
-                      fullWidth
-                      id="name"
-                      label="Full Name"
-                      name="name"
-                      value={formData.name}
-                      onChange={handleInputChange}
-                      error={!!errors.name}
-                      helperText={errors.name}
-                    />
-                  </Grid>
-                  <Grid item xs={12} sm={6}>
-                    <TextField
-                      required
-                      fullWidth
-                      id="email"
-                      label="Email Address"
-                      name="email"
-                      autoComplete="email"
-                      value={formData.email}
-                      onChange={handleInputChange}
-                      error={!!errors.email}
-                      helperText={errors.email}
-                    />
-                  </Grid>
-                  <Grid item xs={12} sm={6}>
-                    <TextField
-                      fullWidth
-                      id="phone"
-                      label="Phone Number"
-                      name="phone"
-                      value={formData.phone}
-                      onChange={handleInputChange}
-                    />
-                  </Grid>
-                  <Grid item xs={12} sm={6}>
-                    <TextField
-                      fullWidth
-                      id="subject"
-                      label="Subject"
-                      name="subject"
-                      value={formData.subject}
-                      onChange={handleInputChange}
-                    />
-                  </Grid>
-                  <Grid item xs={12}>
-                    <TextField
-                      required
-                      fullWidth
-                      id="message"
-                      label="Message"
-                      name="message"
-                      multiline
-                      rows={6}
-                      value={formData.message}
-                      onChange={handleInputChange}
-                      error={!!errors.message}
-                      helperText={errors.message}
-                    />
-                  </Grid>
-                  <Grid item xs={12}>
-                    <Typography variant="caption" color="textSecondary" sx={{ display: 'block', mb: 2 }}>
-                      This site is protected by reCAPTCHA v3. By submitting this form, you agree to the 
-                      <Link href="https://policies.google.com/privacy" target="_blank" rel="noopener" sx={{ mx: 0.5 }}>Privacy Policy</Link>
-                      and
-                      <Link href="https://policies.google.com/terms" target="_blank" rel="noopener" sx={{ mx: 0.5 }}>Terms of Service</Link>.
+                {submitted ? (
+                  <Box sx={{ textAlign: 'center', py: 4 }}>
+                    <Typography variant="h6" gutterBottom color="success.main">
+                      Thank you for your message!
                     </Typography>
-                  </Grid>
-                  <Grid item xs={12} sx={{ display: 'flex', justifyContent: 'flex-end' }}>
-                    <Button
-                      type="submit"
-                      variant="contained"
-                      color="primary"
-                      size="large"
-                      disabled={isSubmitting || !reCaptchaLoaded}
-                      sx={{ 
-                        minWidth: '200px', 
-                        py: 1.5,
-                        fontSize: '1.1rem'
-                      }}
-                      endIcon={isSubmitting ? <CircularProgress size={20} color="inherit" /> : null}
+                    <Typography variant="body1">
+                      We've received your inquiry and will get back to you as soon as possible.
+                    </Typography>
+                    <Button 
+                      variant="outlined" 
+                      color="primary" 
+                      sx={{ mt: 3 }}
+                      onClick={() => setSubmitted(false)}
                     >
-                      {isSubmitting ? 'Sending...' : 'Send Message'}
+                      Send Another Message
                     </Button>
+                  </Box>
+                ) : (
+                  <Grid container spacing={3}>
+                    <Grid item xs={12} sm={6}>
+                      <TextField
+                        required
+                        fullWidth
+                        id="name"
+                        label="Full Name"
+                        name="name"
+                        value={formData.name}
+                        onChange={handleInputChange}
+                        error={!!errors.name}
+                        helperText={errors.name}
+                      />
+                    </Grid>
+                    <Grid item xs={12} sm={6}>
+                      <TextField
+                        required
+                        fullWidth
+                        id="email"
+                        label="Email Address"
+                        name="email"
+                        autoComplete="email"
+                        value={formData.email}
+                        onChange={handleInputChange}
+                        error={!!errors.email}
+                        helperText={errors.email}
+                      />
+                    </Grid>
+                    <Grid item xs={12} sm={6}>
+                      <TextField
+                        fullWidth
+                        id="phone"
+                        label="Phone Number"
+                        name="phone"
+                        value={formData.phone}
+                        onChange={handleInputChange}
+                      />
+                    </Grid>
+                    <Grid item xs={12} sm={6}>
+                      <TextField
+                        fullWidth
+                        id="subject"
+                        label="Subject"
+                        name="subject"
+                        value={formData.subject}
+                        onChange={handleInputChange}
+                      />
+                    </Grid>
+                    <Grid item xs={12}>
+                      <TextField
+                        required
+                        fullWidth
+                        id="message"
+                        label="Message"
+                        name="message"
+                        multiline
+                        rows={6}
+                        value={formData.message}
+                        onChange={handleInputChange}
+                        error={!!errors.message}
+                        helperText={errors.message}
+                      />
+                    </Grid>
+                    <Grid item xs={12}>
+                      <Typography variant="caption" color="textSecondary" sx={{ display: 'block', mb: 2 }}>
+                        This site is protected by reCAPTCHA v3. By submitting this form, you agree to the 
+                        <Link href="https://policies.google.com/privacy" target="_blank" rel="noopener" sx={{ mx: 0.5 }}>Privacy Policy</Link>
+                        and
+                        <Link href="https://policies.google.com/terms" target="_blank" rel="noopener" sx={{ mx: 0.5 }}>Terms of Service</Link>.
+                      </Typography>
+                    </Grid>
+                    <Grid item xs={12} sx={{ display: 'flex', justifyContent: 'flex-end' }}>
+                      <Button
+                        type="submit"
+                        variant="contained"
+                        color="primary"
+                        size="large"
+                        disabled={isSubmitting || !reCaptchaLoaded}
+                        sx={{ 
+                          minWidth: '200px', 
+                          py: 1.5,
+                          fontSize: '1.1rem'
+                        }}
+                        endIcon={isSubmitting ? <CircularProgress size={20} color="inherit" /> : null}
+                      >
+                        {isSubmitting ? 'Sending...' : 'Send Message'}
+                      </Button>
+                    </Grid>
                   </Grid>
-                </Grid>
+                )}
               </Box>
             </Paper>
           </Grid>
@@ -454,8 +459,8 @@ const FormContent = () => {
                   </Grid>
                   <Grid item xs={12} sm={6}>
                     <Box sx={{ display: 'flex', alignItems: 'center', mb: 2 }}>
-                      <PhoneIcon sx={{ mr: 1, color: theme.palette.primary.main }} />
-                      <Typography variant="body2">
+                      <PhoneIcon sx={{ mr: 1, color: theme.palette.primary.main, fontSize: { xs: '1rem', sm: '1.2rem' } }} />
+                      <Typography variant="body2" sx={{ fontSize: { xs: '0.85rem', sm: '1rem' } }}>
                         <Link href="tel:+19255255802" color="inherit" underline="hover">
                           (925) 525-5802
                         </Link>
