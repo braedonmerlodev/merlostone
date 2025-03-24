@@ -48,4 +48,7 @@ coverage/
 tmp/
 temp/
 .DS_Store
-Thumbs.db 
+Thumbs.db
+
+# server logs
+server/logs 
