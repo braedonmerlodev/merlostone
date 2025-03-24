@@ -27,9 +27,10 @@ const mapServiceCategoryToGalleryTab = (serviceCategory) => {
     'kitchens': 'Kitchens',
     'bathrooms': 'Bathrooms | Vanities',
     'fireplaces': 'Fireplaces',
-    'outdoor': 'BBQ\'s', // Fallback mapping
-    'commercial': 'Industrial', // Fallback mapping
-    'custom': 'Bathrooms | Vanities' // Fallback mapping
+    'outdoor': 'BBQ\'s',
+    'commercial': 'Industrial',
+    'custom': 'Kitchens',
+    'installations': 'Installations'
   };
   
   return mappings[serviceCategory] || categories[0];
@@ -219,7 +220,12 @@ const GalleryPage = () => {
   const [showAll, setShowAll] = useState(false);
   const [modalOpen, setModalOpen] = useState(false);
   const [selectedImage, setSelectedImage] = useState(null);
+  const [selectedImageIndex, setSelectedImageIndex] = useState(0);
   const [showCustomTitleAlert, setShowCustomTitleAlert] = useState(Boolean(customTitle));
+  
+  // Track touch events for swipe functionality
+  const [touchStart, setTouchStart] = useState(null);
+  const [touchEnd, setTouchEnd] = useState(null);
 
   // Effect to scroll to the content when navigating from services
   useEffect(() => {
@@ -253,8 +259,9 @@ const GalleryPage = () => {
     setShowCustomTitleAlert(false);
   };
 
-  const handleImageClick = (image) => {
+  const handleImageClick = (image, index) => {
     setSelectedImage(image);
+    setSelectedImageIndex(index);
     setModalOpen(true);
   };
 
@@ -264,6 +271,72 @@ const GalleryPage = () => {
   
   const handleCloseAlert = () => {
     setShowCustomTitleAlert(false);
+  };
+  
+  // Navigate to the next image in the current category
+  const handleNextImage = () => {
+    const currentCategoryImages = showAll 
+      ? galleryData[selectedCategory]
+      : galleryData[selectedCategory];
+    
+    const nextIndex = (selectedImageIndex + 1) % currentCategoryImages.length;
+    setSelectedImageIndex(nextIndex);
+    setSelectedImage(currentCategoryImages[nextIndex]);
+  };
+  
+  // Navigate to the previous image in the current category
+  const handlePreviousImage = () => {
+    const currentCategoryImages = showAll 
+      ? galleryData[selectedCategory]
+      : galleryData[selectedCategory];
+    
+    const prevIndex = (selectedImageIndex - 1 + currentCategoryImages.length) % currentCategoryImages.length;
+    setSelectedImageIndex(prevIndex);
+    setSelectedImage(currentCategoryImages[prevIndex]);
+  };
+  
+  // Handle keyboard navigation
+  useEffect(() => {
+    const handleKeyDown = (e) => {
+      if (!modalOpen) return;
+      
+      if (e.key === 'ArrowRight') {
+        handleNextImage();
+      } else if (e.key === 'ArrowLeft') {
+        handlePreviousImage();
+      } else if (e.key === 'Escape') {
+        handleCloseModal();
+      }
+    };
+    
+    window.addEventListener('keydown', handleKeyDown);
+    return () => window.removeEventListener('keydown', handleKeyDown);
+  }, [modalOpen, selectedImageIndex, selectedCategory, showAll]);
+  
+  // Handle touch events for swipe
+  const handleTouchStart = (e) => {
+    setTouchStart(e.targetTouches[0].clientX);
+  };
+  
+  const handleTouchMove = (e) => {
+    setTouchEnd(e.targetTouches[0].clientX);
+  };
+  
+  const handleTouchEnd = () => {
+    if (!touchStart || !touchEnd) return;
+    
+    const distance = touchStart - touchEnd;
+    const isLeftSwipe = distance > 50;
+    const isRightSwipe = distance < -50;
+    
+    if (isLeftSwipe) {
+      handleNextImage();
+    } else if (isRightSwipe) {
+      handlePreviousImage();
+    }
+    
+    setTouchStart(null);
+    setTouchEnd(null);
   };
 
   return (
@@ -354,12 +427,12 @@ const GalleryPage = () => {
                 <Divider sx={{ mb: 4 }} />
                 
                 <Grid container spacing={3}>
-                  {galleryData[category].map((item) => (
+                  {galleryData[category].map((item, index) => (
                     <Grid item xs={12} sm={6} md={4} key={item.id}>
                       <Card 
                         elevation={2}
                         className="gallery-image-card"
-                        onClick={() => handleImageClick(item)}
+                        onClick={() => handleImageClick(item, index)}
                         sx={{ 
                           height: '100%',
                           display: 'flex',
@@ -404,12 +477,12 @@ const GalleryPage = () => {
           // Show only the selected category
           <Box>
             <Grid container spacing={3}>
-              {galleryData[selectedCategory].map((item) => (
+              {galleryData[selectedCategory].map((item, index) => (
                 <Grid item xs={12} sm={6} md={4} key={item.id}>
                   <Card 
                     elevation={2}
                     className="gallery-image-card"
-                    onClick={() => handleImageClick(item)}
+                    onClick={() => handleImageClick(item, index)}
                     sx={{ 
                       height: '100%',
                       display: 'flex',

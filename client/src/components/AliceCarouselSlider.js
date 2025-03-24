@@ -11,7 +11,7 @@ import { useImages } from '../contexts/ImageContext';
 const items = [
     {
         id: 1,
-        image: "1.jpg", // Using simplified paths that our context will resolve
+        image: "4.jpg", // Using simplified paths that our context will resolve
         title: "Merlo Stone Welcomes You!",
         description: ""
     },
@@ -29,7 +29,7 @@ const items = [
     },
     {
         id: 4,
-        image: "4.jpg",
+        image: "1.jpg",
         title: "Merlo Stone Welcomes You!",
         description: ""
     }
@@ -393,66 +393,28 @@ const AliceCarouselSlider = () => {
                         renderNextButton={renderNextButton}
                         activeIndex={activeIndex}
                         onSlideChanged={handleSlideChanged}
+                        className="alice-carousel__dots"
                     />
-                    
-                    {/* Path mode indicator */}
-                    <Box 
-                        sx={{ 
-                            position: 'absolute',
-                            bottom: 90,
-                            right: 10,
-                            zIndex: 1000,
-                            backgroundColor: 'rgba(0,0,0,0.7)',
-                            p: 1,
-                            borderRadius: 1,
-                            fontSize: '12px',
-                            color: 'white'
-                        }}
-                    >
-                        Image strategy: {pathMode}
-                    </Box>
-                    
-                    {/* Hidden diagnostic images for testing paths */}
-                    <Box 
-                        sx={{ 
-                            position: 'absolute',
-                            bottom: 10,
-                            right: 10,
-                            zIndex: 1000,
-                            backgroundColor: 'rgba(0,0,0,0.7)',
-                            p: 2,
-                            borderRadius: 1,
-                            display: 'flex' 
-                        }}
-                    >
-                        <Box>
-                            <Typography variant="caption" color="white">Path Tests:</Typography>
-                            <Box sx={{ display: 'flex', gap: 1, mt: 1 }}>
-                                <img 
-                                    src={resolveImagePath(items[0].image)}
-                                    alt="Test 1 (standard)" 
-                                    style={{ width: 50, height: 50, objectFit: 'cover' }}
-                                    onLoad={() => console.log("Test 1 (standard) loaded successfully")}
-                                    onError={() => console.error("Test 1 (standard) failed to load")}
-                                />
-                                <img 
-                                    src={resolveImagePath(items[0].image, { absolute: true })}
-                                    alt="Test 2 (absolute)" 
-                                    style={{ width: 50, height: 50, objectFit: 'cover' }}
-                                    onLoad={() => console.log("Test 2 (absolute) loaded successfully")}
-                                    onError={() => console.error("Test 2 (absolute) failed to load")}
-                                />
-                                <img 
-                                    src={resolveImagePath(items[0].image, { useOptimized: true })}
-                                    alt="Test 3 (optimized)" 
-                                    style={{ width: 50, height: 50, objectFit: 'cover' }}
-                                    onLoad={() => console.log("Test 3 (optimized) loaded successfully")}
-                                    onError={() => console.error("Test 3 (optimized) failed to load")}
-                                />
-                            </Box>
-                        </Box>
-                    </Box>
                 </>
+            )}
+            
+            {loading && (
+                <Box
+                    sx={{
+                        position: 'absolute',
+                        top: 0,
+                        left: 0,
+                        width: '100%',
+                        height: '100%',
+                        display: 'flex',
+                        justifyContent: 'center',
+                        alignItems: 'center',
+                        backgroundColor: 'rgba(0, 0, 0, 0.5)',
+                        zIndex: 10
+                    }}
+                >
+                    <CircularProgress sx={{ color: 'white' }} />
+                </Box>
             )}
         </Box>
     );

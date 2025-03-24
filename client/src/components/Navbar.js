@@ -11,18 +11,10 @@ import {
   Button, 
   MenuItem,
   useTheme,
-  Link as MuiLink,
-  ButtonGroup,
-  Popper,
-  Grow,
-  Paper,
-  ClickAwayListener,
-  MenuList
+  Link as MuiLink
 } from '@mui/material';
 import MenuIcon from '@mui/icons-material/Menu';
 import PhoneIcon from '@mui/icons-material/Phone';
-import DeviceHubIcon from '@mui/icons-material/DeviceHub';
-import ArrowDropDownIcon from '@mui/icons-material/ArrowDropDown';
 
 // Update the pages array to remove Products
 const pages = ['Home', 'Services', 'Stone Care', 'Edges', 'Gallery', 'About', 'Contact'];
@@ -37,18 +29,9 @@ const pageRoutes = {
   'Contact': '/contact'
 };
 
-// Dev tools menu items
-const devTools = [
-  { name: 'Image Debugger', route: '/debug-images' },
-  { name: 'Privacy Policy', route: '/privacy-policy' }
-];
-
 function Navbar() {
   const [anchorElNav, setAnchorElNav] = useState(null);
   const [scrolled, setScrolled] = useState(false);
-  const [devMenuOpen, setDevMenuOpen] = useState(false);
-  const [mobileDevMenuAnchor, setMobileDevMenuAnchor] = useState(null);
-  const devMenuAnchorRef = React.useRef(null);
   // eslint-disable-next-line no-unused-vars
   const theme = useTheme();
   
@@ -77,25 +60,6 @@ function Navbar() {
     setAnchorElNav(null);
   };
   
-  const handleDevMenuToggle = () => {
-    setDevMenuOpen((prevOpen) => !prevOpen);
-  };
-  
-  const handleDevMenuClose = (event) => {
-    if (devMenuAnchorRef.current && devMenuAnchorRef.current.contains(event.target)) {
-      return;
-    }
-    setDevMenuOpen(false);
-  };
-  
-  const handleOpenMobileDevMenu = (event) => {
-    setMobileDevMenuAnchor(event.currentTarget);
-  };
-  
-  const handleCloseMobileDevMenu = () => {
-    setMobileDevMenuAnchor(null);
-  };
-
   return (
     <AppBar 
       position="fixed" 
@@ -167,40 +131,6 @@ function Navbar() {
                     <Typography textAlign="center" sx={{ fontWeight: 'bold', fontSize: '1.05rem' }}>{page}</Typography>
                   </MenuItem>
                 ))}
-                
-                {/* Mobile Dev Tools Menu Item */}
-                <MenuItem onClick={handleOpenMobileDevMenu}>
-                  <Typography textAlign="center" sx={{ display: 'flex', alignItems: 'center', fontWeight: 'bold', fontSize: '1.05rem' }}>
-                    <DeviceHubIcon sx={{ mr: 1, fontSize: '1.05rem' }} />
-                    Dev Tools
-                  </Typography>
-                </MenuItem>
-              </Menu>
-              
-              {/* Mobile Dev Tools Submenu */}
-              <Menu
-                id="mobile-dev-tools-menu"
-                anchorEl={mobileDevMenuAnchor}
-                open={Boolean(mobileDevMenuAnchor)}
-                onClose={handleCloseMobileDevMenu}
-                MenuListProps={{
-                  'aria-labelledby': 'mobile-dev-button',
-                }}
-              >
-                {devTools.map((tool) => (
-                  <MenuItem 
-                    key={tool.name} 
-                    component={Link}
-                    to={tool.route}
-                    onClick={() => {
-                      handleCloseMobileDevMenu();
-                      handleCloseNavMenu();
-                    }}
-                    sx={{ fontWeight: 'bold', fontSize: '1.05rem' }}
-                  >
-                    <Typography textAlign="center" sx={{ fontSize: '1.05rem' }}>{tool.name}</Typography>
-                  </MenuItem>
-                ))}
               </Menu>
             </Box>
 
@@ -247,82 +177,6 @@ function Navbar() {
                 {page}
               </Button>
             ))}
-            
-            {/* Desktop Dev Tools Dropdown */}
-            <ButtonGroup 
-              variant="contained" 
-              ref={devMenuAnchorRef}
-              aria-label="dev tools button group"
-              sx={{ 
-                my: 2, 
-                ml: 1, 
-                backgroundColor: 'rgba(0, 128, 255, 0.3)',
-                '& .MuiButton-root': {
-                  color: 'white',
-                  px: 1,
-                  '&:hover': {
-                    backgroundColor: 'rgba(255, 255, 255, 0.2)',
-                  }
-                }
-              }}
-            >
-              <Button 
-                startIcon={<DeviceHubIcon />}
-                onClick={handleDevMenuToggle}
-                sx={{ fontWeight: 'bold', fontSize: '1.05rem' }}
-              >
-                Dev Tools
-              </Button>
-              <Button
-                size="small"
-                aria-controls={devMenuOpen ? 'split-button-menu' : undefined}
-                aria-expanded={devMenuOpen ? 'true' : undefined}
-                aria-label="select dev tool"
-                aria-haspopup="menu"
-                onClick={handleDevMenuToggle}
-                sx={{ px: 0.5 }}
-              >
-                <ArrowDropDownIcon />
-              </Button>
-            </ButtonGroup>
-            <Popper
-              sx={{ zIndex: 1 }}
-              open={devMenuOpen}
-              anchorEl={devMenuAnchorRef.current}
-              role={undefined}
-              transition
-              disablePortal
-            >
-              {({ TransitionProps, placement }) => (
-                <Grow
-                  {...TransitionProps}
-                  style={{
-                    transformOrigin:
-                      placement === 'bottom' ? 'center top' : 'center bottom',
-                  }}
-                >
-                  <Paper sx={{ minWidth: 180 }}>
-                    <ClickAwayListener onClickAway={handleDevMenuClose}>
-                      <MenuList id="split-button-menu" dense>
-                        {devTools.map((tool) => (
-                          <MenuItem
-                            key={tool.name}
-                            component={Link}
-                            to={tool.route}
-                            onClick={(event) => {
-                              handleDevMenuClose(event);
-                            }}
-                            sx={{ fontWeight: 'bold', fontSize: '1.05rem' }}
-                          >
-                            {tool.name}
-                          </MenuItem>
-                        ))}
-                      </MenuList>
-                    </ClickAwayListener>
-                  </Paper>
-                </Grow>
-              )}
-            </Popper>
           </Box>
 
           {/* Right side section - phone number */}

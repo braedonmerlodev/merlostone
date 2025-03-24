@@ -157,8 +157,8 @@ function LogoSlider() {
   // Create a duplicated list for seamless looping
   const duplicatedLogos = [...logos, ...logos];
   
-  // Adjust animation duration based on number of logos
-  const animationDuration = Math.max(30, logos.length * 2);
+  // Adjust animation duration based on number of logos - increase duration to slow down
+  const animationDuration = Math.max(60, logos.length * 4);
   
   return (
     <Box 

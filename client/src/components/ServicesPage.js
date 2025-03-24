@@ -5,7 +5,6 @@ import { useNavigate } from 'react-router-dom';
 import ArrowForwardIcon from '@mui/icons-material/ArrowForward';
 import CollectionsIcon from '@mui/icons-material/Collections';
 import { useImages } from '../contexts/ImageContext';
-import ConstructionIcon from '@mui/icons-material/Construction';
 
 function ServicesPage() {
   const theme = useTheme();
@@ -38,30 +37,30 @@ function ServicesPage() {
     },
     {
       id: 4,
-      title: "Outdoor Kitchens",
-      // Using fireplaces as a fallback since outdoor folder doesn't exist
-      image: "fireplaces/15.jpg",
-      description: "Bring the luxury of stone to your outdoor living spaces. Our weather-resistant stone installations are perfect for BBQ areas, patios, and pool surrounds.",
-      galleryCategory: "fireplaces", // Using fireplaces as fallback
-      customTitle: "Outdoor Kitchens" // Will show this title in the gallery
+      title: "BBQ's",
+      // Use the first image from the BBQ gallery
+      image: "bbq/1.jpg",
+      description: "Create the perfect outdoor entertainment space with our custom stone BBQ areas. Weather-resistant and beautiful, our outdoor installations are designed to last and impress.",
+      galleryCategory: "outdoor", 
+      customTitle: "BBQ's"
     },
     {
       id: 5,
-      title: "Commercial Projects",
-      // Using kitchens as a fallback since commercial folder doesn't exist
-      image: "kitchens/m1.jpg",
-      description: "We provide premium stone solutions for restaurants, hotels, office buildings, and other commercial spaces. Our team delivers exceptional results on schedule and within budget.",
-      galleryCategory: "kitchens", // Using kitchens as fallback
-      customTitle: "Commercial Projects" // Will show this title in the gallery
+      title: "Showers",
+      // Use the first image from the Showers gallery
+      image: "showers/1.jpg",
+      description: "Transform your bathroom with our elegant stone shower surrounds. Our experts create seamless, waterproof installations that combine luxury with functionality.",
+      galleryCategory: "bathrooms",
+      customTitle: "Showers"
     },
     {
       id: 6,
       title: "Custom Fabrication",
-      // Using bathrooms as a fallback since custom folder doesn't exist
-      image: "bathrooms/30.jpg",
+      // Use the first image from the Installations gallery
+      image: "installations/1.jpg",
       description: "From unique countertop designs to specialty stone pieces, our custom fabrication services bring your vision to life with precision and expert craftsmanship.",
-      galleryCategory: "bathrooms", // Using bathrooms as fallback
-      customTitle: "Custom Fabrication" // Will show this title in the gallery
+      galleryCategory: "installations", 
+      customTitle: "Custom Fabrication"
     }
   ], []);
 
@@ -213,18 +212,17 @@ function ServicesPage() {
                     />
                     {service.galleryCategory && (
                       <Chip
-                        icon={service.customTitle ? <ConstructionIcon /> : <CollectionsIcon />}
-                        label={service.customTitle ? "Coming Soon" : "Gallery"}
+                        icon={<CollectionsIcon />}
+                        label="Gallery"
                         size="small"
                         sx={{
                           position: 'absolute',
                           top: 10,
                           right: 10,
                           zIndex: 2,
-                          bgcolor: service.customTitle ? 'rgba(255, 193, 7, 0.8)' : 'rgba(255, 255, 255, 0.8)',
-                          color: service.customTitle ? theme.palette.grey[800] : undefined,
+                          bgcolor: 'rgba(255, 255, 255, 0.8)',
                           '& .MuiChip-icon': {
-                            color: service.customTitle ? theme.palette.grey[800] : theme.palette.primary.main
+                            color: theme.palette.primary.main
                           }
                         }}
                       />
@@ -268,7 +266,7 @@ function ServicesPage() {
                           }
                         }}
                       >
-                        {service.customTitle ? "View Alternative Gallery" : "View Gallery"}
+                        View Gallery
                       </Button>
                     )}
                   </Box>

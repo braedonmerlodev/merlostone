@@ -9,9 +9,9 @@ const items = [
     {
         id: 1,
         // Try to use the optimized version first, fall back to original
-        image: "/images/optimized/1.jpg",
-        originalImage: "/images/1.jpg", 
-        thumbImage: "/images/optimized/thumb_1.jpg",
+        image: "/images/optimized/4.jpg",
+        originalImage: "/images/4.jpg", 
+        thumbImage: "/images/optimized/thumb_4.jpg",
         title: "Merlo Stone Welcomes You!",
         description: ""
     },
@@ -33,9 +33,9 @@ const items = [
     },
     {
         id: 4,
-        image: "/images/optimized/4.jpg",
-        originalImage: "/images/4.jpg",
-        thumbImage: "/images/optimized/thumb_4.jpg",
+        image: "/images/optimized/1.jpg",
+        originalImage: "/images/1.jpg",
+        thumbImage: "/images/optimized/thumb_1.jpg",
         title: "Merlo Stone Welcomes You!",
         description: ""
     }
