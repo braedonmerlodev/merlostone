@@ -15,7 +15,7 @@ const StoneCarePage = () => {
   return (
     <Container maxWidth="lg" className="stone-care-container">
       <Paper elevation={3} sx={{ p: 4 }}>
-        <Typography variant="h2" component="h1" gutterBottom align="center" sx={{ fontSize: { xs: '2.5rem', md: '3.5rem' } }}>
+        <Typography variant="h2" component="h1" gutterBottom align="center" sx={{ fontSize: { xs: '2rem', md: '2.8rem' } }}>
           Stone Care
         </Typography>
         
@@ -27,7 +27,7 @@ const StoneCarePage = () => {
           borderLeft: '4px solid',
           borderLeftColor: 'primary.main'
         }}>
-          <Typography variant="body1" paragraph sx={{ fontSize: '1.2rem', lineHeight: 1.6, mb: 0 }}>
+          <Typography variant="body1" paragraph sx={{ fontSize: '1.1rem', lineHeight: 1.6, mb: 0 }}>
             Sealing your stone is a very important step that we perform after your stone is installed. 
             <Box component="span" sx={{ fontWeight: 'bold' }}> We suggest resealing your stone every 12-18 months.</Box>
           </Typography>
@@ -43,10 +43,10 @@ const StoneCarePage = () => {
         }}/>
         
         <Box sx={{ my: 4 }}>
-          <Typography variant="h3" component="h2" gutterBottom align="center" sx={{ fontSize: { xs: '2rem', md: '2.5rem' } }}>
+          <Typography variant="h3" component="h2" gutterBottom align="center" sx={{ fontSize: { xs: '1.8rem', md: '2.2rem' } }}>
             How to clean Marble
           </Typography>
-          <List sx={{ '& .MuiListItemText-primary': { fontSize: '1.25rem', fontWeight: 'bold', mb: 0.5 }, '& .MuiListItemText-secondary': { fontSize: '1.15rem' } }}>
+          <List sx={{ '& .MuiListItemText-primary': { fontSize: '1.1rem', fontWeight: 'bold', mb: 0.5 }, '& .MuiListItemText-secondary': { fontSize: '1rem' } }}>
             <ListItem>
               <ListItemText 
                 primary="Step 1:" 
@@ -95,10 +95,10 @@ const StoneCarePage = () => {
         <Divider sx={{ my: 4 }} />
         
         <Box sx={{ my: 4 }}>
-          <Typography variant="h3" component="h2" gutterBottom align="center" sx={{ fontSize: { xs: '2rem', md: '2.5rem' } }}>
+          <Typography variant="h3" component="h2" gutterBottom align="center" sx={{ fontSize: { xs: '1.8rem', md: '2.2rem' } }}>
             How to clean Granite
           </Typography>
-          <List sx={{ '& .MuiListItemText-primary': { fontSize: '1.25rem', fontWeight: 'bold', mb: 0.5 }, '& .MuiListItemText-secondary': { fontSize: '1.15rem' } }}>
+          <List sx={{ '& .MuiListItemText-primary': { fontSize: '1.1rem', fontWeight: 'bold', mb: 0.5 }, '& .MuiListItemText-secondary': { fontSize: '1rem' } }}>
             <ListItem>
               <ListItemText 
                 primary="Step 1:" 
@@ -177,10 +177,10 @@ const StoneCarePage = () => {
         <Divider sx={{ my: 4 }} />
         
         <Box sx={{ my: 4 }}>
-          <Typography variant="h3" component="h2" gutterBottom align="center" sx={{ fontSize: { xs: '2rem', md: '2.5rem' } }}>
+          <Typography variant="h3" component="h2" gutterBottom align="center" sx={{ fontSize: { xs: '1.8rem', md: '2.2rem' } }}>
             How to clean Limestone
           </Typography>
-          <List sx={{ '& .MuiListItemText-primary': { fontSize: '1.25rem', fontWeight: 'bold', mb: 0.5 }, '& .MuiListItemText-secondary': { fontSize: '1.15rem' } }}>
+          <List sx={{ '& .MuiListItemText-primary': { fontSize: '1.1rem', fontWeight: 'bold', mb: 0.5 }, '& .MuiListItemText-secondary': { fontSize: '1rem' } }}>
             <ListItem>
               <ListItemText 
                 primary="Step 1:" 
@@ -205,28 +205,28 @@ const StoneCarePage = () => {
         <Divider sx={{ my: 4 }} />
         
         <Box sx={{ my: 4 }}>
-          <Typography variant="h3" component="h2" gutterBottom align="center" sx={{ fontSize: { xs: '2rem', md: '2.5rem' } }}>
+          <Typography variant="h3" component="h2" gutterBottom align="center" sx={{ fontSize: { xs: '1.8rem', md: '2.2rem' } }}>
             Tips & Warnings
           </Typography>
-          <Alert severity="warning" className="stone-care-warning" sx={{ mb: 2, '& .MuiAlert-message': { fontSize: '1.15rem' } }}>
+          <Alert severity="warning" className="stone-care-warning" sx={{ mb: 2, '& .MuiAlert-message': { fontSize: '1.1rem' } }}>
             Powdered cleansers will scratch or damage marble.
           </Alert>
-          <Alert severity="warning" className="stone-care-warning" sx={{ mb: 2, '& .MuiAlert-message': { fontSize: '1.15rem' } }}>
+          <Alert severity="warning" className="stone-care-warning" sx={{ mb: 2, '& .MuiAlert-message': { fontSize: '1.1rem' } }}>
             Even weak acids–vinegar, wine, orange juice, cola–can damage marble. Mop up spills immediately and rinse with water.
           </Alert>
-          <Alert severity="error" className="stone-care-danger" sx={{ mb: 2, '& .MuiAlert-message': { fontSize: '1.15rem' } }}>
+          <Alert severity="error" className="stone-care-danger" sx={{ mb: 2, '& .MuiAlert-message': { fontSize: '1.1rem' } }}>
             DON'T use vinegar, lemon juice, or other cleaners containing acids on your stone.
           </Alert>
-          <Alert severity="error" className="stone-care-danger" sx={{ mb: 2, '& .MuiAlert-message': { fontSize: '1.15rem' } }}>
+          <Alert severity="error" className="stone-care-danger" sx={{ mb: 2, '& .MuiAlert-message': { fontSize: '1.1rem' } }}>
             DON'T use cleaners that contain acid such as bathroom cleaners, grout cleaners, or tub & tile cleaners.
           </Alert>
-          <Alert severity="error" className="stone-care-danger" sx={{ mb: 2, '& .MuiAlert-message': { fontSize: '1.15rem' } }}>
+          <Alert severity="error" className="stone-care-danger" sx={{ mb: 2, '& .MuiAlert-message': { fontSize: '1.1rem' } }}>
             DON'T use abrasive cleaners such as dry cleansers or soft cleansers.
           </Alert>
-          <Alert severity="error" className="stone-care-danger" sx={{ mb: 2, '& .MuiAlert-message': { fontSize: '1.15rem' } }}>
+          <Alert severity="error" className="stone-care-danger" sx={{ mb: 2, '& .MuiAlert-message': { fontSize: '1.1rem' } }}>
             DON'T mix bleach and ammonia; this combination creates a toxic and lethal gas.
           </Alert>
-          <Alert severity="error" className="stone-care-danger" sx={{ mb: 2, '& .MuiAlert-message': { fontSize: '1.15rem' } }}>
+          <Alert severity="error" className="stone-care-danger" sx={{ mb: 2, '& .MuiAlert-message': { fontSize: '1.1rem' } }}>
             DON'T ever mix chemicals together unless directions specifically instruct you to do so.
           </Alert>
         </Box>

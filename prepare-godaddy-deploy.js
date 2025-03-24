@@ -36,8 +36,19 @@ try {
 console.log('Copying PHP backend files...');
 for (const file of backendFiles) {
   try {
-    fs.copyFileSync(file, path.join(buildDir, file));
-    console.log(`Copied ${file} to ${buildDir}/${file}`);
+    // Check if the file exists in the root directory
+    if (fs.existsSync(file)) {
+      fs.copyFileSync(file, path.join(buildDir, file));
+      console.log(`Copied ${file} from root directory to ${buildDir}/${file}`);
+    } 
+    // If not in root, try client/public directory
+    else if (fs.existsSync(path.join('client', 'public', file))) {
+      fs.copyFileSync(path.join('client', 'public', file), path.join(buildDir, file));
+      console.log(`Copied ${file} from client/public directory to ${buildDir}/${file}`);
+    }
+    else {
+      console.warn(`Warning: Could not find ${file} in root or client/public directories`);
+    }
   } catch (error) {
     console.error(`Error copying ${file}:`, error);
     process.exit(1);

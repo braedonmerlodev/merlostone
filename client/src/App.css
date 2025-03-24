@@ -41,9 +41,29 @@ html {
   scroll-behavior: smooth;
 }
 
-/* Adjust navbar height */
+/* Navbar styles - fixed size to prevent production size issues */
 .MuiToolbar-root {
   min-height: 64px;
+}
+
+/* Navbar text specific sizes for consistent display */
+.MuiAppBar-root .MuiButton-root {
+  font-size: 0.95rem !important; 
+  font-weight: bold !important;
+}
+
+.MuiAppBar-root .MuiTypography-root {
+  font-size: 0.95rem !important;
+}
+
+.MuiAppBar-root .MuiMenuItem-root .MuiTypography-root {
+  font-size: 0.95rem !important;
+  font-weight: bold !important;
+}
+
+/* Phone number in navbar */
+.MuiAppBar-root a[href^="tel:"] {
+  font-size: 1.1rem !important;
 }
 
 /* Improve Carousel indicators */
@@ -332,4 +352,57 @@ html {
 .custom-prev-btn:hover,
 .custom-next-btn:hover {
   opacity: 1;
+}
+
+/* Global font size controls for production consistency */
+h1, .MuiTypography-h1 {
+  font-size: 2.8rem !important;
+}
+
+h2, .MuiTypography-h2 {
+  font-size: 2.5rem !important;
+}
+
+h3, .MuiTypography-h3 {
+  font-size: 2.2rem !important;
+}
+
+h4, .MuiTypography-h4 {
+  font-size: 1.8rem !important;
+}
+
+h5, .MuiTypography-h5 {
+  font-size: 1.5rem !important;
+}
+
+h6, .MuiTypography-h6 {
+  font-size: 1.2rem !important;
+}
+
+/* Control body text */
+p, .MuiTypography-body1 {
+  font-size: 1.1rem !important;
+}
+
+.MuiTypography-body2 {
+  font-size: 0.95rem !important;
+}
+
+/* Responsive adjustments */
+@media (max-width: 768px) {
+  h1, .MuiTypography-h1 {
+    font-size: 2.2rem !important;
+  }
+  
+  h2, .MuiTypography-h2 {
+    font-size: 2rem !important;
+  }
+  
+  h3, .MuiTypography-h3 {
+    font-size: 1.8rem !important;
+  }
+  
+  h4, .MuiTypography-h4 {
+    font-size: 1.5rem !important;
+  }
 }

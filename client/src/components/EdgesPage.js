@@ -29,7 +29,7 @@ const edgeProfiles = [
   {
     id: 3,
     name: '3/4" Demi-Bevel',
-    image: '/images/edges/demi-bevel.jpg',
+    image: '/images/edges/bullnose-demi.jpg',
     category: '3/4" Profiles'
   },
   {
@@ -53,7 +53,7 @@ const edgeProfiles = [
   {
     id: 7,
     name: '3/4" Offset Full Bullnose',
-    image: '/images/edges/offset-full-bullnose.jpg',
+    image: '/images/edges/full-bullnose.jpg',
     category: '3/4" Profiles'
   },
   
@@ -97,7 +97,7 @@ const edgeProfiles = [
   {
     id: 14,
     name: '1 1/2" Double Laminate Miter',
-    image: '/images/edges/double-laminate-miter.jpg',
+    image: '/images/edges/laminate.jpg',
     category: '1 1/2" Profiles'
   },
   {
@@ -151,7 +151,7 @@ const edgeProfiles = [
   {
     id: 23,
     name: '1 1/2" Offset Full Bullnose',
-    image: '/images/edges/offset-full-bullnose-large.jpg',
+    image: '/images/edges/full-bullnose.jpg',
     category: '1 1/2" Profiles'
   }
 ];
@@ -168,18 +168,18 @@ const EdgesPage = () => {
   return (
     <Container className="page-container">
       <Paper elevation={3} sx={{ p: { xs: 2, md: 4 }, mb: 4 }}>
-        <Typography variant="h3" component="h1" gutterBottom align="center" sx={{ mb: 4 }}>
+        <Typography variant="h3" component="h1" gutterBottom align="center" sx={{ mb: 4, fontSize: { xs: '2rem', md: '2.5rem' } }}>
           Edge Profiles
         </Typography>
         
-        <Typography variant="body1" paragraph align="center" sx={{ mb: 4 }}>
+        <Typography variant="body1" paragraph align="center" sx={{ mb: 4, fontSize: '1.1rem' }}>
           Choose from our wide selection of edge profiles to perfectly complement your stone countertop. 
           Each edge profile offers a unique aesthetic that can dramatically enhance the overall look of your installation.
         </Typography>
         
         {Object.entries(groupedProfiles).map(([category, profiles]) => (
           <Box key={category} sx={{ mb: 6 }}>
-            <Typography variant="h4" component="h2" gutterBottom sx={{ mb: 3 }}>
+            <Typography variant="h4" component="h2" gutterBottom sx={{ mb: 3, fontSize: { xs: '1.7rem', md: '2rem' } }}>
               {category}
             </Typography>
             
@@ -203,22 +203,12 @@ const EdgesPage = () => {
                   >
                     <CardMedia
                       component="img"
-                      height="180"
                       image={profile.image}
                       alt={profile.name}
-                      onError={(e) => {
-                        e.target.onerror = null;
-                        e.target.style.height = '180px';
-                        e.target.style.background = 'linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%)';
-                        e.target.style.display = 'flex';
-                        e.target.style.alignItems = 'center';
-                        e.target.style.justifyContent = 'center';
-                        e.target.alt = profile.name;
-                      }}
-                      sx={{ objectFit: 'contain', p: 2, backgroundColor: '#f5f5f5' }}
+                      sx={{ height: 140, objectFit: 'contain', p: 2, bgcolor: '#f5f5f5' }}
                     />
-                    <CardContent sx={{ flexGrow: 1, textAlign: 'center' }}>
-                      <Typography variant="h6" component="div">
+                    <CardContent>
+                      <Typography gutterBottom variant="h6" component="div" align="center" sx={{ fontSize: '1.1rem' }}>
                         {profile.name}
                       </Typography>
                     </CardContent>

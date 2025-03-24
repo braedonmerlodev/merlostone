@@ -149,10 +149,10 @@ const FormContent = () => {
         recaptchaToken
       };
       
-      // Get the base URL to handle both local development and production
-      const apiUrl = process.env.NODE_ENV === 'production'
-        ? '/contact.php'  // Production endpoint
-        : '/api/contact'; // Development endpoint (Node.js)
+      // Always use contact.php (both in development and production)
+      const apiUrl = '/contact.php';
+      
+      console.log('Submitting form to:', apiUrl);
       
       // Send to API endpoint
       const response = await fetch(apiUrl, {
@@ -161,7 +161,19 @@ const FormContent = () => {
         body: JSON.stringify(dataToSubmit)
       });
       
-      const result = await response.json();
+      console.log('Response status:', response.status);
+      
+      // Try to parse the response as JSON
+      let result;
+      try {
+        result = await response.json();
+        console.log('Response data:', result);
+      } catch (parseError) {
+        console.error('Error parsing response:', parseError);
+        const text = await response.text();
+        console.log('Response text:', text);
+        throw new Error('Could not parse server response');
+      }
       
       if (!response.ok) {
         throw new Error(result.message || 'Error submitting form');

@@ -132,7 +132,7 @@ function Navbar() {
                     to={pageRoutes[page]}
                     onClick={handleCloseNavMenu}
                   >
-                    <Typography textAlign="center" sx={{ fontWeight: 'bold', fontSize: '1.05rem' }}>{page}</Typography>
+                    <Typography textAlign="center" sx={{ fontWeight: 'bold', fontSize: '0.95rem' }}>{page}</Typography>
                   </MenuItem>
                 ))}
               </Menu>
@@ -172,7 +172,7 @@ function Navbar() {
                   display: 'block', 
                   mx: 1,
                   fontWeight: 'bold',
-                  fontSize: '1.05rem',
+                  fontSize: '0.95rem',
                   '&:hover': {
                     backgroundColor: 'rgba(255, 255, 255, 0.1)',
                   } 
@@ -185,13 +185,13 @@ function Navbar() {
 
           {/* Right side section - phone number */}
           <Box sx={{ display: 'flex', alignItems: 'center' }}>
-            <PhoneIcon sx={{ mr: 1, fontSize: { xs: '1.5rem', sm: '2rem' }, color: 'white' }} />
+            <PhoneIcon sx={{ mr: 1, fontSize: { xs: '1.3rem', sm: '1.6rem' }, color: 'white' }} />
             <MuiLink 
               href="tel:+19255255802"
               underline="none"
               sx={{ 
                 fontWeight: 'bold',
-                fontSize: { xs: '1.2rem', sm: '1.5rem' },
+                fontSize: { xs: '1.1rem', sm: '1.3rem' },
                 letterSpacing: '0.5px',
                 color: 'white',
                 textDecoration: 'none',
