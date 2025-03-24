@@ -25,7 +25,7 @@ import { Link as RouterLink } from 'react-router-dom';
 const GoogleMap = () => {
   return (
     <Box sx={{ width: '100%', height: '400px', mt: 6, borderRadius: 2, overflow: 'hidden' }}>
-      <Typography variant="h4" component="h2" gutterBottom align="center" sx={{ mb: 3 }}>
+      <Typography variant="h4" component="h2" gutterBottom align="center" sx={{ mb: 3, fontWeight: 'bold', fontSize: '2.2rem' }}>
         Visit Our Fabrication Shop
       </Typography>
       <Box
@@ -52,7 +52,7 @@ const GoogleMap = () => {
           href="https://www.google.com/maps/dir//4220+Commercial+Dr+unit+1a,+Tracy,+CA+95304" 
           target="_blank"
           rel="noopener noreferrer"
-          sx={{ mt: 2 }}
+          sx={{ mt: 2, fontSize: '1.1rem', px: 3, py: 1 }}
         >
           Get Directions
         </Button>
@@ -173,106 +173,22 @@ const FormContent = () => {
   };
 
   return (
-    <Box sx={{ 
-      py: 8, 
-      px: 2,
-      backgroundColor: theme.palette.grey[50]
-    }}>
+    <Box sx={{ py: 8 }}>
       <Container maxWidth="lg">
-        <Typography variant="h3" component="h1" gutterBottom align="center" sx={{ fontWeight: 'bold', mb: 4, color: theme.palette.primary.main }}>
-          Contact Merlo Stone
+        <Typography variant="h3" component="h1" gutterBottom align="center" sx={{ mb: 4, fontWeight: 'bold', fontSize: '2.5rem' }}>
+          Contact Us
         </Typography>
-        
-        <Typography variant="h6" align="center" sx={{ mb: 6, maxWidth: 800, mx: 'auto' }}>
-          Have questions about our services or want to request a quote? We're here to help with all your natural stone needs.
+        <Typography variant="body1" paragraph align="center" sx={{ mb: 6, maxWidth: '800px', mx: 'auto', fontSize: '1.3rem', lineHeight: 1.7 }}>
+          Have questions or ready to start your project? Reach out to us for a free consultation and estimate.
         </Typography>
         
         <Grid container spacing={4}>
-          {/* Contact Info Column */}
-          {!isMobile && (
-            <Grid item xs={12} md={4}>
-              <Paper elevation={3} sx={{ p: 4, height: '100%', borderLeft: `4px solid ${theme.palette.primary.main}` }}>
-                <Typography variant="h5" gutterBottom sx={{ fontWeight: 'medium', color: theme.palette.primary.main }}>
-                  Get In Touch
-                </Typography>
-                <Divider sx={{ mb: 3 }} />
-                
-                <Box sx={{ display: 'flex', alignItems: 'flex-start', mb: 3 }}>
-                  <LocationOnIcon sx={{ mr: 2, color: theme.palette.primary.main }} />
-                  <Box>
-                    <Typography variant="subtitle1" gutterBottom sx={{ fontWeight: 'medium' }}>
-                      Our Location
-                    </Typography>
-                    <Typography variant="body2">
-                      4220 Commercial Drive, Unit 1A<br />
-                      Tracy, CA 95304
-                    </Typography>
-                    <Button
-                      variant="text"
-                      size="small"
-                      startIcon={<DirectionsIcon />}
-                      href="https://www.google.com/maps/dir//4220+Commercial+Dr+unit+1a,+Tracy,+CA+95304" 
-                      target="_blank"
-                      rel="noopener noreferrer"
-                      sx={{ mt: 1, pl: 0, textTransform: 'none' }}
-                    >
-                      Get Directions
-                    </Button>
-                  </Box>
-                </Box>
-                
-                <Box sx={{ display: 'flex', alignItems: 'flex-start', mb: 3 }}>
-                  <PhoneIcon sx={{ mr: 2, color: theme.palette.primary.main }} />
-                  <Box>
-                    <Typography variant="subtitle1" gutterBottom sx={{ fontWeight: 'medium' }}>
-                      Phone
-                    </Typography>
-                    <Typography variant="body2">
-                      <Link href="tel:+19255255802" color="inherit" underline="hover">
-                        (925) 525-5802
-                      </Link>
-                    </Typography>
-                  </Box>
-                </Box>
-                
-                <Box sx={{ display: 'flex', alignItems: 'flex-start', mb: 3 }}>
-                  <EmailIcon sx={{ mr: 2, color: theme.palette.primary.main }} />
-                  <Box>
-                    <Typography variant="subtitle1" gutterBottom sx={{ fontWeight: 'medium' }}>
-                      Email
-                    </Typography>
-                    <Typography variant="body2">
-                      <Link href="mailto:davemerlo@comcast.net" color="inherit" underline="hover">
-                        davemerlo@comcast.net
-                      </Link>
-                    </Typography>
-                  </Box>
-                </Box>
-                
-                <Box sx={{ display: 'flex', alignItems: 'flex-start' }}>
-                  <AccessTimeIcon sx={{ mr: 2, color: theme.palette.primary.main }} />
-                  <Box>
-                    <Typography variant="subtitle1" gutterBottom sx={{ fontWeight: 'medium' }}>
-                      Business Hours
-                    </Typography>
-                    <Typography variant="body2">
-                      Monday - Friday: 6:00 AM - 2:30 PM<br />
-                      Saturday: Closed<br />
-                      Sunday: Closed
-                    </Typography>
-                  </Box>
-                </Box>
-              </Paper>
-            </Grid>
-          )}
-          
-          {/* Form Column */}
-          <Grid item xs={12} md={8}>
-            <Paper elevation={3} sx={{ p: 4 }}>
-              <Typography variant="h5" gutterBottom sx={{ fontWeight: 'medium', color: theme.palette.primary.main }}>
-                Send Us a Message
+          {/* Form section */}
+          <Grid item xs={12} md={7}>
+            <Paper elevation={2} sx={{ p: { xs: 3, md: 4 } }}>
+              <Typography variant="h5" gutterBottom sx={{ mb: 3, fontWeight: 'bold', fontSize: '1.6rem' }}>
+                Send us a Message
               </Typography>
-              <Divider sx={{ mb: 3 }} />
               
               <Box component="form" onSubmit={handleSubmit} noValidate>
                 <Grid container spacing={3}>
@@ -358,15 +274,89 @@ const FormContent = () => {
                 </Grid>
               </Box>
             </Paper>
-            
-            {/* Mobile Contact Info */}
-            {isMobile && (
-              <Paper elevation={3} sx={{ p: 4, mt: 4, borderLeft: `4px solid ${theme.palette.primary.main}` }}>
-                <Typography variant="h5" gutterBottom sx={{ fontWeight: 'medium', color: theme.palette.primary.main }}>
+          </Grid>
+          
+          {/* Contact info section */}
+          <Grid item xs={12} md={5}>
+            {!isMobile ? (
+              <Paper elevation={2} sx={{ p: 4, height: '100%' }}>
+                <Typography variant="h5" gutterBottom sx={{ mb: 4, fontWeight: 'bold', fontSize: '1.6rem' }}>
+                  Our Contact Information
+                </Typography>
+                
+                <Box sx={{ display: 'flex', alignItems: 'flex-start', mb: 3 }}>
+                  <LocationOnIcon sx={{ mr: 2, color: theme.palette.primary.main }} />
+                  <Box>
+                    <Typography variant="subtitle1" gutterBottom sx={{ fontWeight: 'medium', fontSize: '1.2rem' }}>
+                      Our Location
+                    </Typography>
+                    <Typography variant="body2" sx={{ fontSize: '1.1rem', lineHeight: 1.6 }}>
+                      4220 Commercial Drive, Unit 1A<br />
+                      Tracy, CA 95304
+                    </Typography>
+                    <Button
+                      variant="text"
+                      size="small"
+                      startIcon={<DirectionsIcon />}
+                      href="https://www.google.com/maps/dir//4220+Commercial+Dr+unit+1a,+Tracy,+CA+95304" 
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      sx={{ mt: 1, pl: 0, textTransform: 'none', fontSize: '1rem' }}
+                    >
+                      Get Directions
+                    </Button>
+                  </Box>
+                </Box>
+                
+                <Box sx={{ display: 'flex', alignItems: 'flex-start', mb: 3 }}>
+                  <PhoneIcon sx={{ mr: 2, color: theme.palette.primary.main }} />
+                  <Box>
+                    <Typography variant="subtitle1" gutterBottom sx={{ fontWeight: 'medium', fontSize: '1.2rem' }}>
+                      Phone
+                    </Typography>
+                    <Typography variant="body2" sx={{ fontSize: '1.1rem' }}>
+                      <Link href="tel:+19255255802" color="inherit" underline="hover">
+                        (925) 525-5802
+                      </Link>
+                    </Typography>
+                  </Box>
+                </Box>
+                
+                <Box sx={{ display: 'flex', alignItems: 'flex-start', mb: 3 }}>
+                  <EmailIcon sx={{ mr: 2, color: theme.palette.primary.main }} />
+                  <Box>
+                    <Typography variant="subtitle1" gutterBottom sx={{ fontWeight: 'medium', fontSize: '1.2rem' }}>
+                      Email
+                    </Typography>
+                    <Typography variant="body2" sx={{ fontSize: '1.1rem' }}>
+                      <Link href="mailto:davemerlo@comcast.net" color="inherit" underline="hover">
+                        davemerlo@comcast.net
+                      </Link>
+                    </Typography>
+                  </Box>
+                </Box>
+                
+                <Divider sx={{ my: 3 }} />
+                
+                <Box sx={{ display: 'flex', alignItems: 'flex-start' }}>
+                  <AccessTimeIcon sx={{ mr: 2, color: theme.palette.primary.main }} />
+                  <Box>
+                    <Typography variant="subtitle1" gutterBottom sx={{ fontWeight: 'medium', fontSize: '1.2rem' }}>
+                      Business Hours
+                    </Typography>
+                    <Typography variant="body2" sx={{ fontSize: '1.1rem', lineHeight: 1.6 }}>
+                      Monday - Friday: 6:00 AM - 2:30 PM<br />
+                      Saturday: Closed<br />
+                      Sunday: Closed
+                    </Typography>
+                  </Box>
+                </Box>
+              </Paper>
+            ) : (
+              <Paper elevation={2} sx={{ p: 3, mt: 4 }}>
+                <Typography variant="h5" gutterBottom sx={{ mb: 3, fontWeight: 'bold', fontSize: '1.6rem' }}>
                   Contact Information
                 </Typography>
-                <Divider sx={{ mb: 3 }} />
-                
                 <Grid container spacing={2}>
                   <Grid item xs={12}>
                     <Box sx={{ display: 'flex', alignItems: 'center', mb: 2 }}>

@@ -131,13 +131,14 @@ function ServicesPage() {
           sx={{ 
             fontWeight: 'bold',
             color: theme.palette.primary.main,
-            mb: 4
+            mb: 4,
+            fontSize: '2.5rem'
           }}
         >
           Our Services
         </Typography>
         
-        <Typography variant="body1" paragraph align="center" sx={{ maxWidth: '900px', mx: 'auto', mb: 6 }}>
+        <Typography variant="body1" paragraph align="center" sx={{ maxWidth: '900px', mx: 'auto', mb: 6, fontSize: '1.3rem', lineHeight: 1.7 }}>
           At Merlo Stone, we offer comprehensive stone fabrication and installation services for residential and commercial projects.
           Our skilled craftsmen work with a wide variety of natural and engineered stone to create beautiful, durable surfaces.
         </Typography>
@@ -238,14 +239,16 @@ function ServicesPage() {
                         color: 'white',
                         padding: 2,
                         zIndex: 2,
-                        textShadow: '1px 1px 3px rgba(0,0,0,0.7)'
+                        textShadow: '1px 1px 3px rgba(0,0,0,0.7)',
+                        fontSize: '1.5rem',
+                        fontWeight: 'bold'
                       }}
                     >
                       {service.title}
                     </Typography>
                   </Box>
                   <Box sx={{ p: 3, flexGrow: 1, display: 'flex', flexDirection: 'column' }}>
-                    <Typography variant="body2" color="text.secondary" sx={{ mb: 2 }}>
+                    <Typography variant="body2" color="text.secondary" sx={{ mb: 2, fontSize: '1.1rem', lineHeight: 1.6 }}>
                       {service.description}
                     </Typography>
                     
@@ -263,7 +266,9 @@ function ServicesPage() {
                           alignSelf: 'flex-start',
                           '&:hover': {
                             backgroundColor: 'rgba(25, 118, 210, 0.04)'
-                          }
+                          },
+                          fontSize: '0.95rem',
+                          fontWeight: 'medium'
                         }}
                       >
                         View Gallery

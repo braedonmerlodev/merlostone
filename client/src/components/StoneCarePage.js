@@ -19,10 +19,28 @@ const StoneCarePage = () => {
           Stone Care
         </Typography>
         
-        <Typography variant="body1" paragraph sx={{ fontSize: '1.2rem', lineHeight: 1.6 }}>
-          Sealing your stone is a very important step that we perform after your stone is installed. 
-          We suggest resealing your stone every 12-18 months.
-        </Typography>
+        <Box sx={{ 
+          my: 4, 
+          p: 3, 
+          backgroundColor: 'rgba(0, 0, 0, 0.03)', 
+          borderRadius: 2,
+          borderLeft: '4px solid',
+          borderLeftColor: 'primary.main'
+        }}>
+          <Typography variant="body1" paragraph sx={{ fontSize: '1.2rem', lineHeight: 1.6, mb: 0 }}>
+            Sealing your stone is a very important step that we perform after your stone is installed. 
+            <Box component="span" sx={{ fontWeight: 'bold' }}> We suggest resealing your stone every 12-18 months.</Box>
+          </Typography>
+        </Box>
+        
+        <Divider sx={{ 
+          my: 4, 
+          borderColor: 'primary.main', 
+          borderWidth: 1,
+          '&::before, &::after': {
+            borderColor: 'primary.main',
+          }
+        }}/>
         
         <Box sx={{ my: 4 }}>
           <Typography variant="h3" component="h2" gutterBottom align="center" sx={{ fontSize: { xs: '2rem', md: '2.5rem' } }}>

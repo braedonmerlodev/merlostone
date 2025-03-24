@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { Link } from 'react-router-dom';
+import { Link, useLocation } from 'react-router-dom';
 import { 
   AppBar, 
   Box, 
@@ -34,6 +34,10 @@ function Navbar() {
   const [scrolled, setScrolled] = useState(false);
   // eslint-disable-next-line no-unused-vars
   const theme = useTheme();
+  const location = useLocation();
+  
+  // Check if we're on the About page
+  const isAboutPage = location.pathname === '/about';
   
   // Add scroll event listener to change navbar appearance on scroll
   useEffect(() => {
@@ -64,8 +68,8 @@ function Navbar() {
     <AppBar 
       position="fixed" 
       sx={{
-        backgroundColor: scrolled ? 'rgba(255, 152, 0, 0.95)' : 'transparent',
-        boxShadow: scrolled ? 1 : 'none',
+        backgroundColor: isAboutPage ? 'rgba(255, 152, 0, 0.95)' : (scrolled ? 'rgba(255, 152, 0, 0.95)' : 'transparent'),
+        boxShadow: isAboutPage ? 1 : (scrolled ? 1 : 'none'),
         transition: 'background-color 0.3s ease, box-shadow 0.3s ease'
       }}
     >

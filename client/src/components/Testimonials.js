@@ -43,12 +43,12 @@ function Testimonials() {
   ];
 
   return (
-    <Box sx={{ py: 8, backgroundColor: '#f8f8f8' }}>
+    <Box sx={{ py: 10, backgroundColor: '#f8f8f8' }}>
       <Container maxWidth="lg">
-        <Typography variant="h4" component="h2" gutterBottom align="center" sx={{ mb: 2 }}>
+        <Typography variant="h3" component="h2" gutterBottom align="center" sx={{ mb: 3, fontWeight: 'bold', fontSize: '2.5rem' }}>
           What Our Clients Say
         </Typography>
-        <Typography variant="body1" align="center" paragraph sx={{ maxWidth: '800px', mx: 'auto', mb: 6 }}>
+        <Typography variant="body1" align="center" paragraph sx={{ fontSize: '1.3rem', lineHeight: 1.7, maxWidth: '800px', mx: 'auto', mb: 6 }}>
           We take pride in our craftsmanship and customer service. Here's what some of our satisfied clients have to say about their experience with Merlo Stone.
         </Typography>
 
@@ -75,11 +75,11 @@ function Testimonials() {
                     top: 16, 
                     left: 16, 
                     color: 'rgba(0,0,0,0.1)', 
-                    fontSize: '2rem' 
+                    fontSize: '3rem' 
                   }} 
                 />
                 <Box sx={{ pl: 2 }}>
-                  <Typography variant="body1" paragraph sx={{ fontStyle: 'italic', mb: 3 }}>
+                  <Typography variant="body1" paragraph sx={{ fontStyle: 'italic', mb: 4, fontSize: '1.2rem', lineHeight: 1.6 }}>
                     "{testimonial.text}"
                   </Typography>
                   <Box sx={{ display: 'flex', alignItems: 'center' }}>
@@ -88,21 +88,21 @@ function Testimonials() {
                       alt={testimonial.name}
                       sx={{ 
                         bgcolor: theme.palette.primary.main,
-                        width: 50,
-                        height: 50,
+                        width: 60,
+                        height: 60,
                         mr: 2
                       }}
                     >
                       {testimonial.name.charAt(0)}
                     </Avatar>
                     <Box>
-                      <Typography variant="subtitle1" sx={{ fontWeight: 'bold' }}>
+                      <Typography variant="subtitle1" sx={{ fontWeight: 'bold', fontSize: '1.2rem' }}>
                         {testimonial.name}
                       </Typography>
-                      <Typography variant="body2" color="text.secondary">
+                      <Typography variant="body2" color="text.secondary" sx={{ fontSize: '1rem' }}>
                         {testimonial.location}
                       </Typography>
-                      <Rating value={testimonial.rating} readOnly size="small" sx={{ mt: 0.5 }} />
+                      <Rating value={testimonial.rating} readOnly size="medium" sx={{ mt: 0.5 }} />
                     </Box>
                   </Box>
                 </Box>

@@ -70,18 +70,18 @@ function HomePage() {
               />
             </Grid>
             <Grid item xs={12} md={6}>
-              <Typography variant="h3" component="h2" gutterBottom sx={{ fontWeight: 'bold', color: '#333' }}>
+              <Typography variant="h3" component="h2" gutterBottom sx={{ fontWeight: 'bold', color: '#333', fontSize: '2.5rem', mb: 3 }}>
                 About Us
               </Typography>
-              <Typography variant="body1" paragraph sx={{ fontSize: '1.1rem', mb: 3 }}>
+              <Typography variant="body1" paragraph sx={{ fontSize: '1.3rem', lineHeight: 1.7, mb: 3 }}>
                 As the Bay Area's premier fabricator and installer of natural stone, we provide quality service to all our customers. 
                 Our fabrication shop is based in Tracy, CA, serving general contractors, designers, architects and homeowners throughout the entire Bay Area.
               </Typography>
-              <Typography variant="body1" paragraph sx={{ fontSize: '1.1rem', mb: 3 }}>
+              <Typography variant="body1" paragraph sx={{ fontSize: '1.3rem', lineHeight: 1.7, mb: 3 }}>
                 We can design and install quality countertops, with intricate borders and backsplashes. Solid surface countertops 
                 manufactured from ZodiaqStone, CaesarStone, SileStone as well as other engineered stones.
               </Typography>
-              <Typography variant="body1" paragraph sx={{ fontSize: '1.1rem' }}>
+              <Typography variant="body1" paragraph sx={{ fontSize: '1.3rem', lineHeight: 1.7, mb: 4 }}>
                 Our designers will work with you step by step to create the project of your dreams and imagination at affordable prices.
               </Typography>
               <Button 
@@ -90,7 +90,7 @@ function HomePage() {
                 size="large" 
                 component={Link} 
                 to="/about"
-                sx={{ mt: 3, px: 4, py: 1 }}
+                sx={{ mt: 3, px: 4, py: 1.5, fontSize: '1.1rem', fontWeight: 'medium' }}
               >
                 Learn More
               </Button>
@@ -106,12 +106,12 @@ function HomePage() {
       <LogoSlider />
       
       {/* Call to action for Services */}
-      <Box sx={{ py: 6, textAlign: 'center' }}>
+      <Box sx={{ py: 8, textAlign: 'center' }}>
         <Container maxWidth="md">
-          <Typography variant="h4" component="h2" gutterBottom>
+          <Typography variant="h4" component="h2" gutterBottom sx={{ fontSize: '2.2rem', fontWeight: 'bold', mb: 3 }}>
             Explore Our Services
           </Typography>
-          <Typography variant="body1" paragraph sx={{ mb: 4 }}>
+          <Typography variant="body1" paragraph sx={{ fontSize: '1.3rem', lineHeight: 1.7, mb: 5, maxWidth: '800px', mx: 'auto' }}>
             Discover our full range of stone fabrication and installation services for kitchens, bathrooms, commercial spaces, and more.
           </Typography>
           <Button 
@@ -120,7 +120,7 @@ function HomePage() {
             size="large" 
             component={Link} 
             to="/services"
-            sx={{ px: 4, py: 1.5 }}
+            sx={{ px: 5, py: 1.5, fontSize: '1.1rem', fontWeight: 'medium' }}
           >
             View All Services
           </Button>
@@ -136,21 +136,28 @@ function HomePage() {
 // About Page placeholder - can be moved to a separate file later
 function AboutPage() {
   return (
-    <Box sx={{ pt: 12, pb: 8 }}>
+    <Box sx={{ 
+      pt: 10, 
+      pb: 8,
+      mt: 4 
+    }}>
       <Container maxWidth="lg">
-        <Typography variant="h3" component="h1" gutterBottom sx={{ textAlign: 'center', fontWeight: 'bold' }}>
+        <br />
+        <br />
+        <br />
+        <Typography variant="h3" component="h1" gutterBottom sx={{ textAlign: 'center', fontWeight: 'bold', fontSize: '2.5rem', mb: 5 }}>
           About Merlo Stone
         </Typography>
         <Box sx={{ maxWidth: '800px', mx: 'auto' }}>
-          <Typography variant="body1" paragraph>
+          <Typography variant="body1" paragraph sx={{ fontSize: '1.3rem', lineHeight: 1.7, mb: 3 }}>
             Merlo Stone is the Bay Area's premier fabricator and installer of natural stone. We provide quality service to all our customers, 
             from general contractors and designers to architects and homeowners throughout the Bay Area.
           </Typography>
-          <Typography variant="body1" paragraph>
+          <Typography variant="body1" paragraph sx={{ fontSize: '1.3rem', lineHeight: 1.7, mb: 3 }}>
             With years of experience in the industry, we have established ourselves as a trusted name in stone fabrication and installation. 
             Our team of skilled craftsmen takes pride in delivering exceptional quality and service on every project.
           </Typography>
-          <Typography variant="body1" paragraph>
+          <Typography variant="body1" paragraph sx={{ fontSize: '1.3rem', lineHeight: 1.7, mb: 3 }}>
             Our fabrication shop is located at 4220 Commercial Drive, Unit 1A, Tracy, CA 95304, where we specialize in all types of natural and engineered stone, including granite, marble, quartz, and more. 
             While our workshop is in Tracy, we proudly serve the entire Bay Area with our superior craftsmanship and installation services.
           </Typography>
