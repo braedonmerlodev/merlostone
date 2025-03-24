@@ -66,7 +66,7 @@ function PrivacyPolicy() {
             4220 Commercial Drive, Unit 1A<br />
             Tracy, CA 95304<br />
             Phone: (925) 525-5802<br />
-            Email: info@merlostone.com
+            Email: davemerlo@comcast.net
           </Typography>
         </Paper>
       </Container>

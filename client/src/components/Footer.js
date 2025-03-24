@@ -51,8 +51,8 @@ function Footer() {
             <Box sx={{ display: 'flex', alignItems: 'center' }}>
               <EmailIcon sx={{ mr: 1, fontSize: '1.2rem' }} />
               <Typography variant="body2">
-                <Link href="mailto:info@merlostone.com" color="inherit" underline="hover">
-                  info@merlostone.com
+                <Link href="mailto:davemerlo@comcast.net" color="inherit" underline="hover">
+                  davemerlo@comcast.net
                 </Link>
               </Typography>
             </Box>
@@ -89,10 +89,10 @@ function Footer() {
               Business Hours
             </Typography>
             <Typography variant="body2" sx={{ mb: 0.5 }}>
-              Monday - Friday: 8:00 AM - 5:00 PM
+              Monday - Friday: 6:00 AM - 2:30 PM
             </Typography>
             <Typography variant="body2" sx={{ mb: 0.5 }}>
-              Saturday: 9:00 AM - 2:00 PM
+              Saturday: Closed
             </Typography>
             <Typography variant="body2" sx={{ mb: 3 }}>
               Sunday: Closed
@@ -180,6 +180,9 @@ function Footer() {
               Contact Us
             </Link>
           </Box>
+          <Typography variant="body2" sx={{ mt: 2, opacity: 0.7, fontSize: '0.75rem' }}>
+            Design By: <Link href="https://www.medialitesolutions.com" target="_blank" rel="noopener" color="inherit" underline="hover">Media Lite Solutions</Link>
+          </Typography>
         </Box>
       </Container>
     </Box>

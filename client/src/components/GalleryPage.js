@@ -20,6 +20,8 @@ import CloseIcon from '@mui/icons-material/Close';
 import InfoIcon from '@mui/icons-material/Info';
 import { useLocation } from 'react-router-dom';
 import { useImages } from '../contexts/ImageContext';
+import ArrowBackIosNewIcon from '@mui/icons-material/ArrowBackIosNew';
+import ArrowForwardIosIcon from '@mui/icons-material/ArrowForwardIos';
 
 // Helper function to map service categories to gallery tabs
 const mapServiceCategoryToGalleryTab = (serviceCategory) => {
@@ -218,14 +220,14 @@ const GalleryPage = () => {
   
   const [selectedCategory, setSelectedCategory] = useState(initialCategory);
   const [showAll, setShowAll] = useState(false);
-  const [modalOpen, setModalOpen] = useState(false);
   const [selectedImage, setSelectedImage] = useState(null);
   const [selectedImageIndex, setSelectedImageIndex] = useState(0);
   const [showCustomTitleAlert, setShowCustomTitleAlert] = useState(Boolean(customTitle));
   
   // Track touch events for swipe functionality
-  const [touchStart, setTouchStart] = useState(null);
-  const [touchEnd, setTouchEnd] = useState(null);
+  const [swipeDirection, setSwipeDirection] = useState(null);
+  const [touchStartX, setTouchStartX] = useState(0);
+  const [touchEndX, setTouchEndX] = useState(0);
 
   // Effect to scroll to the content when navigating from services
   useEffect(() => {
@@ -262,11 +264,10 @@ const GalleryPage = () => {
   const handleImageClick = (image, index) => {
     setSelectedImage(image);
     setSelectedImageIndex(index);
-    setModalOpen(true);
   };
 
   const handleCloseModal = () => {
-    setModalOpen(false);
+    setSelectedImage(null);
   };
   
   const handleCloseAlert = () => {
@@ -298,7 +299,7 @@ const GalleryPage = () => {
   // Handle keyboard navigation
   useEffect(() => {
     const handleKeyDown = (e) => {
-      if (!modalOpen) return;
+      if (!selectedImage) return;
       
       if (e.key === 'ArrowRight') {
         handleNextImage();
@@ -311,32 +312,49 @@ const GalleryPage = () => {
     
     window.addEventListener('keydown', handleKeyDown);
     return () => window.removeEventListener('keydown', handleKeyDown);
-  }, [modalOpen, selectedImageIndex, selectedCategory, showAll]);
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [selectedImage, selectedImageIndex, selectedCategory, showAll, handleCloseModal]);
   
   // Handle touch events for swipe
   const handleTouchStart = (e) => {
-    setTouchStart(e.targetTouches[0].clientX);
+    setTouchStartX(e.touches[0].clientX);
+    setSwipeDirection(null);
   };
   
   const handleTouchMove = (e) => {
-    setTouchEnd(e.targetTouches[0].clientX);
+    if (!touchStartX) return;
+    
+    const currentX = e.touches[0].clientX;
+    setTouchEndX(currentX);
+    const diff = touchStartX - currentX;
+    
+    // Determine direction for visual feedback
+    if (diff > 20) {
+      setSwipeDirection('right');
+    } else if (diff < -20) {
+      setSwipeDirection('left');
+    } else {
+      setSwipeDirection(null);
+    }
   };
   
-  const handleTouchEnd = () => {
-    if (!touchStart || !touchEnd) return;
+  const handleTouchEnd = (e) => {
+    if (!touchStartX) return;
     
-    const distance = touchStart - touchEnd;
-    const isLeftSwipe = distance > 50;
-    const isRightSwipe = distance < -50;
+    const diff = touchStartX - touchEndX;
     
-    if (isLeftSwipe) {
+    // Reset swipe direction
+    setSwipeDirection(null);
+    
+    // Need significant swipe to change images
+    if (diff > 50) {
       handleNextImage();
-    } else if (isRightSwipe) {
+    } else if (diff < -50) {
       handlePreviousImage();
     }
     
-    setTouchStart(null);
-    setTouchEnd(null);
+    setTouchStartX(0);
+    setTouchEndX(0);
   };
 
   return (
@@ -546,71 +564,187 @@ const GalleryPage = () => {
       
       {/* Image Modal */}
       <Modal
-        open={modalOpen}
+        open={!!selectedImage}
         onClose={handleCloseModal}
         aria-labelledby="image-modal-title"
-        aria-describedby="image-modal-description"
+        onTouchStart={handleTouchStart}
+        onTouchMove={handleTouchMove}
+        onTouchEnd={handleTouchEnd}
+        closeAfterTransition
         sx={{
           display: 'flex',
           alignItems: 'center',
           justifyContent: 'center',
-          p: 2
+          backdropFilter: 'blur(5px)'
         }}
       >
-        <Box sx={{ 
-          position: 'relative',
-          maxWidth: '90vw',
-          maxHeight: '90vh',
-          bgcolor: 'background.paper',
-          boxShadow: 24,
-          p: 1,
-          borderRadius: 1,
-          outline: 'none'
-        }}>
+        <Box
+          sx={{
+            position: 'relative',
+            width: { xs: '100%', sm: '90%', md: '80%' },
+            height: { xs: '100%', sm: '90%', md: '85%' },
+            maxHeight: '90vh',
+            outline: 'none',
+            display: 'flex',
+            flexDirection: 'column',
+            bgcolor: 'rgba(0, 0, 0, 0.8)',
+            borderRadius: { xs: 0, sm: 2 },
+            p: { xs: 0, sm: 1 },
+            boxShadow: 24,
+            '&:focus': {
+              outline: 'none'
+            },
+            overflow: 'hidden'
+          }}
+        >
+          {/* Close Button */}
           <IconButton
             aria-label="close"
             onClick={handleCloseModal}
             sx={{
               position: 'absolute',
-              right: 8,
-              top: 8,
-              color: 'grey.500',
-              bgcolor: 'rgba(255,255,255,0.7)',
-              zIndex: 1,
+              right: { xs: 8, sm: 16 },
+              top: { xs: 8, sm: 16 },
+              color: 'white',
+              bgcolor: 'rgba(0, 0, 0, 0.4)',
+              zIndex: 10,
               '&:hover': {
-                color: 'grey.800',
-                bgcolor: 'rgba(255,255,255,0.9)',
-              }
+                bgcolor: 'rgba(0, 0, 0, 0.6)',
+                transform: 'scale(1.1)'
+              },
+              transition: 'all 0.2s ease'
             }}
           >
             <CloseIcon />
           </IconButton>
+          
+          {swipeDirection && (
+            <Box
+              sx={{
+                position: 'absolute',
+                top: 0,
+                bottom: 0,
+                ...(swipeDirection === 'left' ? { 
+                  left: 0, 
+                  width: '60px',
+                  background: 'linear-gradient(to right, rgba(255,255,255,0.15), transparent)'
+                } : { 
+                  right: 0, 
+                  width: '60px',
+                  background: 'linear-gradient(to left, rgba(255,255,255,0.15), transparent)'
+                }),
+                zIndex: 1,
+                animation: 'pulse 0.5s ease',
+                '@keyframes pulse': {
+                  '0%': { opacity: 0 },
+                  '50%': { opacity: 1 },
+                  '100%': { opacity: 0 }
+                }
+              }}
+            />
+          )}
+          
+          {/* Previous Image Button */}
+          <IconButton 
+            onClick={handlePreviousImage}
+            sx={{
+              position: 'absolute',
+              left: { xs: 1, sm: 16 },
+              top: '50%',
+              transform: 'translateY(-50%)',
+              backgroundColor: 'rgba(0, 0, 0, 0.5)',
+              color: 'white',
+              width: { xs: 40, sm: 48 },
+              height: { xs: 40, sm: 48 },
+              '&:hover': {
+                backgroundColor: 'rgba(0, 0, 0, 0.7)',
+                transform: 'translateY(-50%) scale(1.1)',
+              },
+              transition: 'all 0.2s ease',
+              zIndex: 2
+            }}
+            size="large"
+            aria-label="previous image"
+          >
+            <ArrowBackIosNewIcon />
+          </IconButton>
+          
+          {/* Next Image Button */}
+          <IconButton 
+            onClick={handleNextImage}
+            sx={{
+              position: 'absolute',
+              right: { xs: 1, sm: 16 },
+              top: '50%',
+              transform: 'translateY(-50%)',
+              backgroundColor: 'rgba(0, 0, 0, 0.5)',
+              color: 'white',
+              width: { xs: 40, sm: 48 },
+              height: { xs: 40, sm: 48 },
+              '&:hover': {
+                backgroundColor: 'rgba(0, 0, 0, 0.7)',
+                transform: 'translateY(-50%) scale(1.1)',
+              },
+              transition: 'all 0.2s ease',
+              zIndex: 2
+            }}
+            size="large"
+            aria-label="next image"
+          >
+            <ArrowForwardIosIcon />
+          </IconButton>
+          
           {selectedImage && (
             <>
-              <img
-                src={resolveImagePath(selectedImage.image.replace(/^\/images\//, ''))}
-                alt={selectedImage.title}
-                style={{ 
-                  maxWidth: '100%', 
-                  maxHeight: 'calc(90vh - 100px)',
-                  display: 'block',
-                  margin: '0 auto',
-                  objectFit: 'contain'
-                }}
-                onError={(e) => {
-                  console.error(`Failed to load modal image: ${selectedImage.image} (using ${pathMode} strategy)`);
-                  e.target.onerror = null;
-                  e.target.style.height = '250px';
-                  e.target.style.background = 'linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%)';
-                  e.target.style.display = 'flex';
-                  e.target.style.alignItems = 'center';
-                  e.target.style.justifyContent = 'center';
-                  e.target.alt = selectedImage.title;
-                }}
-              />
-              <Box sx={{ p: 2, textAlign: 'center' }}>
-                <Typography id="image-modal-title" variant="h6" component="h2">
+              <Box sx={{ 
+                position: 'relative', 
+                width: '100%', 
+                flex: 1,
+                height: 'calc(100% - 60px)',
+                display: 'flex',
+                justifyContent: 'center',
+                alignItems: 'center',
+                overflow: 'hidden'
+              }}>
+                <img
+                  src={resolveImagePath(selectedImage.image.replace(/^\/images\//, ''))}
+                  alt={selectedImage.title}
+                  style={{ 
+                    maxWidth: '100%', 
+                    maxHeight: '100%',
+                    opacity: 0, // Start fully transparent
+                    display: 'block',
+                    objectFit: 'contain',
+                    transform: 'scale(0.95)',
+                    transition: 'opacity 0.4s ease, transform 0.4s ease',
+                    filter: 'drop-shadow(0 5px 15px rgba(0,0,0,0.3))'
+                  }}
+                  onError={(e) => {
+                    console.error(`Failed to load modal image: ${selectedImage.image} (using ${pathMode} strategy)`);
+                    e.target.onerror = null;
+                    e.target.style.height = '250px';
+                    e.target.style.background = 'linear-gradient(135deg, #333, #111)';
+                    e.target.style.display = 'flex';
+                    e.target.style.alignItems = 'center';
+                    e.target.style.justifyContent = 'center';
+                    e.target.alt = selectedImage.title;
+                  }}
+                  onLoad={(e) => {
+                    // Ensure image is visible once loaded with animation
+                    e.target.style.opacity = 1;
+                    e.target.style.transform = 'scale(1)';
+                  }}
+                />
+              </Box>
+              <Box sx={{ p: 2, textAlign: 'center', background: 'rgba(0,0,0,0.4)', backdropFilter: 'blur(10px)' }}>
+                <Typography id="image-modal-title" variant="h6" component="h2" sx={{ color: 'white', fontWeight: 'medium' }}>
                   {selectedImage.title}
+                </Typography>
+                <Typography variant="body2" sx={{ color: 'rgba(255,255,255,0.7)', mt: 1 }}>
+                  Image {selectedImageIndex + 1} of {galleryData[selectedCategory].length}
+                </Typography>
+                <Typography variant="caption" sx={{ display: 'block', mt: 1, color: 'rgba(255,255,255,0.5)' }}>
+                  Use arrow keys ← → or swipe to navigate • Press ESC to close
                 </Typography>
               </Box>
             </>

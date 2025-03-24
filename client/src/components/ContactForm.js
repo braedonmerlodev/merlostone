@@ -256,8 +256,8 @@ const FormContent = () => {
                       Business Hours
                     </Typography>
                     <Typography variant="body2">
-                      Monday - Friday: 8:00 AM - 5:00 PM<br />
-                      Saturday: 9:00 AM - 2:00 PM<br />
+                      Monday - Friday: 6:00 AM - 2:30 PM<br />
+                      Saturday: Closed<br />
                       Sunday: Closed
                     </Typography>
                   </Box>
@@ -393,6 +393,16 @@ const FormContent = () => {
                         <Link href="mailto:davemerlo@comcast.net" color="inherit" underline="hover">
                           davemerlo@comcast.net
                         </Link>
+                      </Typography>
+                    </Box>
+                  </Grid>
+                  <Grid item xs={12}>
+                    <Box sx={{ display: 'flex', alignItems: 'center', mb: 2 }}>
+                      <AccessTimeIcon sx={{ mr: 1, color: theme.palette.primary.main }} />
+                      <Typography variant="body2">
+                        Monday - Friday: 6:00 AM - 2:30 PM<br />
+                        Saturday: Closed<br />
+                        Sunday: Closed
                       </Typography>
                     </Box>
                   </Grid>
