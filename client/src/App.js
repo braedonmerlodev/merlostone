@@ -92,30 +92,70 @@ function HomePage() {
               />
             </Grid>
             <Grid item xs={12} md={6}>
-              <Typography variant="h3" component="h2" gutterBottom sx={{ fontWeight: 'bold', color: '#333', fontSize: '2.5rem', mb: 3 }}>
+              <Typography 
+                variant="h3" 
+                component="h2" 
+                gutterBottom 
+                sx={{ 
+                  fontWeight: 'bold', 
+                  color: '#333', 
+                  fontSize: '2.5rem', 
+                  mb: 3,
+                  textAlign: { xs: 'center', md: 'left' } // Center on mobile, left-aligned on desktop
+                }}
+              >
                 About Us
               </Typography>
-              <Typography variant="body1" paragraph sx={{ fontSize: '1.3rem', lineHeight: 1.7, mb: 3 }}>
+              <Typography 
+                variant="body1" 
+                paragraph 
+                sx={{ 
+                  fontSize: '1.3rem', 
+                  lineHeight: 1.7, 
+                  mb: 3, 
+                  textAlign: { xs: 'center', md: 'left' } 
+                }}
+              >
                 As the Bay Area's premier fabricator and installer of natural stone, we provide quality service to all our customers. 
                 Our fabrication shop is based in Tracy, CA, serving general contractors, designers, architects and homeowners throughout the entire Bay Area.
               </Typography>
-              <Typography variant="body1" paragraph sx={{ fontSize: '1.3rem', lineHeight: 1.7, mb: 3 }}>
+              <Typography 
+                variant="body1" 
+                paragraph 
+                sx={{ 
+                  fontSize: '1.3rem', 
+                  lineHeight: 1.7, 
+                  mb: 3, 
+                  textAlign: { xs: 'center', md: 'left' } 
+                }}
+              >
                 We can design and install quality countertops, with intricate borders and backsplashes. Solid surface countertops 
                 manufactured from ZodiaqStone, CaesarStone, SileStone as well as other engineered stones.
               </Typography>
-              <Typography variant="body1" paragraph sx={{ fontSize: '1.3rem', lineHeight: 1.7, mb: 4 }}>
+              <Typography 
+                variant="body1" 
+                paragraph 
+                sx={{ 
+                  fontSize: '1.3rem', 
+                  lineHeight: 1.7, 
+                  mb: 4, 
+                  textAlign: { xs: 'center', md: 'left' } 
+                }}
+              >
                 Our designers will work with you step by step to create the project of your dreams and imagination at affordable prices.
               </Typography>
-              <Button 
-                variant="contained" 
-                color="primary" 
-                size="large" 
-                component={ScrollToTopLink} 
-                to="/about"
-                sx={{ mt: 3, px: 4, py: 1.5, fontSize: '1.1rem', fontWeight: 'medium' }}
-              >
-                Learn More
-              </Button>
+              <Box sx={{ display: 'flex', justifyContent: { xs: 'center', md: 'flex-start' } }}>
+                <Button 
+                  variant="contained" 
+                  color="primary" 
+                  size="large" 
+                  component={ScrollToTopLink} 
+                  to="/about"
+                  sx={{ mt: 3, px: 4, py: 1.5, fontSize: '1.1rem', fontWeight: 'medium' }}
+                >
+                  Learn More
+                </Button>
+              </Box>
             </Grid>
           </Grid>
         </Container>
