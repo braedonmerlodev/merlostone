@@ -6,11 +6,22 @@ const { execSync } = require('child_process');
 const buildDir = 'build-godaddy';
 const backendFiles = ['contact.php'];
 
-// Create the build directory if it doesn't exist
-if (!fs.existsSync(buildDir)) {
-  fs.mkdirSync(buildDir, { recursive: true });
-  console.log(`Created ${buildDir} directory`);
+// Clean up previous build directory if it exists
+if (fs.existsSync(buildDir)) {
+  console.log(`Removing previous ${buildDir} directory...`);
+  try {
+    execSync(`rm -rf ${buildDir}`, { stdio: 'inherit' });
+    console.log(`Previous ${buildDir} directory removed`);
+  } catch (error) {
+    console.error(`Error removing ${buildDir} directory:`, error);
+    process.exit(1);
+  }
 }
+
+// Create a fresh build directory
+console.log(`Creating fresh ${buildDir} directory...`);
+fs.mkdirSync(buildDir, { recursive: true });
+console.log(`Created ${buildDir} directory`);
 
 // Build the React app
 console.log('Building React app...');
