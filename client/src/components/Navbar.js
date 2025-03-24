@@ -164,14 +164,14 @@ function Navbar() {
                     to={pageRoutes[page]}
                     onClick={handleCloseNavMenu}
                   >
-                    <Typography textAlign="center">{page}</Typography>
+                    <Typography textAlign="center" sx={{ fontWeight: 'bold', fontSize: '1.05rem' }}>{page}</Typography>
                   </MenuItem>
                 ))}
                 
                 {/* Mobile Dev Tools Menu Item */}
                 <MenuItem onClick={handleOpenMobileDevMenu}>
-                  <Typography textAlign="center" sx={{ display: 'flex', alignItems: 'center' }}>
-                    <DeviceHubIcon sx={{ mr: 1, fontSize: '1rem' }} />
+                  <Typography textAlign="center" sx={{ display: 'flex', alignItems: 'center', fontWeight: 'bold', fontSize: '1.05rem' }}>
+                    <DeviceHubIcon sx={{ mr: 1, fontSize: '1.05rem' }} />
                     Dev Tools
                   </Typography>
                 </MenuItem>
@@ -196,8 +196,9 @@ function Navbar() {
                       handleCloseMobileDevMenu();
                       handleCloseNavMenu();
                     }}
+                    sx={{ fontWeight: 'bold', fontSize: '1.05rem' }}
                   >
-                    <Typography textAlign="center">{tool.name}</Typography>
+                    <Typography textAlign="center" sx={{ fontSize: '1.05rem' }}>{tool.name}</Typography>
                   </MenuItem>
                 ))}
               </Menu>
@@ -236,6 +237,8 @@ function Navbar() {
                   color: 'white', 
                   display: 'block', 
                   mx: 1,
+                  fontWeight: 'bold',
+                  fontSize: '1.05rem',
                   '&:hover': {
                     backgroundColor: 'rgba(255, 255, 255, 0.1)',
                   } 
@@ -266,6 +269,7 @@ function Navbar() {
               <Button 
                 startIcon={<DeviceHubIcon />}
                 onClick={handleDevMenuToggle}
+                sx={{ fontWeight: 'bold', fontSize: '1.05rem' }}
               >
                 Dev Tools
               </Button>
@@ -308,6 +312,7 @@ function Navbar() {
                             onClick={(event) => {
                               handleDevMenuClose(event);
                             }}
+                            sx={{ fontWeight: 'bold', fontSize: '1.05rem' }}
                           >
                             {tool.name}
                           </MenuItem>
