@@ -3,7 +3,6 @@ import {
   Container, 
   Typography, 
   Box, 
-  Grid, 
   Paper,
   Card,
   CardMedia,
@@ -20,11 +19,19 @@ import {
 } from '@mui/material';
 import CloseIcon from '@mui/icons-material/Close';
 import InfoIcon from '@mui/icons-material/Info';
+import ArrowBackIosNewIcon from '@mui/icons-material/ArrowBackIosNew';
 import ArrowForwardIosIcon from '@mui/icons-material/ArrowForwardIos';
 import { useLocation } from 'react-router-dom';
 import { useImages } from '../contexts/ImageContext';
-import ArrowBackIosNewIcon from '@mui/icons-material/ArrowBackIosNew';
-import ArrowForwardIosIcon from '@mui/icons-material/ArrowForwardIos';
+
+// Swiper imports
+import { Swiper, SwiperSlide } from 'swiper/react';
+import { Navigation, Pagination, Thumbs, FreeMode, Autoplay } from 'swiper/modules';
+import 'swiper/css';
+import 'swiper/css/navigation';
+import 'swiper/css/pagination';
+import 'swiper/css/thumbs';
+import 'swiper/css/free-mode';
 
 // Helper function to map service categories to gallery tabs
 const mapServiceCategoryToGalleryTab = (serviceCategory) => {
@@ -226,56 +233,28 @@ const GalleryPage = () => {
   const [selectedImage, setSelectedImage] = useState(null);
   const [selectedImageIndex, setSelectedImageIndex] = useState(0);
   const [showCustomTitleAlert, setShowCustomTitleAlert] = useState(Boolean(customTitle));
-  const galleryRef = useRef(null);
-  const [showScrollIndicator, setShowScrollIndicator] = useState(true);
-  const theme = useTheme();
-  const isMobile = useMediaQuery(theme.breakpoints.down('md'));
   
-  // Track touch events for swipe functionality
-  const [swipeDirection, setSwipeDirection] = useState(null);
+  // Touch event states for modal navigation
   const [touchStartX, setTouchStartX] = useState(0);
   const [touchEndX, setTouchEndX] = useState(0);
+  const [swipeDirection, setSwipeDirection] = useState(null);
+  
+  const theme = useTheme();
+  const isMobile = useMediaQuery(theme.breakpoints.down('sm'));
+  const tabsRef = useRef(null);
 
-  // Effect to scroll to the content when navigating from services
-  useEffect(() => {
-    if (location.state?.selectedCategory) {
-      // Small delay to ensure DOM is ready
-      setTimeout(() => {
-        const categoriesSection = document.getElementById('gallery-categories');
-        if (categoriesSection) {
-          categoriesSection.scrollIntoView({ behavior: 'smooth', block: 'start' });
-        } else {
-          // Fallback to scroll to top
-          window.scrollTo({
-            top: 0,
-            behavior: 'smooth'
-          });
-        }
-      }, 100);
-    }
-  }, [location.state]);
-
-  // Scroll detection for mobile
-  useEffect(() => {
-    if (!isMobile) return;
-
-    const handleScroll = () => {
-      const container = galleryRef.current;
-      if (container) {
-        const { scrollLeft, scrollWidth, clientWidth } = container;
-        const isAtEnd = scrollLeft + clientWidth >= scrollWidth - 20;
-        setShowScrollIndicator(!isAtEnd && scrollWidth > clientWidth);
+  // Function to scroll tabs to the right
+  const handleScrollTabs = () => {
+    if (tabsRef.current) {
+      const tabsContainer = tabsRef.current.querySelector('.MuiTabs-scroller');
+      if (tabsContainer) {
+        tabsContainer.scrollBy({
+          left: 200, // Scroll 200px to the right
+          behavior: 'smooth'
+        });
       }
-    };
-
-    const container = galleryRef.current;
-    if (container) {
-      container.addEventListener('scroll', handleScroll);
-      // Check initial state
-      handleScroll();
-      return () => container.removeEventListener('scroll', handleScroll);
     }
-  }, [selectedCategory, isMobile]);
+  };
 
   const handleCategoryChange = (event, newValue) => {
     setSelectedCategory(newValue);
@@ -411,23 +390,89 @@ const GalleryPage = () => {
         </Typography>
         
         {/* Category tabs */}
-        <Box id="gallery-categories" sx={{ borderBottom: 1, borderColor: 'divider', mb: 4 }} className="gallery-tabs">
+        <Box id="gallery-categories" sx={{ borderBottom: 1, borderColor: 'divider', mb: 4, position: 'relative' }} className="gallery-tabs">
           <Tabs 
+            ref={tabsRef}
             value={selectedCategory} 
             onChange={handleCategoryChange}
             variant="scrollable"
             scrollButtons="auto"
+            allowScrollButtonsMobile
             aria-label="gallery categories"
+            sx={{
+              '& .MuiTabs-scrollButtons': {
+                '&.Mui-disabled': { opacity: 0.3 },
+              },
+              '& .MuiTabScrollButton-root': {
+                width: 48,
+                flexShrink: 0,
+              },
+            }}
           >
             {categories.map((category) => (
               <Tab 
                 key={category} 
                 label={category} 
                 value={category}
-                sx={{ fontWeight: 'medium' }}
+                sx={{ 
+                  fontWeight: 'medium',
+                  minWidth: 'auto',
+                  whiteSpace: 'nowrap'
+                }}
               />
             ))}
           </Tabs>
+          
+          {/* Mobile Scroll Indicator for Category Tabs - Clickable and positioned further right */}
+          {isMobile && categories.length > 3 && (
+            <Box
+              onClick={handleScrollTabs}
+              sx={{
+                position: 'absolute',
+                right: 5, // Moved further right (was 15)
+                top: '50%',
+                transform: 'translateY(-50%)',
+                background: 'rgba(255, 152, 0, 0.9)',
+                color: 'white',
+                borderRadius: '50%',
+                width: 40,
+                height: 40,
+                display: 'flex',
+                alignItems: 'center',
+                justifyContent: 'center',
+                animation: 'pulse 2s infinite, bounce 3s infinite',
+                cursor: 'pointer', // Make it clear it's clickable
+                zIndex: 999,
+                boxShadow: '0 4px 12px rgba(255, 152, 0, 0.4)',
+                border: '2px solid white',
+                transition: 'all 0.2s ease',
+                '&:hover': {
+                  background: 'rgba(255, 152, 0, 1)',
+                  transform: 'translateY(-50%) scale(1.05)',
+                },
+                '&:active': {
+                  transform: 'translateY(-50%) scale(0.95)',
+                },
+                '@keyframes pulse': {
+                  '0%, 100%': { opacity: 0.8, transform: 'translateY(-50%) scale(1)' },
+                  '50%': { opacity: 1, transform: 'translateY(-50%) scale(1.1)' },
+                },
+                '@keyframes bounce': {
+                  '0%, 20%, 50%, 80%, 100%': { 
+                    transform: 'translateY(-50%) translateX(0)' 
+                  },
+                  '40%': { 
+                    transform: 'translateY(-50%) translateX(-5px)' 
+                  },
+                  '60%': { 
+                    transform: 'translateY(-50%) translateX(-2px)' 
+                  },
+                },
+              }}
+            >
+              <ArrowForwardIosIcon fontSize="small" />
+            </Box>
+          )}
         </Box>
         
         {/* Selected category or all categories */}
@@ -473,68 +518,188 @@ const GalleryPage = () => {
                 
                 <Divider sx={{ mb: 4 }} />
                 
-                <Grid container spacing={3}>
-                  {galleryData[category].map((item, index) => (
-                    <Grid item xs={12} sm={6} md={4} key={item.id}>
-                      <Card 
-                        elevation={2}
-                        className="gallery-image-card"
-                        onClick={() => handleImageClick(item, index)}
-                        sx={{ 
-                          height: '100%',
-                          display: 'flex',
-                          flexDirection: 'column',
-                          transition: 'transform 0.3s, box-shadow 0.3s',
-                          '&:hover': {
-                            transform: 'translateY(-5px)',
-                            boxShadow: 6
-                          }
-                        }}
-                      >
-                        <CardMedia
-                          component="img"
-                          height="250"
-                          image={resolveImagePath(item.image.replace(/^\/images\//, ''))}
-                          alt={item.title}
-                          onError={(e) => {
-                            console.error(`Failed to load gallery image: ${item.image} (using ${pathMode} strategy)`);
-                            e.target.onerror = null;
-                            e.target.style.height = '250px';
-                            e.target.style.background = 'linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%)';
-                            e.target.style.display = 'flex';
-                            e.target.style.alignItems = 'center';
-                            e.target.style.justifyContent = 'center';
-                            e.target.alt = item.title;
+                {/* Mobile-Friendly Swiper Gallery */}
+                <Box sx={{ mb: 4, position: 'relative' }}>
+                  <Swiper
+                    modules={[Navigation, Pagination, Thumbs, FreeMode, Autoplay]}
+                    spaceBetween={20}
+                    slidesPerView={1}
+                    navigation={{
+                      nextEl: '.swiper-button-next-custom',
+                      prevEl: '.swiper-button-prev-custom',
+                    }}
+                    pagination={{ 
+                      clickable: true,
+                      dynamicBullets: true,
+                    }}
+                    autoplay={{
+                      delay: 5000,
+                      disableOnInteraction: false,
+                    }}
+                    breakpoints={{
+                      640: {
+                        slidesPerView: 2,
+                        spaceBetween: 30,
+                      },
+                      768: {
+                        slidesPerView: 2,
+                        spaceBetween: 40,
+                      },
+                      1024: {
+                        slidesPerView: 2,
+                        spaceBetween: 50,
+                      },
+                    }}
+                    style={{ 
+                      '--swiper-navigation-color': '#1976d2',
+                      '--swiper-pagination-color': '#1976d2',
+                      padding: '20px 0 50px 0'
+                    }}
+                  >
+                    {galleryData[category].map((item, index) => (
+                      <SwiperSlide key={item.id}>
+                        <Card 
+                          elevation={2}
+                          className="gallery-image-card"
+                          onClick={() => handleImageClick(item, index)}
+                          sx={{ 
+                            height: '350px',
+                            display: 'flex',
+                            flexDirection: 'column',
+                            transition: 'transform 0.3s, box-shadow 0.3s',
+                            cursor: 'pointer',
+                            '&:hover': {
+                              transform: 'translateY(-5px)',
+                              boxShadow: 6
+                            }
                           }}
-                          sx={{ objectFit: 'cover' }}
-                        />
-                        <CardContent sx={{ flexGrow: 1 }}>
-                          <Typography variant="h6" component="div">
-                            {item.title}
-                          </Typography>
-                        </CardContent>
-                      </Card>
-                    </Grid>
-                  ))}
-                </Grid>
+                        >
+                          <CardMedia
+                            component="img"
+                            height="250"
+                            image={resolveImagePath(item.image.replace(/^\/images\//, ''))}
+                            alt={item.title}
+                            onError={(e) => {
+                              console.error(`Failed to load gallery image: ${item.image} (using ${pathMode} strategy)`);
+                              e.target.onerror = null;
+                              e.target.style.height = '250px';
+                              e.target.style.background = 'linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%)';
+                              e.target.style.display = 'flex';
+                              e.target.style.alignItems = 'center';
+                              e.target.style.justifyContent = 'center';
+                              e.target.alt = item.title;
+                            }}
+                            sx={{ objectFit: 'cover' }}
+                          />
+                          <CardContent sx={{ flexGrow: 1, p: 2 }}>
+                            <Typography variant="h6" component="div" sx={{ fontSize: '1rem' }}>
+                              {item.title}
+                            </Typography>
+                          </CardContent>
+                        </Card>
+                      </SwiperSlide>
+                    ))}
+                    
+                    {/* Custom Navigation Buttons */}
+                    <Box className="swiper-button-prev-custom" sx={{
+                      position: 'absolute',
+                      left: 10,
+                      top: '50%',
+                      transform: 'translateY(-50%)',
+                      zIndex: 10,
+                      background: 'rgba(25, 118, 210, 0.8)',
+                      borderRadius: '50%',
+                      width: 40,
+                      height: 40,
+                      display: 'flex',
+                      alignItems: 'center',
+                      justifyContent: 'center',
+                      cursor: 'pointer',
+                      color: 'white',
+                      '&:hover': {
+                        background: 'rgba(25, 118, 210, 1)',
+                      }
+                    }}>
+                      <ArrowBackIosNewIcon fontSize="small" />
+                    </Box>
+                    
+                    <Box className="swiper-button-next-custom" sx={{
+                      position: 'absolute',
+                      right: 10,
+                      top: '50%',
+                      transform: 'translateY(-50%)',
+                      zIndex: 10,
+                      background: 'rgba(25, 118, 210, 0.8)',
+                      borderRadius: '50%',
+                      width: 40,
+                      height: 40,
+                      display: 'flex',
+                      alignItems: 'center',
+                      justifyContent: 'center',
+                      cursor: 'pointer',
+                      color: 'white',
+                      '&:hover': {
+                        background: 'rgba(25, 118, 210, 1)',
+                      }
+                    }}>
+                      <ArrowForwardIosIcon fontSize="small" />
+                    </Box>
+                  </Swiper>
+                </Box>
               </Box>
             </React.Fragment>
           ))
         ) : (
-          // Show only the selected category
-          <Box>
-            <Grid container spacing={3}>
+          // Show only the selected category with Swiper
+          <Box sx={{ position: 'relative' }}>
+            <Swiper
+              modules={[Navigation, Pagination, Thumbs, FreeMode, Autoplay]}
+              spaceBetween={20}
+              slidesPerView={1}
+              navigation={{
+                nextEl: '.swiper-button-next-custom-single',
+                prevEl: '.swiper-button-prev-custom-single',
+              }}
+              pagination={{ 
+                clickable: true,
+                dynamicBullets: true,
+              }}
+              autoplay={{
+                delay: 5000,
+                disableOnInteraction: false,
+              }}
+              breakpoints={{
+                640: {
+                  slidesPerView: 2,
+                  spaceBetween: 30,
+                },
+                768: {
+                  slidesPerView: 2,
+                  spaceBetween: 40,
+                },
+                1024: {
+                  slidesPerView: 2,
+                  spaceBetween: 50,
+                },
+              }}
+              style={{ 
+                '--swiper-navigation-color': '#1976d2',
+                '--swiper-pagination-color': '#1976d2',
+                padding: '20px 0 50px 0'
+              }}
+            >
               {galleryData[selectedCategory].map((item, index) => (
-                <Grid item xs={12} sm={6} md={4} key={item.id}>
+                <SwiperSlide key={item.id}>
                   <Card 
                     elevation={2}
                     className="gallery-image-card"
                     onClick={() => handleImageClick(item, index)}
                     sx={{ 
-                      height: '100%',
+                      height: '350px',
                       display: 'flex',
                       flexDirection: 'column',
                       transition: 'transform 0.3s, box-shadow 0.3s',
+                      cursor: 'pointer',
                       '&:hover': {
                         transform: 'translateY(-5px)',
                         boxShadow: 6
@@ -558,26 +723,60 @@ const GalleryPage = () => {
                       }}
                       sx={{ objectFit: 'cover' }}
                     />
-                    <CardContent sx={{ flexGrow: 1 }}>
-                      <Typography variant="h6" component="div">
+                    <CardContent sx={{ flexGrow: 1, p: 2 }}>
+                      <Typography variant="h6" component="div" sx={{ fontSize: '1rem' }}>
                         {item.title}
                       </Typography>
                     </CardContent>
                   </Card>
-                </Grid>
+                </SwiperSlide>
               ))}
-            </Grid>
-            
-            <Box sx={{ display: 'flex', justifyContent: 'center', mt: 4 }}>
-              <Button 
-                variant="outlined" 
-                color="primary" 
-                onClick={handleShowAll}
-                sx={{ px: 4 }}
-              >
-                View All Categories
-              </Button>
-            </Box>
+              
+              {/* Custom Navigation Buttons for Single Category */}
+              <Box className="swiper-button-prev-custom-single" sx={{
+                position: 'absolute',
+                left: 10,
+                top: '50%',
+                transform: 'translateY(-50%)',
+                zIndex: 10,
+                background: 'rgba(25, 118, 210, 0.8)',
+                borderRadius: '50%',
+                width: 40,
+                height: 40,
+                display: 'flex',
+                alignItems: 'center',
+                justifyContent: 'center',
+                cursor: 'pointer',
+                color: 'white',
+                '&:hover': {
+                  background: 'rgba(25, 118, 210, 1)',
+                }
+              }}>
+                <ArrowBackIosNewIcon fontSize="small" />
+              </Box>
+              
+              <Box className="swiper-button-next-custom-single" sx={{
+                position: 'absolute',
+                right: 10,
+                top: '50%',
+                transform: 'translateY(-50%)',
+                zIndex: 10,
+                background: 'rgba(25, 118, 210, 0.8)',
+                borderRadius: '50%',
+                width: 40,
+                height: 40,
+                display: 'flex',
+                alignItems: 'center',
+                justifyContent: 'center',
+                cursor: 'pointer',
+                color: 'white',
+                '&:hover': {
+                  background: 'rgba(25, 118, 210, 1)',
+                }
+              }}>
+                <ArrowForwardIosIcon fontSize="small" />
+              </Box>
+            </Swiper>
           </Box>
         )}
         
@@ -646,32 +845,7 @@ const GalleryPage = () => {
           >
             <CloseIcon />
           </IconButton>
-          
-          {swipeDirection && (
-            <Box
-              sx={{
-                position: 'absolute',
-                top: 0,
-                bottom: 0,
-                ...(swipeDirection === 'left' ? { 
-                  left: 0, 
-                  width: '60px',
-                  background: 'linear-gradient(to right, rgba(255,255,255,0.15), transparent)'
-                } : { 
-                  right: 0, 
-                  width: '60px',
-                  background: 'linear-gradient(to left, rgba(255,255,255,0.15), transparent)'
-                }),
-                zIndex: 1,
-                animation: 'pulse 0.5s ease',
-                '@keyframes pulse': {
-                  '0%': { opacity: 0 },
-                  '50%': { opacity: 1 },
-                  '100%': { opacity: 0 }
-                }
-              }}
-            />
-          )}
+
           
           {/* Previous Image Button */}
           <IconButton 
@@ -780,6 +954,8 @@ const GalleryPage = () => {
           )}
         </Box>
       </Modal>
+      
+
     </Container>
   );
 };
