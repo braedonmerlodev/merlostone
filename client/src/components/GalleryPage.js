@@ -10,7 +10,6 @@ import {
   Tabs,
   Tab,
   Divider,
-  Button,
   Modal,
   IconButton,
   Alert,
@@ -237,7 +236,6 @@ const GalleryPage = () => {
   // Touch event states for modal navigation
   const [touchStartX, setTouchStartX] = useState(0);
   const [touchEndX, setTouchEndX] = useState(0);
-  const [swipeDirection, setSwipeDirection] = useState(null);
   
   const theme = useTheme();
   const isMobile = useMediaQuery(theme.breakpoints.down('sm'));
@@ -260,12 +258,6 @@ const GalleryPage = () => {
     setSelectedCategory(newValue);
     setShowAll(false);
     // Hide the custom title alert when user changes categories
-    setShowCustomTitleAlert(false);
-  };
-
-  const handleShowAll = () => {
-    setShowAll(true);
-    // Hide the custom title alert when showing all
     setShowCustomTitleAlert(false);
   };
 
@@ -326,7 +318,6 @@ const GalleryPage = () => {
   // Handle touch events for swipe
   const handleTouchStart = (e) => {
     setTouchStartX(e.touches[0].clientX);
-    setSwipeDirection(null);
   };
   
   const handleTouchMove = (e) => {
@@ -334,25 +325,12 @@ const GalleryPage = () => {
     
     const currentX = e.touches[0].clientX;
     setTouchEndX(currentX);
-    const diff = touchStartX - currentX;
-    
-    // Determine direction for visual feedback
-    if (diff > 20) {
-      setSwipeDirection('right');
-    } else if (diff < -20) {
-      setSwipeDirection('left');
-    } else {
-      setSwipeDirection(null);
-    }
   };
   
   const handleTouchEnd = (e) => {
     if (!touchStartX) return;
     
     const diff = touchStartX - touchEndX;
-    
-    // Reset swipe direction
-    setSwipeDirection(null);
     
     // Need significant swipe to change images
     if (diff > 50) {
