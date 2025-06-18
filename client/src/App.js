@@ -52,7 +52,7 @@ const ScrollToTopLink = ({ to, children, ...props }) => {
 export const AudioContext = createContext();
 
 
-const recaptcha_site_key = process.env.REACT_APP_RECAPTCHA_SITE_KEY;
+const recaptchaSiteKey = process.env.REACT_APP_RECAPTCHA_SITE_KEY;
 
 
 function HomePage() {
@@ -320,7 +320,7 @@ function App() {
   });
   
   return (
-    <ReCaptchaProvider siteKey={RECAPTCHA_SITE_KEY}>
+    <ReCaptchaProvider siteKey={recaptchaSiteKey}>
       <AudioContext.Provider value={{ audioState, setAudioState }}>
         <ThemeProvider theme={theme}>
           <CssBaseline />
