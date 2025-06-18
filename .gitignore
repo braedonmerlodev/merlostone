@@ -8,7 +8,6 @@ yarn.lock
 
 # Build outputs
 dist/
-# build/  # Commented out to include build files
 out/
 .next/
 .nuxt/

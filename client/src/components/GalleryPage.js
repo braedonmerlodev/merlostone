@@ -27,7 +27,6 @@ import { useImages } from '../contexts/ImageContext';
 import { Swiper, SwiperSlide } from 'swiper/react';
 import { Navigation, Pagination, Thumbs, FreeMode } from 'swiper/modules';
 import 'swiper/css';
-import 'swiper/css/navigation';
 import 'swiper/css/pagination';
 import 'swiper/css/thumbs';
 import 'swiper/css/free-mode';
@@ -233,10 +232,7 @@ const GalleryPage = () => {
   const [selectedImageIndex, setSelectedImageIndex] = useState(0);
   const [showCustomTitleAlert, setShowCustomTitleAlert] = useState(Boolean(customTitle));
   const [swiperKey, setSwiperKey] = useState(0); // Add unique key for Swiper reset
-  
-  // Touch event states for modal navigation
-  const [touchStartX, setTouchStartX] = useState(0);
-  const [touchEndX, setTouchEndX] = useState(0);
+  const [isNavigating, setIsNavigating] = useState(false); // Prevent rapid navigation
   
   const theme = useTheme();
   const isMobile = useMediaQuery(theme.breakpoints.down('sm'));
@@ -280,6 +276,9 @@ const GalleryPage = () => {
   
   // Navigate to the next image in the current category
   const handleNextImage = () => {
+    if (isNavigating) return; // Prevent rapid clicking
+    setIsNavigating(true);
+    
     const currentCategoryImages = showAll 
       ? galleryData[selectedCategory]
       : galleryData[selectedCategory];
@@ -287,10 +286,16 @@ const GalleryPage = () => {
     const nextIndex = (selectedImageIndex + 1) % currentCategoryImages.length;
     setSelectedImageIndex(nextIndex);
     setSelectedImage(currentCategoryImages[nextIndex]);
+    
+    // Reset navigation lock after a short delay
+    setTimeout(() => setIsNavigating(false), 300);
   };
   
   // Navigate to the previous image in the current category
   const handlePreviousImage = () => {
+    if (isNavigating) return; // Prevent rapid clicking
+    setIsNavigating(true);
+    
     const currentCategoryImages = showAll 
       ? galleryData[selectedCategory]
       : galleryData[selectedCategory];
@@ -298,6 +303,9 @@ const GalleryPage = () => {
     const prevIndex = (selectedImageIndex - 1 + currentCategoryImages.length) % currentCategoryImages.length;
     setSelectedImageIndex(prevIndex);
     setSelectedImage(currentCategoryImages[prevIndex]);
+    
+    // Reset navigation lock after a short delay
+    setTimeout(() => setIsNavigating(false), 300);
   };
   
   // Handle keyboard navigation
@@ -319,33 +327,7 @@ const GalleryPage = () => {
   // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [selectedImage, selectedImageIndex, selectedCategory, showAll, handleCloseModal]);
   
-  // Handle touch events for swipe
-  const handleTouchStart = (e) => {
-    setTouchStartX(e.touches[0].clientX);
-  };
-  
-  const handleTouchMove = (e) => {
-    if (!touchStartX) return;
-    
-    const currentX = e.touches[0].clientX;
-    setTouchEndX(currentX);
-  };
-  
-  const handleTouchEnd = (e) => {
-    if (!touchStartX) return;
-    
-    const diff = touchStartX - touchEndX;
-    
-    // Need significant swipe to change images
-    if (diff > 50) {
-      handleNextImage();
-    } else if (diff < -50) {
-      handlePreviousImage();
-    }
-    
-    setTouchStartX(0);
-    setTouchEndX(0);
-  };
+  // Touch handlers removed - using arrow buttons instead for navigation
 
   return (
     <Container maxWidth="lg" sx={{ py: 4 }}>
@@ -566,10 +548,8 @@ const GalleryPage = () => {
                     modules={[Navigation, Pagination, Thumbs, FreeMode]}
                     spaceBetween={20}
                     slidesPerView={1}
-                    navigation={{
-                      nextEl: '.swiper-button-next-custom',
-                      prevEl: '.swiper-button-prev-custom',
-                    }}
+                    slidesPerGroup={1}
+                    navigation={false} 
                     pagination={{ 
                       clickable: true,
                       dynamicBullets: true,
@@ -577,19 +557,21 @@ const GalleryPage = () => {
                     breakpoints={{
                       640: {
                         slidesPerView: 2,
+                        slidesPerGroup: 1,
                         spaceBetween: 30,
                       },
                       768: {
                         slidesPerView: 2,
+                        slidesPerGroup: 1,
                         spaceBetween: 40,
                       },
                       1024: {
                         slidesPerView: 2,
+                        slidesPerGroup: 1,
                         spaceBetween: 50,
                       },
                     }}
                     style={{ 
-                      '--swiper-navigation-color': '#1976d2',
                       '--swiper-pagination-color': '#1976d2',
                       padding: '20px 0 50px 0'
                     }}
@@ -638,50 +620,6 @@ const GalleryPage = () => {
                       </SwiperSlide>
                     ))}
                     
-                    {/* Custom Navigation Buttons */}
-                    <Box className="swiper-button-prev-custom" sx={{
-                      position: 'absolute',
-                      left: 10,
-                      top: '50%',
-                      transform: 'translateY(-50%)',
-                      zIndex: 10,
-                      background: 'rgba(25, 118, 210, 0.8)',
-                      borderRadius: '50%',
-                      width: 40,
-                      height: 40,
-                      display: 'flex',
-                      alignItems: 'center',
-                      justifyContent: 'center',
-                      cursor: 'pointer',
-                      color: 'white',
-                      '&:hover': {
-                        background: 'rgba(25, 118, 210, 1)',
-                      }
-                    }}>
-                      <ArrowBackIosNewIcon fontSize="small" />
-                    </Box>
-                    
-                    <Box className="swiper-button-next-custom" sx={{
-                      position: 'absolute',
-                      right: 10,
-                      top: '50%',
-                      transform: 'translateY(-50%)',
-                      zIndex: 10,
-                      background: 'rgba(25, 118, 210, 0.8)',
-                      borderRadius: '50%',
-                      width: 40,
-                      height: 40,
-                      display: 'flex',
-                      alignItems: 'center',
-                      justifyContent: 'center',
-                      cursor: 'pointer',
-                      color: 'white',
-                      '&:hover': {
-                        background: 'rgba(25, 118, 210, 1)',
-                      }
-                    }}>
-                      <ArrowForwardIosIcon fontSize="small" />
-                    </Box>
                   </Swiper>
                 </Box>
               </Box>
@@ -692,13 +630,9 @@ const GalleryPage = () => {
           <Box sx={{ position: 'relative' }}>
             <Swiper
               key={`single-${selectedCategory}-${swiperKey}`} // Unique key for single category view
-              modules={[Navigation, Pagination, Thumbs, FreeMode]}
+              modules={[Pagination, Thumbs, FreeMode]}
               spaceBetween={20}
               slidesPerView={1}
-              navigation={{
-                nextEl: '.swiper-button-next-custom-single',
-                prevEl: '.swiper-button-prev-custom-single',
-              }}
               pagination={{ 
                 clickable: true,
                 dynamicBullets: true,
@@ -718,7 +652,6 @@ const GalleryPage = () => {
                 },
               }}
               style={{ 
-                '--swiper-navigation-color': '#1976d2',
                 '--swiper-pagination-color': '#1976d2',
                 padding: '20px 0 50px 0'
               }}
@@ -767,50 +700,6 @@ const GalleryPage = () => {
                 </SwiperSlide>
               ))}
               
-              {/* Custom Navigation Buttons for Single Category */}
-              <Box className="swiper-button-prev-custom-single" sx={{
-                position: 'absolute',
-                left: 10,
-                top: '50%',
-                transform: 'translateY(-50%)',
-                zIndex: 10,
-                background: 'rgba(25, 118, 210, 0.8)',
-                borderRadius: '50%',
-                width: 40,
-                height: 40,
-                display: 'flex',
-                alignItems: 'center',
-                justifyContent: 'center',
-                cursor: 'pointer',
-                color: 'white',
-                '&:hover': {
-                  background: 'rgba(25, 118, 210, 1)',
-                }
-              }}>
-                <ArrowBackIosNewIcon fontSize="small" />
-              </Box>
-              
-              <Box className="swiper-button-next-custom-single" sx={{
-                position: 'absolute',
-                right: 10,
-                top: '50%',
-                transform: 'translateY(-50%)',
-                zIndex: 10,
-                background: 'rgba(25, 118, 210, 0.8)',
-                borderRadius: '50%',
-                width: 40,
-                height: 40,
-                display: 'flex',
-                alignItems: 'center',
-                justifyContent: 'center',
-                cursor: 'pointer',
-                color: 'white',
-                '&:hover': {
-                  background: 'rgba(25, 118, 210, 1)',
-                }
-              }}>
-                <ArrowForwardIosIcon fontSize="small" />
-              </Box>
             </Swiper>
           </Box>
         )}
@@ -830,9 +719,10 @@ const GalleryPage = () => {
         open={!!selectedImage}
         onClose={handleCloseModal}
         aria-labelledby="image-modal-title"
-        onTouchStart={handleTouchStart}
-        onTouchMove={handleTouchMove}
-        onTouchEnd={handleTouchEnd}
+        // Disable touch gestures to prevent conflicts with arrow buttons
+        // onTouchStart={handleTouchStart}
+        // onTouchMove={handleTouchMove}
+        // onTouchEnd={handleTouchEnd}
         closeAfterTransition
         sx={{
           display: 'flex',
@@ -884,7 +774,10 @@ const GalleryPage = () => {
           
           {/* Previous Image Button */}
           <IconButton 
-            onClick={handlePreviousImage}
+            onClick={(e) => {
+              e.stopPropagation(); // Prevent event bubbling
+              handlePreviousImage();
+            }}
             sx={{
               position: 'absolute',
               left: { xs: 1, sm: 16 },
@@ -909,7 +802,10 @@ const GalleryPage = () => {
           
           {/* Next Image Button */}
           <IconButton 
-            onClick={handleNextImage}
+            onClick={(e) => {
+              e.stopPropagation(); // Prevent event bubbling
+              handleNextImage();
+            }}
             sx={{
               position: 'absolute',
               right: { xs: 1, sm: 16 },
