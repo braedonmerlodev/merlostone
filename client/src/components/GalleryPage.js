@@ -25,7 +25,7 @@ import { useImages } from '../contexts/ImageContext';
 
 // Swiper imports
 import { Swiper, SwiperSlide } from 'swiper/react';
-import { Navigation, Pagination, Thumbs, FreeMode, Autoplay } from 'swiper/modules';
+import { Navigation, Pagination, Thumbs, FreeMode } from 'swiper/modules';
 import 'swiper/css';
 import 'swiper/css/navigation';
 import 'swiper/css/pagination';
@@ -232,6 +232,7 @@ const GalleryPage = () => {
   const [selectedImage, setSelectedImage] = useState(null);
   const [selectedImageIndex, setSelectedImageIndex] = useState(0);
   const [showCustomTitleAlert, setShowCustomTitleAlert] = useState(Boolean(customTitle));
+  const [swiperKey, setSwiperKey] = useState(0); // Add unique key for Swiper reset
   
   // Touch event states for modal navigation
   const [touchStartX, setTouchStartX] = useState(0);
@@ -240,6 +241,7 @@ const GalleryPage = () => {
   const theme = useTheme();
   const isMobile = useMediaQuery(theme.breakpoints.down('sm'));
   const tabsRef = useRef(null);
+  const swiperRef = useRef(null);
 
   // Function to scroll tabs to the right
   const handleScrollTabs = () => {
@@ -259,6 +261,8 @@ const GalleryPage = () => {
     setShowAll(false);
     // Hide the custom title alert when user changes categories
     setShowCustomTitleAlert(false);
+    // Force Swiper to completely re-render with a new key
+    setSwiperKey(prev => prev + 1);
   };
 
   const handleImageClick = (image, index) => {
@@ -401,55 +405,113 @@ const GalleryPage = () => {
             ))}
           </Tabs>
           
-          {/* Mobile Scroll Indicator for Category Tabs - Clickable and positioned further right */}
+          {/* Mobile Scroll Indicators for Category Tabs */}
           {isMobile && categories.length > 3 && (
-            <Box
-              onClick={handleScrollTabs}
-              sx={{
-                position: 'absolute',
-                right: 5, // Moved further right (was 15)
-                top: '50%',
-                transform: 'translateY(-50%)',
-                background: 'rgba(255, 152, 0, 0.9)',
-                color: 'white',
-                borderRadius: '50%',
-                width: 40,
-                height: 40,
-                display: 'flex',
-                alignItems: 'center',
-                justifyContent: 'center',
-                animation: 'pulse 2s infinite, bounce 3s infinite',
-                cursor: 'pointer', // Make it clear it's clickable
-                zIndex: 999,
-                boxShadow: '0 4px 12px rgba(255, 152, 0, 0.4)',
-                border: '2px solid white',
-                transition: 'all 0.2s ease',
-                '&:hover': {
-                  background: 'rgba(255, 152, 0, 1)',
-                  transform: 'translateY(-50%) scale(1.05)',
-                },
-                '&:active': {
-                  transform: 'translateY(-50%) scale(0.95)',
-                },
-                '@keyframes pulse': {
-                  '0%, 100%': { opacity: 0.8, transform: 'translateY(-50%) scale(1)' },
-                  '50%': { opacity: 1, transform: 'translateY(-50%) scale(1.1)' },
-                },
-                '@keyframes bounce': {
-                  '0%, 20%, 50%, 80%, 100%': { 
-                    transform: 'translateY(-50%) translateX(0)' 
+            <>
+              {/* Left Arrow */}
+              <Box
+                onClick={() => {
+                  if (tabsRef.current) {
+                    const tabsContainer = tabsRef.current.querySelector('.MuiTabs-scroller');
+                    if (tabsContainer) {
+                      tabsContainer.scrollBy({
+                        left: -200, // Scroll 200px to the left
+                        behavior: 'smooth'
+                      });
+                    }
+                  }
+                }}
+                sx={{
+                  position: 'absolute',
+                  left: 5,
+                  top: '50%',
+                  transform: 'translateY(-50%)',
+                  background: 'rgba(255, 152, 0, 0.9)',
+                  color: 'white',
+                  borderRadius: '50%',
+                  width: 40,
+                  height: 40,
+                  display: 'flex',
+                  alignItems: 'center',
+                  justifyContent: 'center',
+                  animation: 'pulse 2s infinite, bounceLeft 3s infinite',
+                  cursor: 'pointer',
+                  zIndex: 999,
+                  boxShadow: '0 4px 12px rgba(255, 152, 0, 0.4)',
+                  border: '2px solid white',
+                  transition: 'all 0.2s ease',
+                  '&:hover': {
+                    background: 'rgba(255, 152, 0, 1)',
+                    transform: 'translateY(-50%) scale(1.05)',
                   },
-                  '40%': { 
-                    transform: 'translateY(-50%) translateX(-5px)' 
+                  '&:active': {
+                    transform: 'translateY(-50%) scale(0.95)',
                   },
-                  '60%': { 
-                    transform: 'translateY(-50%) translateX(-2px)' 
+                  '@keyframes bounceLeft': {
+                    '0%, 20%, 50%, 80%, 100%': { 
+                      transform: 'translateY(-50%) translateX(0)' 
+                    },
+                    '40%': { 
+                      transform: 'translateY(-50%) translateX(5px)' 
+                    },
+                    '60%': { 
+                      transform: 'translateY(-50%) translateX(2px)' 
+                    },
                   },
-                },
-              }}
-            >
-              <ArrowForwardIosIcon fontSize="small" />
-            </Box>
+                }}
+              >
+                <ArrowBackIosNewIcon fontSize="small" />
+              </Box>
+              
+              {/* Right Arrow */}
+              <Box
+                onClick={handleScrollTabs}
+                sx={{
+                  position: 'absolute',
+                  right: 5, // Moved further right (was 15)
+                  top: '50%',
+                  transform: 'translateY(-50%)',
+                  background: 'rgba(255, 152, 0, 0.9)',
+                  color: 'white',
+                  borderRadius: '50%',
+                  width: 40,
+                  height: 40,
+                  display: 'flex',
+                  alignItems: 'center',
+                  justifyContent: 'center',
+                  animation: 'pulse 2s infinite, bounce 3s infinite',
+                  cursor: 'pointer', // Make it clear it's clickable
+                  zIndex: 999,
+                  boxShadow: '0 4px 12px rgba(255, 152, 0, 0.4)',
+                  border: '2px solid white',
+                  transition: 'all 0.2s ease',
+                  '&:hover': {
+                    background: 'rgba(255, 152, 0, 1)',
+                    transform: 'translateY(-50%) scale(1.05)',
+                  },
+                  '&:active': {
+                    transform: 'translateY(-50%) scale(0.95)',
+                  },
+                  '@keyframes pulse': {
+                    '0%, 100%': { opacity: 0.8, transform: 'translateY(-50%) scale(1)' },
+                    '50%': { opacity: 1, transform: 'translateY(-50%) scale(1.1)' },
+                  },
+                  '@keyframes bounce': {
+                    '0%, 20%, 50%, 80%, 100%': { 
+                      transform: 'translateY(-50%) translateX(0)' 
+                    },
+                    '40%': { 
+                      transform: 'translateY(-50%) translateX(-5px)' 
+                    },
+                    '60%': { 
+                      transform: 'translateY(-50%) translateX(-2px)' 
+                    },
+                  },
+                }}
+              >
+                <ArrowForwardIosIcon fontSize="small" />
+              </Box>
+            </>
           )}
         </Box>
         
@@ -499,7 +561,9 @@ const GalleryPage = () => {
                 {/* Mobile-Friendly Swiper Gallery */}
                 <Box sx={{ mb: 4, position: 'relative' }}>
                   <Swiper
-                    modules={[Navigation, Pagination, Thumbs, FreeMode, Autoplay]}
+                    key={`${category}-${swiperKey}`} // Unique key to force complete re-render
+                    ref={swiperRef}
+                    modules={[Navigation, Pagination, Thumbs, FreeMode]}
                     spaceBetween={20}
                     slidesPerView={1}
                     navigation={{
@@ -509,10 +573,6 @@ const GalleryPage = () => {
                     pagination={{ 
                       clickable: true,
                       dynamicBullets: true,
-                    }}
-                    autoplay={{
-                      delay: 5000,
-                      disableOnInteraction: false,
                     }}
                     breakpoints={{
                       640: {
@@ -631,7 +691,8 @@ const GalleryPage = () => {
           // Show only the selected category with Swiper
           <Box sx={{ position: 'relative' }}>
             <Swiper
-              modules={[Navigation, Pagination, Thumbs, FreeMode, Autoplay]}
+              key={`single-${selectedCategory}-${swiperKey}`} // Unique key for single category view
+              modules={[Navigation, Pagination, Thumbs, FreeMode]}
               spaceBetween={20}
               slidesPerView={1}
               navigation={{
@@ -641,10 +702,6 @@ const GalleryPage = () => {
               pagination={{ 
                 clickable: true,
                 dynamicBullets: true,
-              }}
-              autoplay={{
-                delay: 5000,
-                disableOnInteraction: false,
               }}
               breakpoints={{
                 640: {
