@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import { 
   Container, 
   Typography, 
@@ -14,10 +14,13 @@ import {
   Button,
   Modal,
   IconButton,
-  Alert
+  Alert,
+  useTheme,
+  useMediaQuery
 } from '@mui/material';
 import CloseIcon from '@mui/icons-material/Close';
 import InfoIcon from '@mui/icons-material/Info';
+import ArrowForwardIosIcon from '@mui/icons-material/ArrowForwardIos';
 import { useLocation } from 'react-router-dom';
 import { useImages } from '../contexts/ImageContext';
 import ArrowBackIosNewIcon from '@mui/icons-material/ArrowBackIosNew';
@@ -223,6 +226,10 @@ const GalleryPage = () => {
   const [selectedImage, setSelectedImage] = useState(null);
   const [selectedImageIndex, setSelectedImageIndex] = useState(0);
   const [showCustomTitleAlert, setShowCustomTitleAlert] = useState(Boolean(customTitle));
+  const galleryRef = useRef(null);
+  const [showScrollIndicator, setShowScrollIndicator] = useState(true);
+  const theme = useTheme();
+  const isMobile = useMediaQuery(theme.breakpoints.down('md'));
   
   // Track touch events for swipe functionality
   const [swipeDirection, setSwipeDirection] = useState(null);
@@ -247,6 +254,28 @@ const GalleryPage = () => {
       }, 100);
     }
   }, [location.state]);
+
+  // Scroll detection for mobile
+  useEffect(() => {
+    if (!isMobile) return;
+
+    const handleScroll = () => {
+      const container = galleryRef.current;
+      if (container) {
+        const { scrollLeft, scrollWidth, clientWidth } = container;
+        const isAtEnd = scrollLeft + clientWidth >= scrollWidth - 20;
+        setShowScrollIndicator(!isAtEnd && scrollWidth > clientWidth);
+      }
+    };
+
+    const container = galleryRef.current;
+    if (container) {
+      container.addEventListener('scroll', handleScroll);
+      // Check initial state
+      handleScroll();
+      return () => container.removeEventListener('scroll', handleScroll);
+    }
+  }, [selectedCategory, isMobile]);
 
   const handleCategoryChange = (event, newValue) => {
     setSelectedCategory(newValue);
@@ -358,7 +387,7 @@ const GalleryPage = () => {
   };
 
   return (
-    <Container className="page-container">
+    <Container maxWidth="lg" sx={{ py: 4 }}>
       <Paper elevation={3} sx={{ p: { xs: 2, md: 4 }, mb: 4 }}>
         <Typography variant="h3" component="h1" gutterBottom align="center" sx={{ mb: 4 }}>
           {customTitle && showCustomTitleAlert ? customTitle : 'Gallery'}
@@ -755,4 +784,4 @@ const GalleryPage = () => {
   );
 };
 
-export default GalleryPage; 
+export default GalleryPage;
