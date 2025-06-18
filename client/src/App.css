@@ -220,6 +220,45 @@ html {
   background-color: #FFC107;
 }
 
+.gallery-container {
+  position: relative;
+  overflow-x: auto;
+  scroll-behavior: smooth;
+}
+
+.gallery-container::after {
+  content: '→';
+  position: absolute;
+  right: 10px;
+  top: 50%;
+  transform: translateY(-50%);
+  background: rgba(0, 0, 0, 0.7);
+  color: white;
+  padding: 8px 12px;
+  border-radius: 50%;
+  font-size: 18px;
+  pointer-events: none;
+  opacity: 0.8;
+  animation: pulse 2s infinite;
+}
+
+@keyframes pulse {
+  0%, 100% { opacity: 0.8; }
+  50% { opacity: 0.4; }
+}
+
+/* Hide arrow when scrolled to end */
+.gallery-container.scrolled-end::after {
+  display: none;
+}
+
+/* Only show on mobile */
+@media (min-width: 768px) {
+  .gallery-container::after {
+    display: none;
+  }
+}
+
 /* Page container styles for all pages */
 .page-container {
   max-width: 1200px;

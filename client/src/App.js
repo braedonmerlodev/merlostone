@@ -1,3 +1,4 @@
+s
 import React, { createContext, useState, useEffect } from 'react';
 import './App.css';
 import { createBrowserRouter, RouterProvider, Outlet, Link as RouterLink, useLocation } from 'react-router-dom';
@@ -50,11 +51,10 @@ const ScrollToTopLink = ({ to, children, ...props }) => {
 // Create audio context for sharing audio state across components
 export const AudioContext = createContext();
 
-// Add RECAPTCHA_SITE_KEY constant at the top of the file, near other constants or imports
-// This will be replaced with your actual key once you register
-const RECAPTCHA_SITE_KEY = '6Le62v4qAAAAACYwVpkzHHPCfhA4ECZC4NLIGNIg'; // Replace this with your actual key
 
-// Home Page Component
+const recaptcha_site_key = process.env.REACT_APP_RECAPTCHA_SITE_KEY;
+
+
 function HomePage() {
   const { resolveImagePath } = useImages();
 

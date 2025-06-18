@@ -96,7 +96,7 @@ const StoneCarePage = () => {
         
         <Box sx={{ my: 4 }}>
           <Typography variant="h3" component="h2" gutterBottom align="center" sx={{ fontSize: { xs: '2rem', md: '2.5rem' } }}>
-            How to clean Granite
+            How to clean Quartzite
           </Typography>
           <List sx={{ '& .MuiListItemText-primary': { fontSize: '1.25rem', fontWeight: 'bold', mb: 0.5 }, '& .MuiListItemText-secondary': { fontSize: '1.15rem' } }}>
             <ListItem>
